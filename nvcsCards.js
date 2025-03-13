@@ -1,4 +1,4 @@
-function nvcsCards(card) {
+function nvcsCards(card, dustpile) {
     return {
         0: {
             key: 'boneBox',
