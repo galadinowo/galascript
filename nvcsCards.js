@@ -116,6 +116,14 @@ function nvcsCards(card) {
             pool: [[allCards, ['rarity', 'typeCard'], ['===', '==='], ['BASE', 1]]],
             sprite: 'NVCSactive',
             transKey: 'status-nvcs-pool',
+        },
+        14: {
+            key: 'resurrection',
+            name: 'Resurrection',
+            info: 'Displays Resurrection\'s card pool (from your dustpile)',
+            pool: [[dustpile, ['creatorInfo.typeCreator'], ['!=='], [undefined]]],
+            sprite: 'NVCSactive',
+            transKey: 'status-nvcs-pool',
         }
     }
 }
