@@ -121,7 +121,7 @@ function nvcsCards(card) {
             key: 'resurrection',
             name: 'Resurrection',
             info: 'Displays Resurrection\'s card pool (from your dustpile)',
-            pool: [[ingame ? [dustpile] : [], ['creatorInfo.typeCreator', 'owner.id'], ['===', '==='], [undefined, card.owner.id]]],
+            pool: [[ingame ? [dustpile] : [], ['creatorInfo.typeCreator', 'owner.id'], ['===', '==='], [undefined, card?.owner?.id]]],
             sprite: 'NVCSactive',
             transKey: 'status-nvcs-pool',
         }
