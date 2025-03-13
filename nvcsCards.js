@@ -1,4 +1,5 @@
-function nvcsCards(card, dustpile) {
+function nvcsCards(card) {
+    if (typeof dustpile === 'undefined') var dustpile = 0;
     return {
         0: {
             key: 'boneBox',
