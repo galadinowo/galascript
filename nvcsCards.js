@@ -1,5 +1,7 @@
 function nvcsCards(card) {
+    console.log('before');
     if (typeof dustpile === 'undefined') var dustpile = 0;
+    console.log('after');
     return {
         0: {
             key: 'boneBox',
