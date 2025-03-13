@@ -100,6 +100,14 @@ function nvcsCards(card) {
             pool: [[allCards, ['rarity'], ['==='], ['TOKEN']]],
             sprite: 'NVCSactive',
             transKey: 'status-nvcs-pool',
+        },
+        12: {
+            key: 'tutorialGuy',
+            name: 'Tutorial Guy',
+            info: 'Displays Tutorial\'s card pool',
+            pool: [[allCards, ['rarity'], ['==='], ['BASE']]],
+            sprite: 'NVCSactive',
+            transKey: 'status-nvcs-pool',
         }
     }
 }
