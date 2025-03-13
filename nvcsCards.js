@@ -1,4 +1,4 @@
-function nvcsCards(card) {
+export function nvcsCards(card) {
     return {
         0: {
             key: 'boneBox',
