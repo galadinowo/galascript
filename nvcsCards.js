@@ -104,8 +104,16 @@ function nvcsCards(card) {
         12: {
             key: 'tutorialGuy',
             name: 'Tutorial Guy',
-            info: 'Displays Tutorial\'s card pool',
+            info: 'Displays Tutorial Guy\'s card pool',
             pool: [[allCards, ['rarity'], ['==='], ['BASE']]],
+            sprite: 'NVCSactive',
+            transKey: 'status-nvcs-pool',
+        },
+        13: {
+            key: 'eggplantTrashbag',
+            name: 'Eggplant Trashbag',
+            info: 'Displays Eggplant Trashbag\'s card pool',
+            pool: [[allCards, ['rarity', 'typeCard'], ['===', '==='], ['BASE', 1]]],
             sprite: 'NVCSactive',
             transKey: 'status-nvcs-pool',
         }
