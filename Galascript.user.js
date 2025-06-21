@@ -85,10 +85,11 @@ const nullcard = {
     "loop": 0,
     "program": 0
 }
+plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/Galascript.user.js');
 const patchNotes =
 
 
-`Test update!`;
+`Test update`;
 
 
 
