@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.1-beta
+// @version      1.0.0-beta
 // @description  Galascript adds stuff. :3
 // @author       galadino
 // @match        https://*.undercards.net/*
