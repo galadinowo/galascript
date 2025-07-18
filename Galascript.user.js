@@ -2,13 +2,15 @@
 // @name         Galascript
 // @namespace    https://undercards.net
 // @version      1.0.0
-// @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse.
+// @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
 // @icon         https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/iconVirgil.png
 // @require      https://raw.githubusercontent.com/UCProjects/UnderScript/master/src/checkerV2.js
 // @grant        none
 // ==/UserScript==
+
+/* eslint no-multi-spaces: "off" */
 
 const $ = window.$;
 const pluginName = GM_info.script.name;
@@ -107,25 +109,13 @@ plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/G
 
 const patchNotes =
 
-`Welcome to Galascript's first official release! :D
+`Welcome to Galascript's first official release!
 
-- Now uses feild's new shiny plugin updater system
-- Fixed pretty much every setting in the Filters tab not working whatsoever
-- Fixed True obscurity setting not working whatsoever
-- You can now cancel keybinding by pressing Escape
-- Added Shuffle and Reset buttons for the custom soul colors in Silly tab
-- Added Playlist setting, allowing you to control background RNG to your liking, in Silly tab
-- Added Auto start music setting in QOL tab
-- Added keybind setting to open chatroom 0
-- Added multiple new community frames
-- Support for Darkspawn power
-- Added new random entrance lines (for Mulligan info setting)
-- Revamped "Style tabs" into "Tabless" (now it actually works, wow wow)
-- Some more settings are applied instantly and don't require a page refresh
-- Removed some debug console messages I forgot about
-- Removed Dark Mode Barrier setting because i uhhh i forgot the animation got removed entirely lol
+There's simply too many changes from previous betas to list. No, seriously, I'd love to write down every single fix, but the popup for these changes would be so long, it'd go offscreen and be unreadable...
 
-And other miscellaneous changes not subtantial enough to note. Have fun, and report bugs to Gala!`;
+Just... consider this its own, little, stable (hopefully) package!
+
+Have fun, and report bugs to Gala!`;
 
 const convertMarkdown = new underscript.lib.showdown.Converter();
 
@@ -190,7 +180,7 @@ const checkCreateCard = setInterval(() => {
     if (typeof createCard === 'function') {
     clearInterval(checkCreateCard);
     function newCreateCard(card) {
-    var name, image, cost, attack, hp, maxHp, shiny, hpSquish, maxHpSquish, htmlHp, rarity, extension;
+    var name, image, cost, attack, hp, maxHp, shiny, hpSquish, maxHpSquish, htmlHp, htmlAtk, rarity, extension;
     var program = "";
     var fauxCost = "";
     var fauxAttack = "";
@@ -290,6 +280,7 @@ const checkCreateCard = setInterval(() => {
         hp = card.hp;
         maxHp = card.maxHp;
         htmlHp = `<span class="currentHP">${hp}</span><span class="maxHP">${maxHp}</span>`;
+        htmlAtk = `<span class="currentATK">${attack}</span>`;
         switch (JSON.stringify([obscCardStats?.value(), obscActive()])) {
             case '["obfuscate",1]':
                 fauxAttack = obfuscationText?.value();
@@ -312,12 +303,13 @@ const checkCreateCard = setInterval(() => {
 
     /*
 
-            if:
+            if
                 - the card has a frame skin name, or frameSpoofBehavior is set to 'force everywhere'
                 - the frameSpoof setting is not 'off'
                     and:
                         - in a game
-                        - the card is owned by you (in the case of frameSpoofBehavior being set to 'allies only')
+                        ? card is owned by you, and frameSpoofBehavior is 'allies only'
+                        ? frameSpoofBehavior is 'allies + enemies'
                     or:
                         - not in a game
     */
@@ -341,12 +333,10 @@ const checkCreateCard = setInterval(() => {
 
     image = '<div class="cardImage"></div>\n'
 
-    var statbase = statBase?.value();
-
     frameSkinName += '-frame';
 
     var htmlCard =
-    `<div id="${card.id}" class="card monster ${frameSkinName}${shiny} base ${statBase?.value()}" data-rarity="${card.rarity}">
+    `<div id="${card.id}" class="card monster ${frameSkinName}${shiny} base${statBase?.value()}" data-rarity="${card.rarity}">
     <div class="shinySlot"></div>
     <div class="cardFrame"></div>
     <div class="cardBackground"></div>
@@ -367,7 +357,7 @@ const checkCreateCard = setInterval(() => {
     <div class="cardSilence"></div>
     <div class="cardDesc" data-i18n="card-${card.fixedId}"><div>${description}</div></div>
     <div class="cardFooter"></div>
-    <div class="cardATK">${attack}</div>
+    <div class="cardATK">${htmlAtk}</div>
     <div class="cardRarity"></div>
     <div class="cardHP">${htmlHp}</div>
     </div>`;
@@ -648,7 +638,7 @@ const checkSetInfoPowers = setInterval(() => {
         }
     }
 
-        if (backgroundCheck?.value()) {
+        if (checkPower?.value()) {
             pushPower('check', 'custom', 'status-check', [cardLog(card)], null);
         }
 
@@ -794,208 +784,22 @@ if (typeof plugin.addFilter === 'function') {
     )
 }
 
-// const checkIsRemoved = setInterval(() => {
-//     const ignorePaths = ['/CardSkinsShop', '/Translate']
-//     if (ignorePaths.includes(window.location.pathname)){
-//         clearInterval(checkIsRemoved);
-//         return;
-//     }
-//     if (typeof isRemoved === 'function'){
-//         clearInterval(checkIsRemoved);
-//         function newIsRemoved(card) {
-//         var removed = false;
-//         if (window.location.pathname === '/Crafting') {
-//             removed = card.shiny !== $('#shinyInput').prop('checked');
-//         }
-//         if (!removed) {
-//         var rarities = [];
-//             $(".rarityInput").each(function (index) {
-//                 if ($(this).prop('checked')) {
-//                     rarities.push($(this).attr('rarity'));
-//                 }
-//             });
-
-//             if (rarities.length > 0) {
-//                 removed = !rarities.includes(card.rarity);
-//             }
-//         }
-//         if (!removed && window.location.pathname === '/Crafting') {
-//             var base = $('#baseRarityInput').prop('checked');
-//             var gen = $('#tokenRarityInput').prop('checked');
-//             if ($('#baseGenInput').prop('checked') && !$('#baseGenInput').is(':disabled')) {
-//                 base = true
-//                 gen = true
-//             }
-//             if (!base) {
-//                 removed = card.rarity === "BASE";
-//             }
-//             if (!gen && !removed) {
-//                 removed = card.rarity === "TOKEN";
-//             }
-//         }
-
-//         if (!removed) {
-//             var monster = $('#monsterInput').prop('checked');
-//             var spell = $('#spellInput').prop('checked');
-
-//             if (monster && !spell) {
-//                 removed = card.typeCard !== 0;
-//             } else if (!monster && spell) {
-//                 removed = card.typeCard !== 1;
-//             }
-//         }
-
-//         if (!removed && $('#allTribeInput').prop('checked')) {
-//             return !card.tribes.length;
-//         }
-
-//         function max$1(rarity) {
-//             switch (rarity) {
-//                 case 'DETERMINATION':
-//                 case 'LEGENDARY': return 1;
-//                 case 'EPIC': return 2;
-//                 case 'RARE':
-//                 case 'BASE':
-//                 case 'COMMON': return 3;
-//                 case 'TOKEN':
-//                 case 'GENERATED': return 0;
-//                 default: return undefined;
-//             }
-//         }
-
-//         if (!removed && window.location.pathname === '/Crafting') {
-//             switch ($('#collectionType').val()) {
-//                 case 'owned': return !card.quantity;
-//                 case 'unowned': return card.quantity > 0;
-//                 case 'maxed': return card.quantity < max$1(card.rarity);
-//                 case 'surplus': return card.quantity <= max$1(card.rarity);
-//                 case 'craftable': return card.quantity >= max$1(card.rarity);
-//             }
-//         }
-
-//         if (!removed && $('#costInput').length) {
-//             var cost = $('#costInput').val();
-//             var atk = $('#atkInput').val();
-//             var hp = $('#hpInput').val();
-
-//             if (card.typeCard == 1) {
-//                 removed = atk.length > 0 || hp.length > 0;
-//             }
-
-//             if (cost.length > 0 && !removed) {
-//                 switch ($('#costInput').attr('class').split(' ')[1]) {
-//                     case 'equals': removed = card.cost != cost; break;
-//                     case 'moreThan': removed = card.cost <= cost; break;
-//                     case 'moreThanEqualTo': removed = card.cost < cost; break;
-//                     case 'lessThan': removed = card.cost >= cost; break;
-//                     case 'lessThanEqualTo': removed = card.cost > cost; break;
-//                 }
-//             }
-
-//             if (atk.length > 0 && !removed) {
-//                 switch ($('#atkInput').attr('class').split(' ')[1]) {
-//                     case 'equals': removed = card.attack != atk; break;
-//                     case 'moreThan': removed = card.attack <= atk; break;
-//                     case 'moreThanEqualTo': removed = card.attack < atk; break;//                                    oh theres definitely a better way to do this
-//                     case 'lessThan': removed = card.attack >= atk; break;//                                                                                                        ....if i cared enoug
-//                     case 'lessThanEqualTo': removed = card.attack > atk; break;
-//                 }
-//             }
-
-//             if (hp.length > 0 && !removed) {
-//                 switch ($('#hpInput').attr('class').split(' ')[1]) {
-//                     case 'equals': removed = card.hp != hp; break;
-//                     case 'moreThan': removed = card.hp <= hp; break;
-//                     case 'moreThanEqualTo': removed = card.hp < hp; break;
-//                     case 'lessThan': removed = card.hp >= hp; break;
-//                     case 'lessThanEqualTo': removed = card.hp > hp; break;
-//                 }
-//             }
-//         }
-//         if (!removed) {
-
-//             var undertale = $('#undertaleInput').prop('checked');
-//             var deltarune = $('#deltaruneInput').prop('checked');
-//             var uty = $('#utyInput').prop('checked');
-//             var checkedExtensions = [];
-
-//             if (undertale) {
-//                 checkedExtensions.push("BASE");
-//             }
-
-//             if (deltarune) {
-//                 checkedExtensions.push("DELTARUNE");
-//             }
-
-//             if (uty) {
-//                 checkedExtensions.push("UTY")
-//             }
-
-//             if (checkedExtensions.length > 0) {
-//                 removed = checkedExtensions.indexOf(card.extension) === -1;
-//             }
-//         }
-
-//         //Search
-//         if (!removed) {
-//             var searchValue = $('#searchInput').val().toLowerCase();
-
-//             if (searchValue === 'mo') {
-//                 removed = card.name !== 'Mo' // Mo.
-//             }
-
-//             if (searchValue.length > 0 && !removed) {
-
-//                 var findableString = "";
-
-//                 findableString += $.i18n('card-name-' + card.id, 1);
-//                 findableString += $.i18n('card-' + card.id);
-
-//                 for (var i = 0; i < card.tribes.length; i++) {
-//                     var tribe = card.tribes[i];
-//                     findableString += $.i18n('tribe-' + tribe.toLowerCase().replace(/_/g, '-'));
-//                 }
-
-//                 if (card.hasOwnProperty('soul')) {
-//                     findableString += $.i18n('soul-' + card.soul.name.toLowerCase().replace(/_/g, '-'));
-//                 }
-
-//                 var imageNames = [];
-//                 var imgRegex = /<img[^>]+src=["']([^"']+\.png)["'][^>]*>/gi;
-//                 var match;
-//                 while ((match = imgRegex.exec(findableString)) !== null) {
-//                     var srcParts = match[1].split('/');
-//                     var fileName = srcParts[srcParts.length - 1];
-//                     imageNames.push(fileName.toLowerCase());
-//                 }
-
-//                 if (!$.i18n('card-alias-' + card.fixedId).includes('card-alias')) {
-//                     findableString += $.i18n('card-alias-' + card.fixedId);
-//                 }
-//                 var finalString = findableString.toLowerCase().replace(/(<.*?>)/g, '');
-
-//                 removed = !finalString.includes(searchValue);
-//             }
-//         }
-//     return removed;
-// }} window.isRemoved = newIsRemoved;
-// });
-
 const checkUpdateCardVisual = setInterval(() => {
     if (typeof updateCardVisual === 'function'){
         clearInterval(checkUpdateCardVisual);
         function newUpdateCardVisual($htmlCard, card) {
         var cost = card.cost
+        var statbase = $htmlCard.hasClass("base1000") ? 1000 : $htmlCard.hasClass("base100") ? 100 : $htmlCard.hasClass("base10") ? 10 : 1;
         var fauxCost = $htmlCard.find('.cardFauxCost').text();
         if (obscActive() && ['obfuscate', 'to set card', 'to random card'].includes(obscCardCost?.value())) {
             cost = fauxCost - (card.originalCost - card.cost)
             if (isNaN(cost)) {cost = fauxCost}
         }
-        var attack = card.attack
-        var baseAttack = card.originalAttack
-        var hp = card.hp
-        var maxHp = card.maxHp
-        var baseHp = card.originalHp
+        var attack = card.attack * statbase;
+        var baseAttack = card.originalAttack * statbase;
+        var hp = card.hp * statbase;
+        var maxHp = card.maxHp * statbase;
+        var baseHp = card.originalHp * statbase;
         var fauxAttack = $htmlCard.find('.cardFauxATK').text();
         var fauxHp = $htmlCard.find('.cardFauxHP').text();
         var fauxMaxHp = $htmlCard.find('.cardFauxHP').text();
@@ -1020,12 +824,11 @@ const checkUpdateCardVisual = setInterval(() => {
 
         var $cardHP = $htmlCard.find('.currentHP');
         var $cardMaxHP = $htmlCard.find('.maxHP');
-        var statbase = $htmlCard.hasClass("base1000") ? 1000 : $htmlCard.hasClass("base100") ? 100 : $htmlCard.hasClass("base10") ? 10 : 1;
-        $cardHP.html(statbase * hp);
+        $cardHP.html(hp);
         $cardMaxHP.html('');
         var hpSquish, maxHpSquish;
         if (maxHpIndicator?.value() !== 'off' && (maxHpIndicator?.value() === 'always show' || hp < maxHp)) {
-            $cardMaxHP.html('/' + (statbase * maxHp));
+            $cardMaxHP.html('/' + (maxHp));
             for (let i = maxHp.toString().length - hp.toString().length; i > 0; i--) {
                 $cardHP.prepend(' ');
             }
@@ -1037,17 +840,26 @@ const checkUpdateCardVisual = setInterval(() => {
                 case 2: hpSquish = 0.8; break;
                 case 3: hpSquish = 0.7; break;
                 case 4: hpSquish = 0.55; break;
-                default: maxHpSquish = 0.3; break;
+                default: hpSquish = 0.45; break;
             }
             switch (maxHp.toString().length) {
                 case 1: maxHpSquish = 1; break;
                 case 2: maxHpSquish = 0.8; break;
-                case 3: maxHpSquish = 0.55; break;
-                case 4: maxHpSquish = 0.35; break;
-                default: maxHpSquish = 0.25; break;
+                case 3: maxHpSquish = 0.55; break;                                           // todo: these big ass switch statements could very easily be instead calculated instead of manually
+                case 4: maxHpSquish = 0.35; break;                                           // inputted, but i dont care to do that right now, and this works well enough to where the values
+                default: maxHpSquish = 0.25; break;                                          // are exactly what i want
             }
             $cardHP.attr("style", `transform: scaleX(${hpSquish})`);
             $cardMaxHP.attr("style", `transform: scaleX(${maxHpSquish})`);
+        } else {
+            switch (hp.toString().length) {
+                case 1: hpSquish = 1; break;
+                case 2: hpSquish = 1; break;
+                case 3: hpSquish = 0.9; break;
+                case 4: hpSquish = 0.7; break;
+                default: hpSquish = 0.55; break;
+            }
+            $cardHP.attr("style", `transform: scaleX(${hpSquish}); transform-origin: center`);
         }
 
         if (hp < maxHp) {
@@ -1067,8 +879,17 @@ const checkUpdateCardVisual = setInterval(() => {
             $cardHP.append($.i18n('stat-hp', 1));
         }
 
-        var $cardATK = $htmlCard.find('.cardATK');
-        $cardATK.html(statbase * attack);
+        var $cardATK = $htmlCard.find('.currentATK');
+        $cardATK.html(attack);
+        var atkSquish;
+        switch (attack.toString().length) {
+            case 1: atkSquish = 1; break;
+            case 2: atkSquish = 1; break;
+            case 3: atkSquish = 0.9; break;
+            case 4: atkSquish = 0.7; break;
+            default: atkSquish = 0.55; break;
+        }
+        $cardATK.attr("style", `transform: scaleX(${atkSquish})`);
 
         if (card.paralyzed > 0) {
             $htmlCard.removeClass('paralyzed').addClass('paralyzed');
@@ -1174,7 +995,7 @@ function initAliases() {
     "card-alias-573": "elimduck elim duck",
     "card-alias-579": "bqueen",
     "card-alias-581": "gmascot",
-    "card-alias-642": "pblook",
+    "card-alias-642": "pblook poliblook",
     "card-alias-661": "cws cyber sign cybersign",
     "card-alias-673": "bplush",
     "card-alias-700": "vb",
@@ -1224,7 +1045,6 @@ function veryImportantActiveVerbFormOf(str) {
         return `${str}s`;
     }
 }
-
 
 function initMulliganInfo() {
     if (!ingame) return;
@@ -1340,8 +1160,10 @@ function staticStyles() {
     .cardsPreviewCompact {overflow-x: auto; display: flex; height: auto; width: 100%;}
     .cardsPreviewCompact div {flex: 0 0 auto; box-sizing: border-box;}
     .cardHP:not(.pokecard-1996-frame .cardHP) {overflow-x: visible; white-space: nowrap; display: flex; justify-content: center; align-items: baseline; white-space: pre;}
+    .cardATK:not(.pokecard-1996-frame .cardATK) {overflow-x: visible; white-space: nowrap; display: flex; justify-content: center; align-items: baseline; white-space: pre;}
     .currentHP:not(.pokecard-1996-frame .currentHP) {text-align: right; transform-origin: right; display: inline-block;}
     .maxHP:not(.pokecard-1996-frame .maxHP) {text-align: left; font-size: 12px; color: gray; transform-origin: left; display: inline-block;}
+    .currentATK:not(.pokecard-1996-frame .currentATK) {text-align: center; transform-origin: center; display: inline-block;}
     #costInput, #atkInput, #hpInput {width: 33.33%; display: inline; padding-right: 0px; position: relative; z-index: 2; height: 28px;}
     #costInput {color: #00d0ff}
     #atkInput {color: #f0003c}
@@ -1380,16 +1202,37 @@ function staticStyles() {
     .setting-Galascript-button {max-width: 380px;}
     .setting-Galascript-button h4 {font-size: 16px; font-weight: bold; width: 380px; text-align: center;}
     .setting-Galascript-button h5 {font-size: 16px; font-weight: bold; width: 380px;}
-    .setting-Galascript-button .coolguy {float: right; color: lavender;}
+    .setting-Galascript-button .coolguy {float: right; color: thistle;}
     `)
 }
 
 const observer = new MutationObserver((mutations, obs) => {
-    document.querySelectorAll('[id^="underscript.plugin.Galascript.bgMixtape."]:not([id$="value"])').forEach(el => { // this whole thing is for the dynamic backgrounds of the playlist setting
+    document.querySelectorAll('[id^="underscript.plugin.Galascript.bgMixtape."]:not([id$="value"])').forEach(el => { // dynamic backgrounds for playlist setting
         function updateBackground (value) {
-            el.style.backgroundImage = `url('/images/backgrounds/${value}.png')`;
+            el.style.setProperty('background-image', `url('/images/backgrounds/${value}.png')`);
             el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.4)', 'important');
-            el.style.backgroundBlendMode = 'darken';
+            el.style.setProperty('background-blend-mode', 'darken');
+        };
+        el.oninput = e => {
+            updateBackground(e.target.value);
+        }
+        el.onmouseover = e => {
+            updateBackground(e.target.value);
+        }
+        if (!el.dataset.gsLoaded) {
+            el.dataset.gsLoaded = 'true';
+            updateBackground(el.value);
+        }
+    });
+    document.querySelectorAll('[id^="underscript.plugin.Galascript.emoteKeybinds."][id$="value"]').forEach(el => { // dynamic backgrounds for emote map
+        function updateBackground (value) {
+            const emoteImg = window.chatEmotes.find(emote => emote.id === Number(value)).image
+            el.style.setProperty('background-image', `url('/images/emotes/${emoteImg}.png')`);
+            el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.4)', 'important');
+            el.style.setProperty('background-repeat', 'no-repeat');
+            el.style.setProperty('background-position', '85%');
+            el.style.setProperty('background-size', '32px');
+            el.style.setProperty('background-blend-mode', 'darken');
         };
         el.oninput = e => {
             updateBackground(e.target.value);
@@ -1672,7 +1515,8 @@ function frameStyles() {
 function tablessToggle(val) {
     style('tabless', val ? 'add' : 'remove', `
     .cardsList .card, .cardSkinList .card {height: 246px;}
-    .cardsList .card .cardRarity, .cardSkinList .card .cardRarity {opacity: 0.4;}
+    .cardsList .card:has(.cardQuantity) .cardRarity, .cardSkinList .card:has(.cardQuantity) .cardRarity {opacity: 0.4;}
+    .cardsList .card:has(.cardUCPCost) .cardRarity, .cardSkinList .card:has(.cardUCPCost) .cardRarity {opacity: 0.4;}
     .card .cardQuantity, .card .cardUCPCost {top: 210px; z-index: 5; border: none; background-color: unset}
     .card .cardUCPCost:has(*) {visibility: hidden}
     .card .cardUCPCost > * {visibility: visible; position: absolute; left: 35px; width: 55px;}
@@ -1753,7 +1597,9 @@ function defaultSouls() {
 function setBg(bg, noMusic) {
     $('body').css('background', '#000 url(\'images/backgrounds/' + bg + '.png\') no-repeat');
     $('body').css('background-size', 'cover');
-    sessionStorage.setItem(`underscript.bgm.${window.gameId}`, bg); // fixes interactions with underscript's persist bg system (?)
+    if (plugin.settings().value('underscript.persist.bgm')) {
+        sessionStorage.setItem(`underscript.bgm.${window.gameId}`, Number(bg));
+    }
     if (!noMusic) {
         window.music.pause();
         window.playBackgroundMusic(bg);
@@ -1762,7 +1608,9 @@ function setBg(bg, noMusic) {
 
 function rollBgSmart(noMusic) {
     var newBg = window.randomInt(1, backgrounds.length - 1);
-    for (const [key, value] of bgMixtape.value()) {
+    for (let [key, value] of bgMixtape.value()) {
+        key = Number(key)
+        console.log(key, value, newBg)
         if (newBg === key) {
             switch (value) {
                 case 'Omit': rollBgSmart(); break;
@@ -2073,7 +1921,7 @@ const statBase = plugin.settings().add({
     name: 'Stat base',
     note: 'Displays ATK and HP stats in different base number multiples.<br><br><span style="color:thistle;">Change applies on card update</span>',
     category: 'Card rendering',
-    type: "select", options: ["1", "10", "100"],
+    type: "select", options: ["1", "10", "100", "1000"],
     default: "1",
     onChange: (val) => refreshCards()
 });
@@ -2186,7 +2034,7 @@ const switchPerspectivesKeybind = plugin.settings().add({
 const chatroomZeroKeybind = plugin.settings().add({
     key: 'chatroomZeroKeybind',
     name: 'Open OOB chatroom',
-    note: 'Sets the key used to open chatroom 0 -- an ominous unused chat<br>Somewhat useful for writing notes!<br><br><span style="color:salmon;">Chats in this room are still logged by Undercards Chat Log, so<br>don\'t try anything stupid, okay?</span>',
+    note: 'Sets the key used to open chatroom 0 -- an ominous unused chat<br>Somewhat useful for writing notes!<br><br><span style="color:salmon;">Chats in this room are still logged by Undercards Chat Log, so<br>don\'t try anything stupid (:</span>',
     category: 'Keybinds',
     type: keybind,
     default: '["unbound", "unbound"]',
@@ -2197,7 +2045,7 @@ plugin.events.on('Chat:Connected', () => {
     emoteKeybinds = plugin.settings().add({
         key: 'emoteKeybinds',
         name: 'Emotes',
-        note: 'Do emotes with keypresses',
+        note: 'Use ingame emotes with keypresses',
         category: 'Keybinds',
         type: 'advancedMap',
         default: [['["Digit1", "1"]', 'you know what i HATE?      that\'s BEPIS       the taste... the smell... the texture...        hey.... your drooling......']],
@@ -2247,67 +2095,67 @@ const blurriness = plugin.settings().add({
 });
 
 const greyscale = plugin.settings().add({
-  key: 'greyscale',
-  name: 'Greyscale',
-  note: 'companies after pride month',
-  category: 'Filters',
-  type: "slider",
-  min: 0,
-  max: 100,
-  step: 10,
-  default: 0.1,
-  reset: true,
-  onChange: (val) => siteFilter(crispiness?.value(), blurriness?.value(), val, invert?.value())
+    key: 'greyscale',
+    name: 'Greyscale',
+    note: 'companies after pride month',
+    category: 'Filters',
+    type: "slider",
+    min: 0,
+    max: 100,
+    step: 10,
+    default: 0.1,
+    reset: true,
+    onChange: (val) => siteFilter(crispiness?.value(), blurriness?.value(), val, invert?.value())
 });
 
 const invert = plugin.settings().add({
-  key: 'invert',
-  name: 'Invert',
-  note: 'Its like were in some sort of... <b>Distorsion World</b>',
-  category: 'Filters',
-  onChange: (val) => siteFilter(crispiness?.value(), blurriness?.value(), greyscale?.value(), val)
+    key: 'invert',
+    name: 'Invert',
+    note: 'Its like were in some sort of... <b>Distorsion World</b>',
+    category: 'Filters',
+    onChange: (val) => siteFilter(crispiness?.value(), blurriness?.value(), greyscale?.value(), val)
 });
 
 const pixelImageRendering = plugin.settings().add({
-  key: 'pixelImageRendering',
-  name: 'Slightly shittier image rendering',
-  note: 'Seen better on transparent images',
-  category: 'Filters',
-  default: false,
-  onChange: (val) => imgPixelToggle(val)
+    key: 'pixelImageRendering',
+    name: 'Pixel-perfect image rendering',
+    note: 'why',
+    category: 'Filters',
+    default: false,
+    onChange: (val) => imgPixelToggle(val)
 });
 
 const lightsOff = plugin.settings().add({
-  key: 'lightsOff',
-  name: '\"Dark\" mode',
-  note: 'Makes the site dark, with your cursor being the only beacon of light...',
-  category: 'Filters',
-  default: false,
-  onChange: (val) => {if (val) {createFlashlight()} else {removeFlashlight()}
+    key: 'lightsOff',
+    name: '\"Dark\" mode',
+    note: 'Makes the site dark, with your cursor being the only beacon of light...',
+    category: 'Filters',
+    default: false,
+    onChange: (val) => {if (val) {createFlashlight()} else {removeFlashlight()}
 }});
 
 const flashlightRadiusInput = plugin.settings().add({
-  key: 'flashlightRadiusInput',
-  name: 'Flashlight radius',
-  note: 'Changes how big or small the light radius is.',
-  category: 'Filters',
-  type: "slider",
-  min: 1,
-  max: 11,
-  step: 1,
-  default: 4,
-  reset: true,
-  onChange: (val) => updateFlashlightRadius(val)
+    key: 'flashlightRadiusInput',
+    name: 'Flashlight radius',
+    note: 'Changes how big or small the light radius is',
+    category: 'Filters',
+    type: "slider",
+    min: 1,
+    max: 11,
+    step: 1,
+    default: 4,
+    reset: true,
+    onChange: (val) => updateFlashlightRadius(val)
 });
 
 const flashlightStyle = plugin.settings().add({
-  key: 'flashlightStyle',
-  name: 'Flashlight style',
-  note: 'Changes how the light of the flashlight looks',
-  category: 'Filters',
-  type: "select", options: ["spotlight", "diffused"],
-  default: "spotlight",
-  onChange: (val) => updateFlashlightImg(val)
+    key: 'flashlightStyle',
+    name: 'Flashlight style',
+    note: 'Changes how the light of the flashlight looks',
+    category: 'Filters',
+    type: "select", options: ["spotlight", "diffused"],
+    default: "spotlight",
+    onChange: (val) => updateFlashlightImg(val)
 });
 
 const dtColor = plugin.settings().add({
@@ -2827,7 +2675,7 @@ const kittyCatsEnabled = plugin.settings().add({
     data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/kittyCat.png' },
     type: powerCheckbox,
     default: false,
-    onChange: (val) => refreshCards()
+    onChange: (val) => { rollEventArrays(); refreshCards(); }
 });
 
 const kittyCatsChance = plugin.settings().add({
@@ -2838,7 +2686,7 @@ const kittyCatsChance = plugin.settings().add({
     type: "text",
     default: 5,
     reset: true,
-    onChange: (val) => refreshCards()
+    onChange: (val) => { rollEventArrays(); refreshCards(); }
 });
 
 const mikeDropsEnabled = plugin.settings().add({
@@ -2849,7 +2697,7 @@ const mikeDropsEnabled = plugin.settings().add({
     data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/mikeDrop.png' },
     type: powerCheckbox,
     default: false,
-    onChange: (val) => refreshCards()
+    onChange: (val) => { rollEventArrays(); refreshCards(); }
 });
 
 const mikeDropsChance = plugin.settings().add({
@@ -2860,11 +2708,11 @@ const mikeDropsChance = plugin.settings().add({
     type: "text",
     default: 5,
     reset: true,
-    onChange: (val) => refreshCards()
+    onChange: (val) => { rollEventArrays(); refreshCards(); }
 });
 
-const backgroundCheck = plugin.settings().add({
-    key: 'backgroundCheck',
+const checkPower = plugin.settings().add({
+    key: 'checkPower',
     name: 'Check',
     note: 'Always displays, giving all of a card\'s currently stored information<br>For use in debugging :P<br><br><span style="color:thistle;">Change applies on card update</span>',
     category: 'Too many powers!!!',
@@ -3028,41 +2876,37 @@ function actionNotification(icon, type, text) {
 }
 
 function kittytime(card) {
-    var reset = true;
     const kittymind = [
-        `An evil Spaniard kitty changed your language to Spanish.`,
-        `This kitty is asleep...`,
-        `This kitty wants to talk!`,
-        `A kitty ended your turn prematurely.`,
-        `A kitty fell off the counter ;(`,
-        `This kitty wants you to meet her family!`,
-        `A kitty bapped the light switch.`,
-        `This kitty teams up with others...watch out! Next kitty will do ${kittyAmount + 1} actions!`,
+        `An evil Spaniard kitty changed your language to Spanish.`, // loads default translations for es, doesnt actually change the setting
+        `This kitty is asleep...`,                                  // nothing; a break
+        `This kitty wants to talk!`,                                // opens first 17 chat ids
+        `A kitty ended your turn prematurely.`,                     // ends your turn, like mike drop
+        `A kitty fell off the counter ;(`,                          // triggers big damage animation and sound
+        `This kitty wants you to meet her family!`,                 // opens tribe menu for tems
+        `A kitty bapped the light switch.`,                         // toggles on/off dark mode
+        `A kitty messed with the color pallete.`,                   // shuffles soul colors
     ]
-    for (let i = kittyAmount; i >= kittyAmount; i--) {
-        var kittypoll = Math.floor(Math.random() * kittymind.length);
-        switch (kittypoll) {
-            case 0: defaultTranslations('es'); break;
-            case 1: break;
-            case 2: for (let i = 1; i <= 16; i++) {window.openRoom(i)} break;
-            case 3: window.socketGame?.send(JSON.stringify({action: "endTurn"})); break;
-            case 4: window.shakeScreen(); break;
-            case 5: window.showTribeCards('TEMMIE'); break;
-            case 6:
-                if (!lightsOff?.value()) {
-                    createFlashlight();
-                    lightsOff?.set(true);
-                } else {
-                    removeFlashlight();
-                    lightsOff?.set(false);
-                };
-                break;
-            case 7: kittyAmount++; reset = false; break;
+    var kittypoll = Math.floor(Math.random() * kittymind.length);
+    switch (kittypoll) {
+        case 0: defaultTranslations('es'); break;
+        case 1: break;
+        case 2: for (let i = 1; i <= 16; i++) {window.openRoom(i)} break;
+        case 3: window.socketGame?.send(JSON.stringify({action: "endTurn"})); break;
+        case 4: window.shakeScreen(); break;
+        case 5: window.showTribeCards('TEMMIE'); break;
+        case 6:
+            if (!lightsOff?.value()) {
+                createFlashlight();
+                lightsOff?.set(true);
+            } else {
+                removeFlashlight();
+                lightsOff?.set(false);
+            };
             break;
-        }
+        case 7: shuffleSouls(); break;
+        break;
         actionNotification('kittyCat', 'kitty', kittymind[kittypoll])
     }
-    if (reset) { kittyAmount = 1; }
 }
 
 window.kittytime = kittytime
@@ -3124,36 +2968,50 @@ var catsArray = [];
 var mikesArray = [];
 plugin.events.on('GameStart', () => {
     plugin.events.on('connect', () => {
+        const gameBg = sessionStorage.getItem(`underscript.bgm.${window.gameId}`);
+        const persistBg = plugin.settings().value('underscript.persist.bgm');
         if (autoStartMusic?.value()) {
-            rollBgSmart(0);
+            if (gameBg && persistBg) {
+                setBg(gameBg, 0);
+            } else {
+                rollBgSmart(0);
+            }
             $('html').unbind('click');
         } else {
-            rollBgSmart(1)
+            if (gameBg && persistBg) {
+                setBg(gameBg, 1);
+            } else {
+                rollBgSmart(1);
+            }
         };
-        const seed = window.gameId
-        function rollChance(i) {
-            var m = 2**35 - 31
-            var a = 185852
-            var s = ((seed ^ i) * 2654435761) >>> 0;
-            var roll = (s * a % m) / m
-            return Math.floor(roll * 100) + 1;
-        }
-        const kittyCatsChancer = Math.min(Math.max(kittyCatsChance.value(), 0), 100);
-        const mikeDropsChancer = Math.min(Math.max(mikeDropsChance.value(), 0), 100);
-        for (let i = 10000; i <= 20000; i++) {
-            if (kittyCatsChancer >= rollChance(i)) {
-                catsArray.push(i)
-            }
-        }
-        for (let i = 10000; i <= 20000; i++) {
-            if (mikeDropsChancer >= rollChance(i * 6)) {
-                mikesArray.push(i)
-            }
-        }
-        window.catsArray = catsArray
-        window.mikesArray = mikesArray
+        rollEventArrays();
     });
 });
+
+function rollEventArrays() {
+    const seed = window.gameId
+    function rollChance(i) {
+        var m = 2**35 - 31
+        var a = 185852
+        var s = ((seed ^ i) * 2654435761) >>> 0;
+        var roll = (s * a % m) / m
+        return Math.floor(roll * 100) + 1;
+    }
+    const kittyCatsChancer = Math.min(Math.max(kittyCatsChance.value(), 0), 100);
+    const mikeDropsChancer = Math.min(Math.max(mikeDropsChance.value(), 0), 100);
+    for (let i = 10000; i <= 20000; i++) {
+        if (kittyCatsChancer >= rollChance(i)) {
+            catsArray.push(i)
+        }
+    }
+    for (let i = 10000; i <= 20000; i++) {
+        if (mikeDropsChancer >= rollChance(i * 6)) {
+            mikesArray.push(i)
+        }
+    }
+    window.catsArray = catsArray
+    window.mikesArray = mikesArray
+}
 
 // i am very proud of the stat filters. they make me feel cool
 
@@ -3326,13 +3184,17 @@ function creditTitle(title) {
 function creditRow(contribution, creator) {
     return `<h5>${contribution}<span class="coolguy">${creator}</span></h5>`
 }
-function creatorRow(creatorA, creatorB) {
-    return `<h5><span style="color: lavender;">${creatorA}</span><span class="coolguy">${creatorB}</span></h5>`
+function creatorRow(creator) {
+    return `<h5 style="text-align: center; color: thistle;">${creator}</h5>`
+}
+function link(display, link, icon) {
+    return `<a target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;" href="${link}"><img style="width: 14px;" src="https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/${icon}.png">${display}</a>`
 }
 
 const credits = `
-Galascript wouldn't be possible without all of your contributions and epic gamerness. Especially this guy's.
-${creditRow("Lifeblood of Galascript", "feildmaster")}
+Galascript wouldn't be possible without all of your contributions and epic gamerness. Especially...
+${creditRow("Underscript developer", "feildmaster")}
+feild made this whole thing possible! It's him who set the groundwork for people like me to easily craft their silly schemes (not to mention the heavy help along the way!). I can't thank him enough :D
 ${creditTitle("Frames")}
 ${creditRow("Staff", "Diamaincrah")}
 ${creditRow("Spamton", "Dylan Hall")}
@@ -3348,10 +3210,16 @@ ${creditRow("Steamworks", "Shyren")}
 ${creditRow("Inscrypted", "Dylan Hall")}
 ${creditRow("It's TV Time!", "Dylan Hall")}
 ${creditRow("Cold Place", "Dylan Hall")}
-${creditTitle("Other assets")}
-${creditRow("Hollow Knight rarity icons", "Jaku")}
-${creditRow("FNAFB rarity icons", "JaimeezNuts")}
+${creditTitle("Rarity icons")}
+${creditRow("Hollow Knight", "Jaku")}
+${creditRow("FNAFB", "JaimeezNuts")}
+${creditTitle("Free-to-use Frame assets")}
+${creditRow("Pokecard 1996 - Monster, Shiny", link("ILKCMP", "https://www.deviantart.com/ilkcmp", "deviantart_thistle"))}
+${creditRow("Pokecard 1996 - Spell", link("icycatelf", "https://www.deviantart.com/icycatelf", "deviantart_thistle"))}
 ${creditTitle("Special Thanks")}
-${creatorRow("Onutrem", "feildmaster again")}
-${creatorRow("Galascript's early supporters", "And you <3")}
+${creatorRow("feildmaster (again)")}
+${creatorRow("Onutrem")}
+${creatorRow("Galascript's early supporters and testers")}
+${creatorRow("And you. Thank you <3")}
+i am... so happy to have this out you have no fucking idea oh my g
 `
