@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.1
+// @version      1.0.1.1
 // @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
@@ -109,7 +109,10 @@ plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/G
 
 const patchNotes =
 
-`Yello, small little bugfix patch!
+`Oops hold on
+- Gala is dummy and he broke something. This is fixed now
+1.0.1 notes:
+Yello, small little bugfix patch!
 - Fixed the white glow (intended for a pure black SOUL color override) appearing in places it shouldn't when saving your deck image
     - Saving a deck now always displays the soul color as the default soul color
 - Fixed Kitty cats not giving you messages on what they're up to
@@ -2923,7 +2926,7 @@ function kittytime(card) {
         case 4: window.shakeScreen();                                                   break;
         case 5: window.showTribeCards('TEMMIE');                                        break;
         case 6:
-            if ($("#elementId").length) {
+            if ($("#gsFlashlight").length) {
                 removeFlashlight();
             } else {
                 createFlashlight();
