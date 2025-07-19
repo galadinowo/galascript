@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.0
+// @version      1.0.1
 // @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
@@ -109,13 +109,17 @@ plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/G
 
 const patchNotes =
 
-`Welcome to Galascript's first official release!
-
-There's simply too many changes from previous betas to list. No, seriously, I'd love to write down every single fix, but the popup for these changes would be so long, it'd go offscreen and be unreadable...
-
-Just... consider this its own, little, stable (hopefully) package!
-
-Have fun, and report bugs to Gala!`;
+`Yello, small little bugfix patch!
+- Fixed the white glow (intended for a pure black SOUL color override) appearing in places it shouldn't when saving your deck image
+    - Saving a deck now always displays the soul color as the default soul color
+- Fixed Kitty cats not giving you messages on what they're up to
+    - Kitty cats and Mike drops's messages are now togglable in the settings
+- Fixed Evil Spaniard Kitty not working correctly
+    - You will now correctly (and swiftly) get sent to The Spanish Realm
+- Kitty cats can no longer change your settings and just leave them like that after the match
+- Removed a debug message
+- Adjusted some setting tooltips
+`;
 
 const convertMarkdown = new underscript.lib.showdown.Converter();
 
@@ -782,6 +786,7 @@ if (typeof plugin.addFilter === 'function') {
             return removed;
         }
     )
+
 }
 
 const checkUpdateCardVisual = setInterval(() => {
@@ -927,7 +932,9 @@ function defaultTranslations(language) {
     var languagesObject = {}
     languagesObject[language] = `translation/${language}.json`
     $.i18n().locale = language;
-    $.i18n().load(languagesObject).done($('body').i18n());
+    $.i18n().load(languagesObject).done(function () {
+        $('body').i18n();
+    });
 }
 window.defaultTranslations = defaultTranslations
 function initAliases() {
@@ -946,7 +953,7 @@ function initAliases() {
     "card-alias-69": "fmemory",
     "card-alias-71": "fenergy",
     "card-alias-82": "merchire",
-    "card-alias-88": "btreat",
+    "card-alias-88": "btreat bctreat",
     "card-alias-89": "pgas polgas pollgas pollugas",
     "card-alias-92": "fon",
     "card-alias-95": "tow",
@@ -1203,6 +1210,7 @@ function staticStyles() {
     .setting-Galascript-button h4 {font-size: 16px; font-weight: bold; width: 380px; text-align: center;}
     .setting-Galascript-button h5 {font-size: 16px; font-weight: bold; width: 380px;}
     .setting-Galascript-button .coolguy {float: right; color: thistle;}
+    #underscript\\.plugin\\.Galascript\\.kittyCatsChance, #underscript\\.plugin\\.Galascript\\.mikeDropsChance {width: 32px;}
     `)
 }
 
@@ -1529,21 +1537,21 @@ function updateSoulColor(soul, color) {
             img[src*="images/souls/${soul}.png"] {filter: drop-shadow(0px); transform: translateY(0px);}
             img[src*="images/souls/big/${soul}.png"] {filter: drop-shadow(0px); transform: translateY(0px);}
             div:not(.breaking-skin):has(.cardName.${soul}) > .cardImage {background-color: pebis; background-blend-mode: unset;}
-            .${soul}:not(li span):not([onmouseover]):not(.pokecard-1996-frame .${soul}) {color: ${color}; text-shadow: revert}
+            .${soul}:not(li span):not([onmouseover]):not(.pokecard-1996-frame .${soul}):not(#deckCardsCanvas *) {color: ${color}; text-shadow: revert}
         ` : `
             img[src*="images/souls/${soul}.png"] {filter: drop-shadow(5000px 5000px 0 ${color}); transform: translate(-5000px, -5000px);}
             img[src*="images/souls/big/${soul}.png"] {filter: drop-shadow(5000px 5000px 0 ${color}); transform: translate(-5000px, -5000px);}
             div:not(.breaking-skin):has(.cardName.${soul}) > .cardImage {background-color: ${color} !important; background-blend-mode: luminosity;}
-            .${soul}:not(li span):not([onmouseover]):not(.pokecard-1996-frame .${soul}) {color: ${color}}
+            .${soul}:not(li span):not([onmouseover]):not(.pokecard-1996-frame .${soul}):not(#deckCardsCanvas *) {color: ${color}}
             ${color === "#000000" ? `
-                .${soul}:not(li span):not([onmouseover]) {text-shadow: 0px 0px 10px #fff, 0px 0px 10px #fff;}
+                .${soul}:not(li span):not([onmouseover]):not(#deckCardsCanvas *) {text-shadow: 0px 0px 10px #fff, 0px 0px 10px #fff;}
             ` : `
-                .${soul}:not(li span):not([onmouseover]) {text-shadow: revert}
+                .${soul}:not(li span):not([onmouseover]):not(#deckCardsCanvas *) {text-shadow: revert}
             `}
         `}
     `)
 }
-function shuffleSouls() {
+function shuffleSouls(dontSet) {
     var souls = [dtColor.value(), integColor.value(), kindnessColor.value(), justiceColor.value(), pvColor.value(), braveryColor.value(), patienceColor.value()]
     for (let i = souls.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1)); // fisher-yates shuffle
@@ -1552,15 +1560,17 @@ function shuffleSouls() {
 
     function colorSet(soul, color) {
         updateSoulColor(soul, color)
-        switch (soul) {
-            case 'DETERMINATION': return dtColor.set(color);
-            case 'INTEGRITY': return integColor.set(color);
-            case 'KINDNESS': return kindnessColor.set(color);
-            case 'JUSTICE': return justiceColor.set(color);
-            case 'PERSEVERANCE': return pvColor.set(color);
-            case 'BRAVERY': return braveryColor.set(color);
-            case 'PATIENCE': return patienceColor.set(color);
-            default: console.error(`Invalid soul: ${soul} (setting color)`);
+        if (!dontSet) {
+            switch (soul) {
+                case 'DETERMINATION': return dtColor.set(color);
+                case 'INTEGRITY': return integColor.set(color);
+                case 'KINDNESS': return kindnessColor.set(color);
+                case 'JUSTICE': return justiceColor.set(color);
+                case 'PERSEVERANCE': return pvColor.set(color);
+                case 'BRAVERY': return braveryColor.set(color);
+                case 'PATIENCE': return patienceColor.set(color);
+                default: console.error(`Invalid soul: ${soul} (setting color)`);
+            }
         }
     }
 
@@ -1610,7 +1620,6 @@ function rollBgSmart(noMusic) {
     var newBg = window.randomInt(1, backgrounds.length - 1);
     for (let [key, value] of bgMixtape.value()) {
         key = Number(key)
-        console.log(key, value, newBg)
         if (newBg === key) {
             switch (value) {
                 case 'Omit': rollBgSmart(); break;
@@ -1802,7 +1811,7 @@ const mulliganInfo = plugin.settings().add({
 const autoStartMusic = plugin.settings().add({
     key: 'autoStartMusic',
     name: 'Automatically start music',
-    note: 'Normally, the game requires that you first click the page to play the background music<br>With this on, it\'ll attempt to immediately start playing, with no user input<br><br><span style="color:thistle;">Do note, however, that some browsers still aren\'t able to play audio without user input.</span><br><br><span style="color:thistle;">unfinishe dkinda</span>',
+    note: 'Normally, the game requires that you first click the page to play the background music<br>With this on, it\'ll attempt to immediately start playing, with no user input<br><br><span style="color:thistle;">Do note, however, that some browsers still aren\'t able to play audio without user input</span>',
     category: 'QoL',
     default: false,
 });
@@ -2141,9 +2150,9 @@ const flashlightRadiusInput = plugin.settings().add({
     category: 'Filters',
     type: "slider",
     min: 1,
-    max: 11,
+    max: 12,
     step: 1,
-    default: 4,
+    default: 10,
     reset: true,
     onChange: (val) => updateFlashlightRadius(val)
 });
@@ -2667,6 +2676,24 @@ const primePower = plugin.settings().add({
     onChange: (val) => refreshCards()
 });
 
+const checkPower = plugin.settings().add({
+    key: 'checkPower',
+    name: 'Check',
+    note: 'Always displays, giving all of a card\'s currently stored information<br>For use in debugging :P<br><br><span style="color:thistle;">Change applies on card update</span>',
+    category: 'Too many powers!!!',
+    data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/check.png' },
+    type: powerCheckbox,
+    default: false,
+    onChange: (val) => refreshCards()
+});
+
+const actionPowersInfo = plugin.settings().add({
+    key: 'actionPowersInfo',
+    name: '<span style="color: thistle;">Below are <i>action powers</i>. They appear on<br>a set % of cards and can affect the way you<br>play the game.</span>',
+    category: 'Too many powers!!!',
+    type: plaintext,
+});
+
 const kittyCatsEnabled = plugin.settings().add({
     key: 'kittyCatsEnabled',
     name: 'Kitty cats',
@@ -2680,12 +2707,11 @@ const kittyCatsEnabled = plugin.settings().add({
 
 const kittyCatsChance = plugin.settings().add({
     key: 'kittyCatsChance',
-    name: 'Kitty cats chance',
+    name: 'Kitty cats %',
     note: 'The % chance that a card will have a <i>Kitty cat</i><br>(assuming <i>Kitty cats</i> are enabled)',
     category: 'Too many powers!!!',
     type: "text",
     default: 5,
-    reset: true,
     onChange: (val) => { rollEventArrays(); refreshCards(); }
 });
 
@@ -2702,24 +2728,20 @@ const mikeDropsEnabled = plugin.settings().add({
 
 const mikeDropsChance = plugin.settings().add({
     key: 'mikeDropsChance',
-    name: 'Mike drops chance',
+    name: 'Mike drops %',
     note: 'The % chance that a card will have a <i>Mike drop</i><br>(assuming <i>Mike drops</i> are enabled)',
     category: 'Too many powers!!!',
     type: "text",
     default: 5,
-    reset: true,
     onChange: (val) => { rollEventArrays(); refreshCards(); }
 });
 
-const checkPower = plugin.settings().add({
-    key: 'checkPower',
-    name: 'Check',
-    note: 'Always displays, giving all of a card\'s currently stored information<br>For use in debugging :P<br><br><span style="color:thistle;">Change applies on card update</span>',
+const actionNotifications = plugin.settings().add({
+    key: 'actionNotifications',
+    name: 'Action power notifications',
+    note: 'Gives Underscript notifications for when an <i>action power</i> triggers',
     category: 'Too many powers!!!',
-    data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/check.png' },
-    type: powerCheckbox,
-    default: false,
-    onChange: (val) => refreshCards()
+    type: "select", options: ['on', 'off']
 });
 
 const versionInfo = plugin.settings().add({
@@ -2758,6 +2780,11 @@ const gsVersion = plugin.settings().add({
     category: 'Galascript',
     hidden: true,
 });
+
+window.setGSVersion = function(ver) {
+    gsVersion.set(ver);
+    window.location.reload();
+}
 
 function processBinds(e) {
     if (e.target.getAttribute("type") !== 'text' && e.target.className !== 'gsKeybind') { // if not in a text field or setting a keybind
@@ -2861,6 +2888,7 @@ plugin.events.on('GameEvent', (data) => {
 });
 
 function actionNotification(icon, type, text) {
+    if (actionNotifications?.value() === 'off') { return; }
     const kitty = [ `Mrrp`, `Mrow`, `Meow`, `Nyaw`, `Mrrrrow`, `Prrrrrr`, `Mrorw`, `Mroooooow`, `Mew`, `Waoow` ]
     const mike = [ `Truth nuke`, `Final act`, `That's all, folks`, `Yep, I went there`, `I'll see ya next time`, `Thank you all for coming`, `*cue applause*`, `Like and subscribe for part 2` ]
     var title = `<img src="https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${icon}.png"> `;
@@ -2877,36 +2905,34 @@ function actionNotification(icon, type, text) {
 
 function kittytime(card) {
     const kittymind = [
-        `An evil Spaniard kitty changed your language to Spanish.`, // loads default translations for es, doesnt actually change the setting
-        `This kitty is asleep...`,                                  // nothing; a break
-        `This kitty wants to talk!`,                                // opens first 17 chat ids
-        `A kitty ended your turn prematurely.`,                     // ends your turn, like mike drop
-        `A kitty fell off the counter ;(`,                          // triggers big damage animation and sound
-        `This kitty wants you to meet her family!`,                 // opens tribe menu for tems
-        `A kitty bapped the light switch.`,                         // toggles on/off dark mode
-        `A kitty messed with the color pallete.`,                   // shuffles soul colors
+        `An evil Spaniard kitty changed your language to Spanish.`, // 0 loads default translations for es, doesnt actually change the setting
+        `This kitty is asleep...`,                                  // 1 nothing; a break
+        `This kitty wants to talk!`,                                // 2 opens first 17 chat ids
+        `A kitty ended your turn prematurely.`,                     // 3 ends your turn, like mike drop
+        `A kitty fell off the counter ;(`,                          // 4 triggers big damage animation and sound
+        `This kitty wants you to meet her family!`,                 // 5 opens tribe menu for tems
+        `A kitty bapped the light switch.`,                         // 6 toggles on/off dark mode
+        `A kitty messed with the color pallete.`,                   // 7 shuffles soul colors
     ]
     var kittypoll = Math.floor(Math.random() * kittymind.length);
     switch (kittypoll) {
-        case 0: defaultTranslations('es'); break;
-        case 1: break;
-        case 2: for (let i = 1; i <= 16; i++) {window.openRoom(i)} break;
-        case 3: window.socketGame?.send(JSON.stringify({action: "endTurn"})); break;
-        case 4: window.shakeScreen(); break;
-        case 5: window.showTribeCards('TEMMIE'); break;
+        case 0: defaultTranslations('es');                                              break;
+        case 1:                                                                         break;
+        case 2: for (let i = 1; i <= 16; i++) {window.openRoom(i)}                      break;
+        case 3: window.socketGame?.send(JSON.stringify({action: "endTurn"}));           break;
+        case 4: window.shakeScreen();                                                   break;
+        case 5: window.showTribeCards('TEMMIE');                                        break;
         case 6:
-            if (!lightsOff?.value()) {
-                createFlashlight();
-                lightsOff?.set(true);
-            } else {
+            if ($("#elementId").length) {
                 removeFlashlight();
-                lightsOff?.set(false);
+            } else {
+                createFlashlight();
             };
-            break;
-        case 7: shuffleSouls(); break;
-        break;
-        actionNotification('kittyCat', 'kitty', kittymind[kittypoll])
+                                                                                        break;
+        case 7: shuffleSouls(1);                                                        break;
+        default: actionNotification('kittyCat', 'kitty', "Uh oh! Kitty broke the space-time continuum and returned an error. Please report this to Gala!"); return;
     }
+    actionNotification('kittyCat', 'kitty', kittymind[kittypoll])
 }
 
 window.kittytime = kittytime
@@ -2950,7 +2976,7 @@ plugin.events.on(':preload', () => {
         gsVersion.set(pluginVersion);
         plugin.toast({
             title: `Galascript: Update ${pluginVersion}`,
-            text: patchNotes,
+            text: convertMarkdown.makeHtml(patchNotes),
         });
     }
 });
