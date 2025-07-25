@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.1.1
+// @version      1.0.2
 // @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
@@ -29,9 +29,8 @@ function style(group, operation, ...css) {
         default: console.error(`Operation for style is invalid; should be "add", "remove", or "replace" (was "${operation}")`);
     }
 }
-window.gsStyle = style
-const standardFrames = ["Undertale", "Deltarune", "Time to get serious", "Golden", "Vaporwave", "Spider Party", "Halloween2020", "Christmas2020"]
-const customFrames = ["Staff", "Spamton", "Cyber World", "Hollow Knight", "Grimm Troupe", "Void", "FNAFB", "Outbreak", "Mirror Temple", "VMas", "Steamworks", "Inscrypted", "Its TV Time", "Cold Place", "Pokecard 1996"]
+const standardFrames = ["Undertale", "Deltarune", "Time to get serious", "Vaporwave", "Spider Party", "Halloween2020", "Christmas2020"]
+const customFrames = ["Staff", "Spamton", "Cyber World", "Hollow Knight", "Grimm Troupe", "Void", "FNAFB", "Outbreak", "Mirror Temple", "VMas", "Steamworks", "Inscrypted", "Its TV Time", "Cold Place", "Slay the Spire", "Pokecard 1996"]
 const backgrounds = ["-", "Ruins - UT", "Quiet Water - UT", "Hotland - UT", "Snowdin - UT", "The Surface - UT", "MTT Resort - UT", "Waterfall - UT", "The CORE - UT",
                      "Judgement Hall - UT", "True Lab - UT", "Hometown - DR", "Scarlet Forest - DR", "Home - DR", "Field of Hopes and Dreams - DR", "Castle Town - DR",
                      "Card Castle - DR", "Jevil's Staircase - DR", "Temmie Village - UT", "Home - UT", "Snowy - UT", "Quiet Autumn - DR", "Alphys's Classroom - DR", "Grillby's - UT",
@@ -108,20 +107,53 @@ const nullcard = {
 plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/Galascript.user.js');
 
 const patchNotes =
+`
+- Various visual updates to the Pokecard 1996 frame
+    - Correction to how Max HP Indicator looks
+    - Removed hover background
+    - Tabless is no longer ugly
+- New frame: Slay the Spire, by Bartwk!
+- "Card rendering" renamed to "Cardpaint"; "Obscurity" renamed to "Cardsludge"
+    - Fixed a lot of Cardsludge settings just... not working!
+    - New Cardpaint setting: Rarity skins. Changes display of certain custom rarity sets.
+    - New Cardsludge setting: Modifier. An additional wacky visual modifier to cards.
+        - "True obscurity" moved to being an option within "Modifier." To hide the rarities on the back, use "Obscure card rarity"
+- Fixed "force everywhere" in "Ingame display behavior" not working in games
+- Changing frame, shuffling and resetting soul colors, and clearing filters no longer closes the menu
+- Change frame setting has a nice lil background now
+- Fixed bug where Timer and Bridge Seed's image changing was affecting their name with "Card skin names" on
+- Fixed custom background rolling system not being compatiable with profile skin BGs
+    - When a profile skin with a special background is equipped, it will always be active until manually rerolled, at which point the nerly rolled background will be remembered instead of the profile skin's background
+- Did not fix bug where ATK isn't immediately greyed out when a monster is paralyzed
+    - I don't know how
+    - Please agknowledge that I tried
+- Program indicator defaults to Off now
+    - It could be confusing; the average new player had no clue why the numbers were changing randomly
+    - Because they are dumbies
+- Added some new card aliases
+- Golden frame removed
+    - It is currently purchasable so a decision was made to keep it exclusive
+    - I mean it was ugly anyways
+- Various changes and fixes to Kitty cats
+    - Can no longer end your turn
+        - In place of it, a new Kitty ability has been born. I guess you'll have to find it out yourself!
+    - Language switching fixed to be immediately applied
+        - It is janky with Loop names and Card skin names please spare me
+    - Language can now change to one of six supported languages, but never the one currently used
+    - Chatty Kitty is now significantly more annoying
+- "Man" mulligan quote altered
+    - Old: There is a <player> here. Are they happy to see you?
+    - New: Well, there is a <player> here. They might be happy to see you. What do you think?
 
-`Oops hold on
-- Gala is dummy and he broke something. This is fixed now
-1.0.1 notes:
-Yello, small little bugfix patch!
-- Fixed the white glow (intended for a pure black SOUL color override) appearing in places it shouldn't when saving your deck image
-    - Saving a deck now always displays the soul color as the default soul color
-- Fixed Kitty cats not giving you messages on what they're up to
-    - Kitty cats and Mike drops's messages are now togglable in the settings
-- Fixed Evil Spaniard Kitty not working correctly
-    - You will now correctly (and swiftly) get sent to The Spanish Realm
-- Kitty cats can no longer change your settings and just leave them like that after the match
-- Removed a debug message
-- Adjusted some setting tooltips
+Do note that more Kitty abilities will make it in with time! Have fun :3
+`;
+
+const patchNotesShort =
+
+`
+Some bug fixes, some Kitty cat changes, and a new frame!
+
+...The full patch notes were too big for this notification. Go to the bottom of the Galascript settings to view the whole thing!
 `;
 
 const convertMarkdown = new underscript.lib.showdown.Converter();
@@ -205,8 +237,9 @@ const checkCreateCard = setInterval(() => {
             name = $.i18n('card-name-' + pullRandom('id', card, 1), loopNames?.value() && card.loop > 0 ? card.loop + 1 : 1)
             break;
         default:
-            name = $.i18n('card-name-' + card.fixedId, loopNames?.value() && card.loop > 0 ? card.loop + 1 : 1)
-            if (cardSkinNames?.value() && card.image !== card.baseImage) {
+            name = $.i18n('card-name-' + card.fixedId, loopNames?.value() && card.loop > 0 ? card.loop + 1 : 1);
+            var cardImg = card.image.replaceAll(" Open", "").replace(/(\S)\d+$/, "$1");
+            if (cardSkinNames?.value() && cardImg !== card.baseImage) {
                 name = card.image.replaceAll("_", " ").replaceAll(" Full", "").replaceAll(" FULL", "")
             }
     }
@@ -243,6 +276,9 @@ const checkCreateCard = setInterval(() => {
         case '["to random card",1]':
             card.rarity = pullRandom('rarity', card, 4);
             card.extension = pullRandom('extension', card, 4);
+            break;
+        case '["hide",1]':
+            card.rarity = 'BASE'
             break;
     }
 
@@ -317,11 +353,12 @@ const checkCreateCard = setInterval(() => {
                         - in a game
                         ? card is owned by you, and frameSpoofBehavior is 'allies only'
                         ? frameSpoofBehavior is 'allies + enemies'
+                        ? frameSpoofBehavior is 'force everywhere'
                     or:
                         - not in a game
     */
 
-    if (((card.hasOwnProperty('frameSkinName') || frameSpoofBehavior?.value() === 'force everywhere') && frameSpoof?.value() !== 'off') && ((ingame && (frameSpoofBehavior?.value() === 'allies only' && card?.ownerId === window.userId || frameSpoofBehavior?.value() === 'allies + enemies')) || !ingame)) {
+    if (((card.hasOwnProperty('frameSkinName') || frameSpoofBehavior?.value() === 'force everywhere') && frameSpoof?.value() !== 'off') && ((ingame && (frameSpoofBehavior?.value() === 'allies only' && card?.ownerId === window.userId || frameSpoofBehavior?.value() === 'allies + enemies' || frameSpoofBehavior?.value() === 'force everywhere')) || !ingame)) {
         card.frameSkinName = frameSpoof?.value()
     }
 
@@ -340,10 +377,17 @@ const checkCreateCard = setInterval(() => {
 
     image = '<div class="cardImage"></div>\n'
 
+
+    var disableBreaking = '';
+    const frames = ['pokecard-1996', 'slay-the-spire']
+    if (frames.includes(frameSkinName)) {
+        disableBreaking = ' breaking-disabled'
+    }
+
     frameSkinName += '-frame';
 
     var htmlCard =
-    `<div id="${card.id}" class="card monster ${frameSkinName}${shiny} base${statBase?.value()}" data-rarity="${card.rarity}">
+    `<div id="${card.id}" class="card monster ${frameSkinName}${shiny}${disableBreaking} base${statBase?.value()}" data-rarity="${card.rarity}" data-extension="${card.extension}">
     <div class="shinySlot"></div>
     <div class="cardFrame"></div>
     <div class="cardBackground"></div>
@@ -353,7 +397,7 @@ const checkCreateCard = setInterval(() => {
     <div class="faux cardFauxHP">${fauxHp}</div>
     <div class="faux cardFauxStatus">${fauxStatusId}</div>
     <div class="faux cardFauxTribes">${fauxTribesId}</div>
-    <div class="cardName" data-i18n="card-name-${card.fixedId}"><div>${name}</div></div>
+    <div class="cardName" data-i18n="[html]card-name-${card.fixedId}"><div>${name}</div></div>
     <div class="cardCost">${cost}</div>
     ${program}
     <div class="cardStatus"></div>
@@ -362,7 +406,7 @@ const checkCreateCard = setInterval(() => {
     <div class="cardSilence"></div>
     <div class="cardAction"></div>
     <div class="cardSilence"></div>
-    <div class="cardDesc" data-i18n="card-${card.fixedId}"><div>${description}</div></div>
+    <div class="cardDesc"><div data-i18n="[html]card-${card.fixedId}">${description}</div></div>
     <div class="cardFooter"></div>
     <div class="cardATK">${htmlAtk}</div>
     <div class="cardRarity"></div>
@@ -373,7 +417,7 @@ const checkCreateCard = setInterval(() => {
 
         var cardSoul = card.hasOwnProperty('soul') ? card.soul.name : '';
         htmlCard =
-        `<div id="${card.id}" class="card spell ${frameSkinName}${shiny}" data-rarity="${card.rarity}">
+        `<div id="${card.id}" class="card spell ${frameSkinName}${shiny}${disableBreaking}" data-rarity="${card.rarity}" data-extension="${card.extension}">
         <div class="shinySlot"></div>
         <div class="cardFrame"></div>
         <div class="cardBackground"></div>
@@ -381,31 +425,15 @@ const checkCreateCard = setInterval(() => {
         <div class="faux cardFauxCost">${fauxCost}</div>
         <div class="faux cardFauxStatus">${fauxStatusId}</div>
         <div class="faux cardFauxTribes">${fauxTribesId}</div>
-        <div class="cardName ${cardSoul}" data-i18n="card-name-${card.fixedId}"><div>${name}</div></div>
+        <div class="cardName ${cardSoul}"><div data-i18n="[html]card-name-${card.fixedId}">${name}</div></div>
         <div class="cardCost">${cost}</div>
         ${program}
         <div class="cardStatus"></div>
         <div class="cardTribes"></div>
         <div class="cardImage"></div>
-        <div class="cardDesc" data-i18n="card-${card.fixedId}"><div>${description}</div></div>
+        <div class="cardDesc"><div data-i18n="[html]card-${card.fixedId}">${description}</div></div>
         <div class="cardFooter"></div>
         <div class="cardRarity"></div>
-        </div>`;
-    }
-    if (trueObscurity?.value() !== "off") {
-        var ext = card.extension.toUpperCase()
-        var rar = card.rarity.toUpperCase()
-        var link;
-        if (trueObscurity?.value() === "on, obscure rarity backing") {rar = "NORMAL"};
-        if (rar === 'BASE' || rar === 'TOKEN') {
-            link = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/cardBacks/${ext}Card${rar}.png`;
-        } else {
-            link = `images/cardBacks/${ext}Card${rar}.png`;
-        }
-        htmlCard =
-        `<div class="card obscured eviltime muahaha">
-        <div class="shinySlot" style="visibility: hidden;"></div>
-        <div class="cardFrame" style="background: url(${link}) no-repeat center;"></div>
         </div>`;
     }
 
@@ -830,18 +858,21 @@ const checkUpdateCardVisual = setInterval(() => {
         }
         if (card.typeCard === 1) {return;}
 
-        var $cardHP = $htmlCard.find('.currentHP');
-        var $cardMaxHP = $htmlCard.find('.maxHP');
-        $cardHP.html(hp);
-        $cardMaxHP.html('');
+        var $cardHp = $htmlCard.find('.cardHP');
+        var $cardCurrentHp = $htmlCard.find('.currentHP');
+        var $cardMaxHp = $htmlCard.find('.maxHP');
+        $cardHp.html($cardCurrentHp);
+        $cardHp.append($cardMaxHp);
+        $cardCurrentHp.html(hp);
+        $cardMaxHp.html('');
         var hpSquish, maxHpSquish;
         if (maxHpIndicator?.value() !== 'off' && (maxHpIndicator?.value() === 'always show' || hp < maxHp)) {
-            $cardMaxHP.html('/' + (maxHp));
+            $cardMaxHp.html('/' + (maxHp));
             for (let i = maxHp.toString().length - hp.toString().length; i > 0; i--) {
-                $cardHP.prepend(' ');
+                $cardCurrentHp.prepend(' ');
             }
             for (let i = hp.toString().length - maxHp.toString().length; i > 0; i--) {
-                $cardMaxHP.append(' ');
+                $cardMaxHp.append(' ');
             }
             switch (hp.toString().length) {
                 case 1: hpSquish = 1; break;
@@ -857,8 +888,8 @@ const checkUpdateCardVisual = setInterval(() => {
                 case 4: maxHpSquish = 0.35; break;                                           // inputted, but i dont care to do that right now, and this works well enough to where the values
                 default: maxHpSquish = 0.25; break;                                          // are exactly what i want
             }
-            $cardHP.attr("style", `transform: scaleX(${hpSquish})`);
-            $cardMaxHP.attr("style", `transform: scaleX(${maxHpSquish})`);
+            $cardCurrentHp.attr("style", `transform: scaleX(${hpSquish})`);
+            $cardMaxHp.attr("style", `transform: scaleX(${maxHpSquish})`);
         } else {
             switch (hp.toString().length) {
                 case 1: hpSquish = 1; break;
@@ -867,24 +898,23 @@ const checkUpdateCardVisual = setInterval(() => {
                 case 4: hpSquish = 0.7; break;
                 default: hpSquish = 0.55; break;
             }
-            $cardHP.attr("style", `transform: scaleX(${hpSquish}); transform-origin: center`);
+            $cardCurrentHp.attr("style", `transform: scaleX(${hpSquish}); transform-origin: center`);
         }
 
         if (hp < maxHp) {
-            $cardHP.removeClass('damaged').addClass('damaged');
+            $cardCurrentHp.removeClass('damaged').addClass('damaged');
         } else {
-            $cardHP.removeClass('damaged');
+            $cardCurrentHp.removeClass('damaged');
 
             if (maxHp > baseHp) {
-                $cardHP.removeClass('hp-buff').addClass('hp-buff');
+                $cardCurrentHp.removeClass('hp-buff').addClass('hp-buff');
             } else {
-                $cardHP.removeClass('hp-buff');
+                $cardCurrentHp.removeClass('hp-buff');
             }
         }
 
         if ($htmlCard.hasClass("pokecard-1996-frame")) {
-            $cardHP.append(' ');
-            $cardHP.append($.i18n('stat-hp', 1));
+            $cardHp.append($.i18n('stat-hp', 1));
         }
 
         var $cardATK = $htmlCard.find('.currentATK');
@@ -936,7 +966,15 @@ function defaultTranslations(language) {
     languagesObject[language] = `translation/${language}.json`
     $.i18n().locale = language;
     $.i18n().load(languagesObject).done(function () {
-        $('body').i18n();
+        $('[data-i18n]').each(function () {
+            let rawKey = $(this).data('i18n');
+            let cleanKey = rawKey.replace(/^\[html\]/, '');
+            if (rawKey.startsWith('[html]')) {
+                $(this).html($.i18n(cleanKey, 1));
+            } else {
+                $(this).text($.i18n(cleanKey, 1));
+            }
+        });
     });
 }
 window.defaultTranslations = defaultTranslations
@@ -1000,6 +1038,7 @@ function initAliases() {
     "card-alias-531": "ttoriel",
     "card-alias-532": "etdb",
     "card-alias-533": "gertomb gtomb",
+    "card-alias-549": "copdyne",
     "card-alias-552": "cow",
     "card-alias-567": "blowbick",
     "card-alias-573": "elimduck elim duck",
@@ -1038,7 +1077,7 @@ function initAliases() {
     "card-alias-853": "chutomb ctomb",
     "card-alias-853": "duel",
     "card-alias-869": "galadino",
-    "card-alias-878": "cero k",
+    "card-alias-878": "cero ketsukane",
     "card-alias-897": "tspawn titanspawn",
   }, 'en');
 }
@@ -1082,7 +1121,7 @@ function initMulliganInfo() {
                                   `A wild ${player()} appeared!`,
                                   `${player()} glares at you. You hear boss music.`,
                                   `Well, you didn't expect ${player()} to be here.`,
-                                  `There is a ${player()} here. Are they happy to see you?`,
+                                  `Well, there is a ${player()} here. They might be happy to see you. What do you think?`,
                                   `> enters ${player(enemyUser.toLowerCase())}-less queue<br>
                                   > looks inside<br>
                                   > ${player(enemyUser.toLowerCase())}`,
@@ -1167,8 +1206,6 @@ function staticStyles() {
     .cardImage > img {visibility: hidden;}
     .cardName div[style*="font-size: 7px;"] {white-space: nowrap;}
     #gsFlashlight {position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; pointer-events: none; z-index: 100; image-rendering: pixelated;}
-    .cardsPreviewCompact {overflow-x: auto; display: flex; height: auto; width: 100%;}
-    .cardsPreviewCompact div {flex: 0 0 auto; box-sizing: border-box;}
     .cardHP:not(.pokecard-1996-frame .cardHP) {overflow-x: visible; white-space: nowrap; display: flex; justify-content: center; align-items: baseline; white-space: pre;}
     .cardATK:not(.pokecard-1996-frame .cardATK) {overflow-x: visible; white-space: nowrap; display: flex; justify-content: center; align-items: baseline; white-space: pre;}
     .currentHP:not(.pokecard-1996-frame .currentHP) {text-align: right; transform-origin: right; display: inline-block;}
@@ -1208,12 +1245,15 @@ function staticStyles() {
     .setting-advancedMap_select:has(#underscript\\.plugin\\.Galascript\\.bgMixtape) {width: 350px; border-bottom: none !important;}
     .setting-advancedMap_select:has(#underscript\\.plugin\\.Galascript\\.bgMixtape) select {width: 40%; height: 40px; text-wrap: auto; text-align: center; background-repeat: no-repeat; background-size: cover; background-position: center;}
     .card.breaking-skin.breaking-disabled .cardDesc,.cardName,.cardATK,.cardHP,.cardCost,.cardRarity {background-color: rgba(0, 0, 0, 0);}
-    .breaking-skin:not(.breaking-disabled):not(.pokecard-1996-frame):hover .cardDesc, .breaking-skin:not(.breaking-disabled):not(.pokecard-1996-frame):hover .cardName, .breaking-skin:not(.breaking-disabled):not(.pokecard-1996-frame):hover .cardATK, .breaking-skin:not(.breaking-disabled):not(.pokecard-1996-frame):hover .cardHP, .breaking-skin:not(.breaking-disabled):not(.pokecard-1996-frame):hover .cardCost, .breaking-skin:not(.breaking-disabled):not(.pokecard-1996-frame):hover .cardRarity {background-color: rgba(0, 0, 0, 0.7);}
+    .breaking-skin:not(.breaking-disabled):hover .cardDesc, .breaking-skin:not(.breaking-disabled):hover .cardName, .breaking-skin:not(.breaking-disabled):hover .cardATK, .breaking-skin:not(.breaking-disabled):hover .cardHP, .breaking-skin:not(.breaking-disabled):hover .cardCost, .breaking-skin:not(.breaking-disabled):hover .cardRarity {background-color: rgba(0, 0, 0, 0.7);}
     .setting-Galascript-button {max-width: 380px;}
     .setting-Galascript-button h4 {font-size: 16px; font-weight: bold; width: 380px; text-align: center;}
     .setting-Galascript-button h5 {font-size: 16px; font-weight: bold; width: 380px;}
     .setting-Galascript-button .coolguy {float: right; color: thistle;}
     #underscript\\.plugin\\.Galascript\\.kittyCatsChance, #underscript\\.plugin\\.Galascript\\.mikeDropsChance {width: 32px;}
+    .setting-advancedMap:has(#underscript\\.plugin\\.Galascript\\.customTranslations) {width: 350px; border-bottom: none !important;}
+    .setting-advancedMap:has(#underscript\\.plugin\\.Galascript\\.customTranslations) input {width: 40%; height: 40px; text-wrap: auto; text-align: center; background-repeat: no-repeat; background-size: cover; background-position: center;}
+    .gsTransHelperOption {display: block; background-color: black; border: none; margin: 0px 5px;}
     `)
 }
 
@@ -1230,8 +1270,8 @@ const observer = new MutationObserver((mutations, obs) => {
         el.onmouseover = e => {
             updateBackground(e.target.value);
         }
-        if (!el.dataset.gsLoaded) {
-            el.dataset.gsLoaded = 'true';
+        if (!el.dataset.gsBgLoaded) {
+            el.dataset.gsBgLoaded = 'true';
             updateBackground(el.value);
         }
     });
@@ -1251,8 +1291,86 @@ const observer = new MutationObserver((mutations, obs) => {
         el.onmouseover = e => {
             updateBackground(e.target.value);
         }
-        if (!el.dataset.gsLoaded) {
-            el.dataset.gsLoaded = 'true';
+        if (!el.dataset.gsSettingBgLoaded) {
+            el.dataset.gsSettingBgLoaded = 'true';
+            updateBackground(el.value);
+        }
+    });
+    document.querySelectorAll('[id^="underscript.plugin.Galascript.customTranslations."]:not([id$="value"])').forEach(el => { // dynamic backgrounds for custom translation setting
+        function updateBackground (value) {
+            const card = window.getCard(Number(value.replace(/\D/g,'')))
+            const image = card?.baseImage ?? "Blank"
+            el.style.setProperty('background-image', `url('/images/cards/${image}.png')`);
+            el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.4)', 'important');
+            el.style.setProperty('background-blend-mode', 'darken');
+        };
+        el.oninput = e => {
+            updateBackground(e.target.value);
+        }
+        el.onmouseover = e => {
+            updateBackground(e.target.value);
+        }
+        if (!el.dataset.gsSettingBgLoaded) {
+            el.dataset.gsSettingBgLoaded = 'true';
+            updateBackground(el.value);
+        }
+    });
+    document.querySelectorAll('[id="underscript.plugin.Galascript.frameSpoof"]').forEach(el => { // dynamic backgrounds for frame skins option
+        function updateBackground (value) {
+            var underscored = value.toString().replace(/\s+/g, '_');
+            var dashed = value.toString().replace(/\s+/g, '-');
+            var url;
+            if (standardFrames.includes(value)) {
+                url = `images/frameSkins/${underscored}/frame_monster.png`
+            } else if (value === "Pokecard 1996") {
+                url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/pokecard-1996-frame-common.png`
+            } else if (value === "Slay the Spire") {
+                url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/slay-the-spire-frame-monster-common.png`
+            } else {
+                url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/${dashed.toLowerCase()}-frame-monster.png`
+            }
+            el.style.setProperty('background-image', `url('${url}')`);
+            el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.4)', 'important');
+            el.style.setProperty('background-repeat', 'no-repeat');
+            el.style.setProperty('background-position', '85% -2%');
+            el.style.setProperty('background-size', '64px');
+            el.style.setProperty('background-blend-mode', 'darken');
+        };
+        el.oninput = e => {
+            updateBackground(e.target.value);
+        }
+        el.onmouseover = e => {
+            updateBackground(e.target.value);
+        }
+        if (!el.dataset.gsSettingBgLoaded) {
+            el.dataset.gsSettingBgLoaded = 'true';
+            updateBackground(el.value);
+        }
+    });
+    document.querySelectorAll('[id="underscript.plugin.Galascript.raritySkins"]').forEach(el => { // dynamic backgrounds for rarity skins option
+        function updateBackground (value) {
+            var url;
+            switch (value) {
+                case "off": url = 'images/rarity/BASE_DETERMINATION.png'; break;
+                case "match frame": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/rarity-match.gif'; break;
+                case "Hollow Knight": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/hk-determination.png'; break;
+                case "FNAFB": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-ut-determination.png'; break;
+            }0
+            el.style.setProperty('background-image', `url('${url}')`);
+            el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.4)', 'important');
+            el.style.setProperty('background-repeat', 'no-repeat');
+            el.style.setProperty('background-position', '85%');
+            el.style.setProperty('background-size', '32px');
+            el.style.setProperty('background-blend-mode', 'darken');
+        };
+        el.oninput = e => {
+            updateBackground(e.target.value);
+        }
+        el.onmouseover = e => {
+            updateBackground(e.target.value);
+        }
+        if (!el.dataset.gsSettingBgLoaded) {
+            el.dataset.gsSettingBgLoaded = 'true';
             updateBackground(el.value);
         }
     });
@@ -1325,7 +1443,6 @@ function statsWhiteToggle(val) {
     style('statsWhite', val ? 'add' : 'remove', '.cardATK, .cardHP {color: white;}')
 }
 function frameStyles() {
-    const rarities = ['TOKEN', 'BASE', 'COMMON', 'RARE', 'EPIC', 'LEGENDARY', 'DETERMINATION'];
     style('static', 'add', `
     .cardSilence {background: transparent url("images/cardAssets/silence.png") no-repeat; visibility: hidden;}
     @keyframes float { 0% { transform: translatey(-4px); } 50% { transform: translatey(2px); } 100% { transform: translatey(-4px); } }
@@ -1395,6 +1512,7 @@ function frameStyles() {
     .cold-place-frame .cardCost, .cold-place-frame .cardATK, .cold-place-frame .cardHP {left: 119px; transform: scale(0.7);}
     .cold-place-frame .cardRarity {top: 222px; left: 82px; height: 16px;}
     .cold-place-frame .cardQuantity, .cold-place-frame .cardUCPCost {top: 238px;}
+    .cold-place-frame .cardUCPDiscount {top: 130px;}
     .cold-place-frame .cardFooter {background-color: rgba(0, 0, 0, 0);}
     .cold-place-frame .cardTribes {right: 140px; top: 32px}
     .cold-place-frame .cardTribes > img:nth-child(2) {left: -1px; top: -3px;}
@@ -1414,15 +1532,15 @@ function frameStyles() {
     .pokecard-1996-frame.spell .cardCost {top: 37px; left: 119px; text-align: right; transform: scale(1, 0.5);}
     .pokecard-1996-frame.monster.standard-skin .cardImage {top: 28px; left: 0px; width: 175px; height: 105px}
     .pokecard-1996-frame.spell.standard-skin .cardImage {top: 50px;}
-    .pokecard-1996-frame.breaking-skin .cardImage {height: 210px; z-index: 0 !important}
+    .pokecard-1996-frame.breaking-skin .cardImage {height: 210px !important; top: 0px !important; z-index: 0 !important}
     .pokecard-1996-frame.monster .cardDesc {top: 130px; line-height: 1.2; left: 18px; transform-origin: left; transform: scale(0.7); text-align: left;}
     .pokecard-1996-frame.spell .cardDesc {top: 144px; width: 140px; left: 18px; line-height: 1;}
     .pokecard-1996-frame .cardDesc, .pokecard-1996-frame .cardSilence {top: 129px;}
     .pokecard-1996-frame .cardDesc > div span {font-weight: 700; color: black;}
     .pokecard-1996-frame .cardATK {top: 158px; left: 130px;}
-    .pokecard-1996-frame .cardHP {top: 9px; left: -3px; font-weight: 700; width: 150px; transform-origin: right; transform: scale(0.6); text-align: right;}
+    .pokecard-1996-frame .cardHP {top: 9px; left: -3px; font-weight: 700; width: 150px; transform-origin: right; transform: scale(0.6); text-align: right; color: red !important}
     .pokecard-1996-frame .currentHP {color: red !important}
-    .pokecard-1996-frame .maxHP {color: red !important}
+    .pokecard-1996-frame .maxHP {color: maroon !important}
     .pokecard-1996-frame .cardRarity {visibility: hidden}
     .pokecard-1996-frame.monster .cardStatus {left: 91px; top: 207px;}
     .pokecard-1996-frame.monster .cardStatus > img {max-width: 10px; width: 10px; max-height: 10px; height: 10px}
@@ -1435,7 +1553,38 @@ function frameStyles() {
     .pokecard-1996-frame.spell .cardStatus > img:nth-child(5) {left: 56px;}
     .pokecard-1996-frame.monster .cardTribes > img {max-width: 12px; width: 12px; max-height: 12px; height: 12px}
     .pokecard-1996-frame.monster .cardTribes > img:not(:first-child) {visibility: hidden}
-    .pokecard-1996-frame .cardQuantity, .mirror-temple-frame .cardUCPCost {top: 244px;}
+    .pokecard-1996-frame.monster .PrettyCards_CardBottomLeftInfo > img {max-width: 12px; width: 12px; max-height: 12px; height: 12px}
+    .pokecard-1996-frame.monster .PrettyCards_CardBottomLeftInfo {left: 12px; top: 130px; filter: grayscale(100%)}
+    .pokecard-1996-frame.spell .PrettyCards_CardBottomLeftInfo {left: 30px; top: 145px; filter: grayscale(100%)}
+    .pokecard-1996-frame .cardQuantity, .pokecard-1996-frame .cardUCPCost {top: 244px;}
+    .pokecard-1996-frame .cardUCPDiscount {top: 122px;}
+    .pokecard-1996-frame .cardQuantity, .pokecard-1996-frame .cardUCPCost, .pokecard-1996-frame .friendship-xp {text-shadow: -1px -1px black, 1px 1px black, -1px 1px black, 1px -1px black !important;}
+
+    .slay-the-spire-frame {font-family: Candara,Calibri,Segoe,Segoe UI,Optima,Arial,sans-serif; }
+    .slay-the-spire-frame .cardName {top: 18px; text-align: center !important; left: 31px; transform: scale(1.1); width: 120px;}
+    .slay-the-spire-frame .cardHeader, .slay-the-spire-frame .cardFooter {background-color: rgba(0, 0, 0, 0);}
+    .slay-the-spire-frame .cardCost {top: 6px; left: -1px;}
+    .slay-the-spire-frame .cardImage {background-color: black !important;}
+    .slay-the-spire-frame.monster.standard-skin .cardImage {top: 39px; left: 15px; width: 150px; height: 100px; background-size: cover !important;}
+    .slay-the-spire-frame.spell.standard-skin .cardImage {top: 39px; left: 15px; width: 150px; height: 100px; background-size: cover !important;}
+    .slay-the-spire-frame.breaking-skin .cardImage, .slay-the-spire-frame.full-skin .cardImage {top: 39px; left: 15px; width: 150px; height: 100px; background-size: cover !important; background-position-y: 26% !important; z-index: 0 !important}
+    .slay-the-spire-frame .cardDesc {left: 21.5px; width: 136px;}
+    .slay-the-spire-frame .cardSilence {left: 52px;}
+    .slay-the-spire-frame .cardDesc > div span {color: revert;}
+    .slay-the-spire-frame .cardDesc > div .helpPointer, .slay-the-spire-frame .cardDesc .PATIENCE {text-decoration: none; font-weight: 700; color: #f0c441 !important;}
+    .slay-the-spire-frame .cardStatus {left: 150px; top: 44px;}
+    .slay-the-spire-frame.monster .cardTribes {right: 25px;}
+    .slay-the-spire-frame.monster .cardTribes > img:nth-child(2) {top: 5px;}
+    .slay-the-spire-frame.spell .cardTribes {right: 25px; top: 116px;}
+    .slay-the-spire-frame.monster .cardDesc, .slay-the-spire-frame.monster .cardSilence {top: 140px;}
+    .slay-the-spire-frame.spell .cardDesc, .slay-the-spire-frame.spell .cardSilence {top: 150px;}
+    .slay-the-spire-frame .cardATK, .slay-the-spire-frame .cardHP {top: 211px;}
+    .slay-the-spire-frame .cardATK {left: 45px;}
+    .slay-the-spire-frame .cardHP {left: 99px;}
+    .slay-the-spire-frame .cardQuantity, .slay-the-spire-frame .cardUCPCost {top: 240px; left: 29px;}
+    .slay-the-spire-frame .cardUCPDiscount {top: 120px;}
+    .slay-the-spire-frame .cardRarity {visibility: hidden}
+    .slay-the-spire-frame .cardBackground {visibility: hidden}
 
     .vmas-frame .shinySlot {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/vmas-frame-shiny.png"); opacity: 0.3; mix-blend-mode: hard-light;}
     .vmas-frame .shinySlot.animated {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/vmas-frame-shiny-animated.gif"); opacity: 0.3; mix-blend-mode: hard-light;}
@@ -1445,7 +1594,6 @@ function frameStyles() {
     .vmas-frame .cardDesc, .vmas-frame .cardSilence {top: 129px;}
     .vmas-frame .cardATK, .vmas-frame .cardHP, .vmas-frame .cardRarity {top: 214px;}
     .vmas-frame .cardQuantity, .vmas-frame .cardUCPCost {top: 240px;}
-
 
     .grimm-troupe-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
     .grimm-troupe-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
@@ -1512,14 +1660,36 @@ function frameStyles() {
     .mirror-temple-frame .cardHP {animation: float 6s ease-in-out infinite; animation-delay: -1s;}
     .mirror-temple-frame .cardQuantity, .mirror-temple-frame .cardUCPCost {top: 240px;}
     `)
-    rarities.forEach(r => { // unique rarity-dependant behaviors
-        style('static', 'add', `
-        .pokecard-1996-frame.monster[data-rarity="${r}"] .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/pokecard-1996-frame-${r.toLowerCase()}.png");}
-        .hollow-knight-frame[data-rarity="${r}"] .cardRarity, .grimm-troupe-frame[data-rarity="${r}"] .cardRarity, .void-frame[data-rarity="${r}"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/hk-${r.toLowerCase()}.png) no-repeat transparent !important;}
-        .fnafb-frame .cardRarity[style*='background: url("images/rarity/BASE_${r}.png") no-repeat transparent;'] {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-ut-${r.toLowerCase()}.png) no-repeat transparent !important;}
-        .fnafb-frame .cardRarity[style*='background: url("images/rarity/DELTARUNE_${r}.png") no-repeat transparent;'] {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-dr-${r.toLowerCase()}.png) no-repeat transparent !important;}
-        .fnafb-frame .cardRarity[style*='background: url("images/rarity/UTY_${r}.png") no-repeat transparent;'] {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-uty-${r.toLowerCase()}.png) no-repeat transparent !important;}
-        `)
+}
+
+function rarityStyles(type) {
+    const rarities = ['TOKEN', 'BASE', 'COMMON', 'RARE', 'EPIC', 'LEGENDARY', 'DETERMINATION'];
+    style('rarityStyle', 'remove');
+    rarities.forEach(r => {
+        style('rarityStyle', 'add', `.pokecard-1996-frame.monster[data-rarity="${r}"] .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/pokecard-1996-frame-${r.toLowerCase()}.png");}`);
+        style('rarityStyle', 'add', `.slay-the-spire-frame.monster[data-rarity="${r}"] .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/slay-the-spire-frame-monster-${r.toLowerCase()}.png");}`);
+        style('rarityStyle', 'add', `.slay-the-spire-frame.spell[data-rarity="${r}"] .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/slay-the-spire-frame-spell-${r.toLowerCase()}.png");}`);
+        switch (type) {
+            case "off": break;
+            case "match frame":
+                style('rarityStyle', 'add', `
+                .hollow-knight-frame[data-rarity="${r}"] .cardRarity, .grimm-troupe-frame[data-rarity="${r}"] .cardRarity, .void-frame[data-rarity="${r}"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/hk-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                .fnafb-frame[data-rarity="${r}"][data-extension="BASE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-ut-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                .fnafb-frame[data-rarity="${r}"][data-extension="DELTARUNE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-dr-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                .fnafb-frame[data-rarity="${r}"][data-extension="UTY"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-uty-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                `);
+                break;
+            case "Hollow Knight":
+                style('rarityStyle', 'add', `.card[data-rarity="${r}"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/hk-${r.toLowerCase()}.png) no-repeat transparent !important;}`);
+                break;
+            case "FNAFB":
+                style('rarityStyle', 'add', `
+                .card[data-rarity="${r}"][data-extension="BASE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-ut-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                .card[data-rarity="${r}"][data-extension="DELTARUNE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-dr-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                .card[data-rarity="${r}"][data-extension="UTY"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-uty-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                `);
+                break;
+        }
     });
 }
 
@@ -1529,9 +1699,64 @@ function tablessToggle(val) {
     .cardsList .card:has(.cardQuantity) .cardRarity, .cardSkinList .card:has(.cardQuantity) .cardRarity {opacity: 0.4;}
     .cardsList .card:has(.cardUCPCost) .cardRarity, .cardSkinList .card:has(.cardUCPCost) .cardRarity {opacity: 0.4;}
     .card .cardQuantity, .card .cardUCPCost {top: 210px; z-index: 5; border: none; background-color: unset}
+    .slay-the-spire-frame .cardQuantity, .slay-the-spire-frame .cardUCPCost {top: 222px;}
+    .pokecard-1996-frame .cardQuantity, .pokecard-1996-frame .cardUCPCost {top: 212px;}
+    .halloween2020-frame .cardQuantity, .halloween2020-frame .cardUCPCost {top: 216px;}
     .card .cardUCPCost:has(*) {visibility: hidden}
     .card .cardUCPCost > * {visibility: visible; position: absolute; left: 35px; width: 55px;}
     `)
+}
+
+function cardModifier(val) {
+    style('cardModifier', 'remove')
+    if (!obscActive()) { refreshCards(); return; }
+    const rarities = ['TOKEN', 'BASE', 'COMMON', 'RARE', 'EPIC', 'LEGENDARY', 'DETERMINATION'];
+    style('static', 'add', `
+    @keyframes spin {
+        0%  {transform: rotate(0deg);}
+        100% {transform: rotate(360deg);}
+    }
+    @keyframes treadmill {
+        0% {transform: translateX(1200px);}
+        100% {transform: translateX(-1200px);}
+    }
+    `)
+    var modifier = ``;
+    switch (val) {
+        case "none": modifier = ``; break;
+        case "thin": modifier = `.card {transform: scaleX(0.5)}`; break;
+        case "wide": modifier = `.card {transform: scaleX(1.5)}`; break;
+        case "wee": modifier = `.card {transform: scale(0.5)}`; break;
+        case "large": modifier = `.card {transform: scale(1.5)}`; break;
+        case "offset": modifier = `.card {transform: translate(-100px)}`; break;
+        case "upsidedown": modifier = `.card {transform: rotate(180deg)}`; break;
+        case "flipped":
+            rarities.forEach(r => {
+                function link(ext) {
+                    if (r === 'BASE' || r === 'TOKEN') {
+                        return `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/cardBacks/${ext}Card${r}.png`;
+                    } else {
+                        return `images/cardBacks/${ext}Card${r}.png`;
+                    }
+                }
+                modifier += `.card[data-rarity="${r}"][data-extension="BASE"] .cardFrame {background-image: url(${link('BASE')})}
+                `;
+                modifier += `.card[data-rarity="${r}"][data-extension="DELTARUNE"] .cardFrame {background-image: url(${link('DELTARUNE')})}
+                `;
+                modifier += `.card[data-rarity="${r}"][data-extension="UTY"] .cardFrame {background-image: url(${link('UTY')})}
+                `;
+            });
+            modifier += `.card *:not(.cardFrame) {visibility: hidden;}
+            `;
+            if (obscCardRarity?.value() === 'blur') {
+                modifier += `.card .cardFrame {filter: blur(${obscBlurStrength.value()}px)}`
+            }
+            break;
+        case "spin": modifier = `.card {animation: spin 4s infinite linear;}`; break;
+        case "treadmill": modifier = `.card {animation: treadmill 15s infinite linear;} .card:hover {animation-play-state: paused;}`; break;
+    }
+    console.log(modifier)
+    style('cardModifier', 'add', modifier)
 }
 
 function updateSoulColor(soul, color) {
@@ -1578,8 +1803,6 @@ function shuffleSouls(dontSet) {
     }
 
     souls.forEach((soul, i) => colorSet(Object.keys(soulColors)[i], souls[i]) );
-
-    $('.underscript-dialog').modal('hide');
 }
 
 function defaultSouls() {
@@ -1603,23 +1826,25 @@ function defaultSouls() {
 
     updateSoulColor('PATIENCE', soulColors.PATIENCE);
     patienceColor.set(soulColors.PATIENCE);
-
-    $('.underscript-dialog').modal('hide');
 }
 
-function setBg(bg, noMusic) {
+function setBg(bg, music, detachMusic) {
     $('body').css('background', '#000 url(\'images/backgrounds/' + bg + '.png\') no-repeat');
     $('body').css('background-size', 'cover');
     if (plugin.settings().value('underscript.persist.bgm')) {
-        sessionStorage.setItem(`underscript.bgm.${window.gameId}`, Number(bg));
+        sessionStorage.setItem(`underscript.bgm.${window.gameId}`, bg);
     }
-    if (!noMusic) {
+    if (music) {
         window.music.pause();
-        window.playBackgroundMusic(bg);
+        if (detachMusic) {
+            window.playBackgroundMusic(rollBgSmart(music, true));
+        } else {
+            window.playBackgroundMusic(bg);
+        }
     }
 }
 
-function rollBgSmart(noMusic) {
+function rollBgSmart(music, returnNum) {
     var newBg = window.randomInt(1, backgrounds.length - 1);
     for (let [key, value] of bgMixtape.value()) {
         key = Number(key)
@@ -1633,7 +1858,10 @@ function rollBgSmart(noMusic) {
             newBg = key;
         }
     }
-    setBg(newBg, noMusic)
+    if (returnNum) {
+        return newBg;
+    }
+    setBg(newBg, music);
 }
 
 function getValue(el, remove = false) {
@@ -1798,7 +2026,7 @@ function refreshCards() { if (typeof window.showPage === 'function' && window.pa
 const cardAliases = plugin.settings().add({
     key: 'cardAliases',
     name: 'Card alias lookup',
-    note: 'Cards can be searched in your collection by well-known aliases and shorthands<br>For example, searching "casdyne" will have Casual Undyne as a result.<br><br><span style="color:thistle;">Change applies on reload</span>',
+    note: 'Cards can be searched in your collection by well-known aliases and shorthands<br>For example, searching "casdyne" will have Casual Undyne as a result<br><br><span style="color:thistle;">Change applies on reload</span>',
     category: 'QoL',
     default: true,
 });
@@ -1806,7 +2034,7 @@ const cardAliases = plugin.settings().add({
 const mulliganInfo = plugin.settings().add({
     key: 'mulliganInfo',
     name: 'Mulligan information',
-    note: 'Displays turn order and opponent\'s name and SOUL on the Mulligan at the start of the game.',
+    note: 'Displays turn order and opponent\'s name and SOUL on the Mulligan at the start of the game',
     category: 'QoL',
     default: true,
 });
@@ -1824,7 +2052,7 @@ const programIndicators = plugin.settings().add({
     name: 'Program indicator',
     note: 'Program cards, when hovered, display their cost as their cost + the Program\'s cost<br><br><span style="color:thistle;">Change applies on card update</span>',
     category: 'QoL',
-    default: true,
+    default: false,
     onChange: (val) => refreshCards()
 });
 
@@ -1840,7 +2068,7 @@ const statFilters = plugin.settings().add({
 const statsOnTop = plugin.settings().add({
     key: 'statsOnTop',
     name: 'Stats on top',
-    note: 'Renders card stats to be always over obstructing skins',
+    note: 'Displays card stats over obstructing skins',
     category: 'QoL',
     default: false,
     onChange: (val) => statsOnTopToggle(val)
@@ -1860,7 +2088,7 @@ const cardSkinNames = plugin.settings().add({
     key: 'cardSkinNames',
     name: 'Card skin names',
     note: 'Card names will match applied skins<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Card rendering',
+    category: 'Cardpaint',
     default: false,
     onChange: (val) => refreshCards()
 });
@@ -1869,7 +2097,7 @@ const loopNames = plugin.settings().add({
     key: 'loopNames',
     name: 'Loop names',
     note: 'When a card has 1 or more Loop, its name will be changed to its plural form<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Card rendering',
+    category: 'Cardpaint',
     default: false,
     onChange: (val) => refreshCards()
 });
@@ -1878,7 +2106,7 @@ const respectiveFrames = plugin.settings().add({
     key: 'respectiveFrames',
     name: 'Respective frames',
     note: 'UT and UTY cards use the Undertale frame, and DR cards use the Deltarune frame<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Card rendering',
+    category: 'Cardpaint',
     default: false,
     onChange: (val) => refreshCards()
 });
@@ -1886,43 +2114,61 @@ const respectiveFrames = plugin.settings().add({
 const frameSpoof = plugin.settings().add({
     key: 'frameSpoof',
     name: 'Card frame',
-    note: 'Changes cards to use any frame, including some custom ones!<br><br><span style="color:thistle;">Closes this menu to manually set Stat base, Power spacing, Power bounds,<br>No power fitting, and Powers iterate settings to best fit the selected frame</span><br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Card rendering',
+    note: 'Changes cards to use any frame, including some custom ones!<br><br>Some frames change the below settings when applied.<br><br><span style="color:thistle;">Change applies on card update</span>',
+    category: 'Cardpaint',
     type: "select", options: allFrames.toSpliced(0, 0, "off"),
     default: "off",
-    onChange: (val) => {
-        if (val === 'Pokecard 1996') {
-            statBase.set('10')
-            powerSpacing.set(135)
-            powerBounds.set(58)
-            legacyPowers.set(false)
-            numStack.set(true)
-        } else {
-            statBase.set('1')
-            powerSpacing.set(20)
-            powerBounds.set(135)
-            legacyPowers.set(false)
-            numStack.set(false)
+    onChange: (val, oldVal) => {
+        switch (oldVal) {
+            case 'Pokecard 1996':
+                statBase.set('1');
+                powerSpacing.set(20);
+                powerBounds.set(135);
+                numStack.set(false);
+                break;
+            case 'Slay the Spire':
+                powerBounds.set(135);
+                break;
         }
-      $('.underscript-dialog').modal('hide');
-      refreshCards()
+        switch (val) {
+            case 'Pokecard 1996':
+                statBase.set('10');
+                powerSpacing.set(135);
+                powerBounds.set(58);
+                numStack.set(true);
+                break;
+            case 'Slay the Spire':
+                powerBounds.set(102);
+                break;
+        }
+      refreshCards();
     }
 });
 
 const frameSpoofBehavior = plugin.settings().add({
     key: 'frameSpoofBehavior',
     name: 'Ingame display behavior',
-    note: 'Decides when the chosen frame should display itself<br><br>Side note: Ally cards are cards owned by <i>you</i> specifically,<br>so they won\'t show up while spectating</span><br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Card rendering',
+    note: 'Decides when the chosen frame should display itself<br><br><span style="color:thistle;">Change applies on card update</span>',
+    category: 'Cardpaint',
     type: "select", options: ["allies only", "allies + enemies", "force everywhere"],
     default: "allies + enemies",
+});
+
+const raritySkins = plugin.settings().add({
+    key: 'raritySkins',
+    name: 'Rarity skin',
+    note: 'Use a selection of custom rarity icons<br>"match frame" uses the custom rarity icon associated with the frame, if any',
+    category: 'Cardpaint',
+    type: "select", options: ["off", "match frame", "Hollow Knight", "FNAFB"],
+    default: "match frame",
+    onChange: (val) => rarityStyles(val)
 });
 
 const shinyDisplay = plugin.settings().add({
     key: 'shinyDisplay',
     name: 'Shiny display',
     note: 'Modifies how a card\'s shiny form is displayed',
-    category: 'Card rendering',
+    category: 'Cardpaint',
     type: "select", options: ["default", "cover"],
     default: "default",
     onChange: (val) => shinyDisplayToggle(val)
@@ -1931,8 +2177,8 @@ const shinyDisplay = plugin.settings().add({
 const statBase = plugin.settings().add({
     key: 'statBase',
     name: 'Stat base',
-    note: 'Displays ATK and HP stats in different base number multiples.<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Card rendering',
+    note: 'Displays ATK and HP stats in different base number multiples<br><br><span style="color:thistle;">Change applies on card update</span>',
+    category: 'Cardpaint',
     type: "select", options: ["1", "10", "100", "1000"],
     default: "1",
     onChange: (val) => refreshCards()
@@ -1942,7 +2188,7 @@ const powerSpacing = plugin.settings().add({
     key: 'powerSpacing',
     name: 'Power spacing',
     note: 'Changes how close together or far powers are spaced from eachother<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Card rendering',
+    category: 'Cardpaint',
     type: "slider",
     min: 0,
     max: 135,
@@ -1956,7 +2202,7 @@ const powerBounds = plugin.settings().add({
     key: 'powerBounds',
     name: 'Power bounds',
     note: 'Changes how far powers can go up to<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Card rendering',
+    category: 'Cardpaint',
     type: "text",
     default: 135,
     reset: true,
@@ -1967,7 +2213,7 @@ const legacyPowers = plugin.settings().add({
     key: 'legacyPowers',
     name: 'No power fitting',
     note: 'Do you prefer the powers hanging off the card, you sick freak?<br>Here you go :3<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Card rendering',
+    category: 'Cardpaint',
     default: false,
     onChange: (val) => refreshCards()
 });
@@ -1976,9 +2222,8 @@ const numStack = plugin.settings().add({
     key: 'numStack',
     name: 'Powers iterate',
     note: 'Instead of numbers, powers iterate themselves<br><span style="color:thistle;">ex:</span> 3 Loop would appear as 3 seperate Loop icons,<br>not one Loop icon with a 3 on it.<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Card rendering',
+    category: 'Cardpaint',
     default: false,
-    disabled: frameSpoof?.value() === 'Pokecard 1996',
     onChange: (val) => refreshCards()
 });
 
@@ -1986,7 +2231,7 @@ const tabless = plugin.settings().add({
     key: 'tabless',
     name: 'Tabless',
     note: 'Compacts the weird tab things for Quantity and UCP Cost<br>into the rarity box',
-    category: 'Card rendering',
+    category: 'Cardpaint',
     default: true,
     onChange: (val) => tablessToggle(val)
 });
@@ -2052,23 +2297,20 @@ const chatroomZeroKeybind = plugin.settings().add({
     default: '["unbound", "unbound"]',
 });
 
-var emoteKeybinds
-plugin.events.on('Chat:Connected', () => {
-    emoteKeybinds = plugin.settings().add({
-        key: 'emoteKeybinds',
-        name: 'Emotes',
-        note: 'Use ingame emotes with keypresses',
-        category: 'Keybinds',
-        type: 'advancedMap',
-        default: [['["Digit1", "1"]', 'you know what i HATE?      that\'s BEPIS       the taste... the smell... the texture...        hey.... your drooling......']],
-        type: {
-            key: keybind,
-            value: 'select',
-        },
-        data: () => ({
-            value: window.chatEmotes.map(emote => [emote.name, emote.id])
-        }),
-    });
+const emoteKeybinds = plugin.settings().add({
+    key: 'emoteKeybinds',
+    name: 'Emotes',
+    note: 'Use ingame emotes with keypresses',
+    category: 'Keybinds',
+    type: 'advancedMap',
+    default: [['["Digit1", "1"]', 'you know what i HATE?      that\'s BEPIS       the taste... the smell... the texture...        hey.... your drooling......']],
+    type: {
+        key: keybind,
+        value: 'select',
+    },
+    data: () => ({
+        value: window.chatEmotes?.map(emote => [emote.name, emote.id])
+    }),
 });
 
 const filtersInfo = plugin.settings().add({
@@ -2174,7 +2416,7 @@ const dtColor = plugin.settings().add({
     key: 'dtColor',
     name: 'Determination color',
     note: 'Recolors anything Determination!',
-    category: 'Sillies',
+    category: 'To your liking',
     type: "color",
     default: soulColors.DETERMINATION,
     reset: true,
@@ -2185,7 +2427,7 @@ const integColor = plugin.settings().add({
     key: 'integColor',
     name: 'Integrity color',
     note: 'Recolors anything Integrity!',
-    category: 'Sillies',
+    category: 'To your liking',
     type: "color",
     default: soulColors.INTEGRITY,
     reset: true,
@@ -2196,7 +2438,7 @@ const kindnessColor = plugin.settings().add({
     key: 'kindnessColor',
     name: 'Kindness color',
     note: 'Recolors anything Kindness!',
-    category: 'Sillies',
+    category: 'To your liking',
     type: "color",
     default: soulColors.KINDNESS,
     reset: true,
@@ -2207,7 +2449,7 @@ const justiceColor = plugin.settings().add({
     key: 'justiceColor',
     name: 'Justice color',
     note: 'Recolors anything Justice!',
-    category: 'Sillies',
+    category: 'To your liking',
     type: "color",
     default: soulColors.JUSTICE,
     reset: true,
@@ -2218,7 +2460,7 @@ const pvColor = plugin.settings().add({
     key: 'pvColor',
     name: 'Perseverance color',
     note: 'Recolors anything Perseverance!',
-    category: 'Sillies',
+    category: 'To your liking',
     type: "color",
     default: soulColors.PERSEVERANCE,
     reset: true,
@@ -2229,7 +2471,7 @@ const braveryColor = plugin.settings().add({
     key: 'braveryColor',
     name: 'Bravery color',
     note: 'Recolors anything Bravery!',
-    category: 'Sillies',
+    category: 'To your liking',
     type: "color",
     default: soulColors.BRAVERY,
     reset: true,
@@ -2240,7 +2482,7 @@ const patienceColor = plugin.settings().add({
     key: 'patienceColor',
     name: 'Patience color',
     note: 'Recolors anything Patience!',
-    category: 'Sillies',
+    category: 'To your liking',
     type: "color",
     default: soulColors.PATIENCE,
     reset: true,
@@ -2251,7 +2493,7 @@ const shuffleSoulColors = plugin.settings().add({
     key: 'shuffleSoulColors',
     name: 'Shuffle',
     note: 'Shuffles all the soul colors!?<br><br><span style="color:thistle;">Closes this menu</span>',
-    category: 'Sillies',
+    category: 'To your liking',
     type: button,
     data: {
         text: 'Shuffle',
@@ -2263,7 +2505,7 @@ const resetSoulColors = plugin.settings().add({
     key: 'resetSoulColors',
     name: 'Reset',
     note: 'Resets all the soul colors to their default values<br><br><span style="color:thistle;">Closes this menu</span>',
-    category: 'Sillies',
+    category: 'To your liking',
     type: button,
     data: {
         text: 'Reset',
@@ -2274,8 +2516,8 @@ const resetSoulColors = plugin.settings().add({
 const bgMixtape = plugin.settings().add({
     key: 'bgMixtape',
     name: 'Playlist',
-    note: 'Take control of the cruel, cruel RNG that is background randomisation',
-    category: 'Sillies',
+    note: 'Take control of the cruel, cruel RNG that is background randomization',
+    category: 'To your liking',
     type: 'advancedMap',
     default: [[]],
     type: {
@@ -2288,6 +2530,16 @@ const bgMixtape = plugin.settings().add({
     }),
 });
 
+const customTranslations = plugin.settings().add({
+    key: 'customTranslations',
+    name: 'Custom translations',
+    note: 'Use custom translations for UC',
+    category: 'To your liking',
+    type: 'advancedMap',
+    default: [["card-15", ";)"]],
+    hidden: true // eek! im not ready yet
+});
+
 const obscurityInfo = plugin.settings().add({
     key: 'obscurityInfo',
     name: 'ⓘ Obscurity info',
@@ -2297,14 +2549,14 @@ const obscurityInfo = plugin.settings().add({
          <span style="color:thistle;">to set card</span>: Set to the same content as the card in "Set card"<br>
          <span style="color:thistle;">to random card</span>: Set to the same content as a completely random card<br>
          <span style="color:thistle;">hide</span>: Hidden`,
-    category: 'Obscurity',
+    category: 'Cardsludge',
     type: plaintext,
 });
 
 const obscCardName = plugin.settings().add({
     key: 'obscCardName',
     name: 'Obscure name',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     type: "select", options: ["off", "obfuscate", "blur", "to set card", "to random card", "hide"],
     default: "off",
     onChange: (val) => obscure('cardName', val)
@@ -2313,7 +2565,7 @@ const obscCardName = plugin.settings().add({
 const obscCardCost = plugin.settings().add({
     key: 'obscCardCost',
     name: 'Obscure cost',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     type: "select", options: ["off", "obfuscate", "blur", "to set card", "to random card", "hide"],
     default: "off",
     onChange: (val) => obscure('cardCost', val)
@@ -2322,7 +2574,7 @@ const obscCardCost = plugin.settings().add({
 const obscCardImage = plugin.settings().add({
     key: 'obscCardImage',
     name: 'Obscure image',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     type: "select", options: ["off", "blur", "to set card", "to random card", "hide"],
     default: "off",
     onChange: (val) => obscure('cardImage', val)
@@ -2331,7 +2583,7 @@ const obscCardImage = plugin.settings().add({
 const obscCardPowers = plugin.settings().add({
     key: 'obscCardPowers',
     name: 'Obscure powers',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     type: "select", options: ["off", "obfuscate", "blur", "to set card", "to random card", "hide"],
     default: "off",
     onChange: (val) => obscure('cardStatus', val)
@@ -2340,7 +2592,7 @@ const obscCardPowers = plugin.settings().add({
 const obscCardTribes = plugin.settings().add({
     key: 'obscCardTribes',
     name: 'Obscure tribes',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     type: "select", options: ["off", "obfuscate", "blur", "to set card", "to random card", "hide"],
     default: "off",
     onChange: (val) => obscure('cardTribes', val)
@@ -2349,7 +2601,7 @@ const obscCardTribes = plugin.settings().add({
 const obscCardDesc = plugin.settings().add({
     key: 'obscCardDesc',
     name: 'Obscure descriptions',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     type: "select", options: ["off", "obfuscate", "blur", "to set card", "to random card", "hide"],
     default: "off",
     onChange: (val) => obscure('cardDesc', val)
@@ -2359,7 +2611,7 @@ const obscCardStats = plugin.settings().add({
     key: 'obscCardStats',
     name: 'Obscure stats',
     note: '("Stats" is both ATK and HP.)',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     type: "select", options: ["off", "obfuscate", "blur", "to set card", "to random card", "hide", "hide, use spell frame"],
     default: "off",
     onChange: (val) => {obscure('cardATK', val); obscure('cardHP', val)}
@@ -2368,10 +2620,10 @@ const obscCardStats = plugin.settings().add({
 const obscCardRarity = plugin.settings().add({
     key: 'obscCardRarity',
     name: 'Obscure rarity',
-    category: 'Obscurity',
-    type: "select", options: ["off", "obfuscate", "blur", "to set card", "to random card", "hide"],
+    category: 'Cardsludge',
+    type: "select", options: ["off", "blur", "to set card", "to random card", "hide"],
     default: "off",
-    onChange: (val) => obscure('cardRarity', val)
+    onChange: (val) => { obscure('cardRarity', val); cardModifier(visualModifier?.value()); }
 });
 
 const obscSettings = {
@@ -2413,7 +2665,7 @@ const obfuscationText = plugin.settings().add({
     key: 'obfuscationText',
     name: 'Obfuscation text',
     note: 'Sets the text used by the "obfuscate" option',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     type: "text",
     default: "?",
     onChange: (val) => refreshCards()
@@ -2423,14 +2675,19 @@ const obscBlurStrength = plugin.settings().add({
     key: 'obscBlurStrength',
     name: 'Blur strength',
     note: 'Sets the strength of the blur effect used by the "blur" option',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     type: "slider",
     min: 1,
     max: 10,
     step: 1,
     default: 2,
     reset: true,
-    onChange: () => {for (var i in obscSettings) { obscSettings[i].elements.forEach(k => obscure(k, obscSettings[i].value)) };}
+    onChange: () => {
+        for (var i in obscSettings) {
+            obscSettings[i].elements.forEach(k => obscure(k, obscSettings[i].value))
+        };
+        cardModifier(visualModifier?.value());
+    }
 });
 
 var cardNames = [];
@@ -2444,7 +2701,7 @@ const obscSetCard = plugin.settings().add({
     key: 'obscSetCard',
     name: 'Set card',
     note: () => cardNames.length === 0 ? 'allCards isn\'t loaded.<br><span style="color: gray;">uhh somethin wrong. idk. try coming back</span>' : 'Sets the card used by the "to set card" option',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     type: "select", options: cardNames,
     default: "Sans",
     disabled: () => cardNames.length === 0,
@@ -2463,27 +2720,26 @@ const obscRandomType = plugin.settings().add({
      unique to the original card, e.g. Toriel.<br><br>
     <span style="color:thistle;">Independant means X could be W, Y, Z... that is, it could be anything.</span><br>
     Future X won't always be what you got from that last X.`,
-    category: 'Obscurity',
+    category: 'Cardsludge',
     type: "select", options: ["universal", "independant"],
     default: "universal",
     onChange: (val) => refreshCards()
 });
 
-const trueObscurity = plugin.settings().add({
-    key: 'trueObscurity',
-    name: 'True obscurity',
-    note: 'I think your deck was shuffled the wrong way...?<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Obscurity',
-    type: "select", options: ["off", "on", "on, obscure rarity backing"],
-    default: "off",
-    onChange: (val) => refreshCards()
+const visualModifier = plugin.settings().add({
+    key: 'visualModifier',
+    name: 'Modifier',
+    note: 'Visually changes cards in dumb ways',
+    category: 'Cardsludge',
+    type: "select", options: ["none", "thin", "wide", "large", "wee", "offset", "upsidedown", "flipped", "spin", "treadmill"],
+    onChange: (val) => cardModifier(val)
 });
 
 const noGenerated = plugin.settings().add({
     key: 'noGenerated',
     name: 'No Generated',
     note: 'Hides generated power<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/createdUnknown.png' },
     type: powerCheckbox,
     default: false,
@@ -2494,7 +2750,7 @@ const noSilence = plugin.settings().add({
     key: 'noSilence',
     name: 'No silence',
     note: 'Hides silence power and background<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/silencedUnknown.png' },
     type: powerCheckbox,
     default: false,
@@ -2505,7 +2761,7 @@ const noCostBuffs = plugin.settings().add({
     key: 'noCostBuffs',
     name: 'No cost buffs',
     note: 'Hides cost buff and debuff power<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/costUnknown.png' },
     type: powerCheckbox,
     default: false,
@@ -2516,7 +2772,7 @@ const noStatBuffs = plugin.settings().add({
     key: 'noStatBuffs',
     name: 'No ATK / HP buffs',
     note: 'Hides ATK / HP buff and debuff powers<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Obscurity',
+    category: 'Cardsludge',
     data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/statsUnknown.gif' },
     type: powerCheckbox,
     default: false,
@@ -2525,22 +2781,23 @@ const noStatBuffs = plugin.settings().add({
 
 const obscApply = plugin.settings().add({
     key: 'obscApply',
-    name: 'Apply obscurity',
-    note: 'Changes where exactly Obscurity settings will be applied, in case you want to<br>let the chaos loose, or bottle it up, never to be seen again...<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Obscurity',
+    name: 'Apply sludge',
+    note: 'Changes where exactly Cardsludge settings will be applied, in case you want to<br>let the chaos loose, or bottle it up, never to be seen again...<br><br><span style="color:thistle;">Change applies on card update</span>',
+    category: 'Cardsludge',
     type: "select", options: ['nowhere', 'ingame only', 'everywhere!!!'],
     default: "ingame only",
     onChange: (val) => {
         for (var i in obscSettings) {
             obscSettings[i].elements.forEach(k => obscure(k, obscSettings[i].value))
         };
+        cardModifier(visualModifier?.value());
     }
 });
 
 function obscActive() {
     switch (obscApply?.value()) {
         case 'nowhere': return 0;
-        case 'ingame only': return window.ingame || 0;
+        case 'ingame only': return window.gameId ? 1 : 0;
         case 'everywhere!!!': return 1;
     }
 }
@@ -2550,7 +2807,7 @@ window.obscActive = obscActive;
 const baseStatChangePower = plugin.settings().add({
     key: 'baseStatChangePower',
     name: 'Base stat change',
-    note: 'Brings back the base stat change power!<br>...Should be slightly more stable. Reset your cache frequently, folks!',
+    note: 'Brings back the base stat change power!<br>...Should be slightly more stable. Reset your allCards cache frequently, folks!',
     category: 'Too many powers!!!',
     data: { src: 'images/powers/baseStatChange.png' },
     type: powerCheckbox,
@@ -2784,8 +3041,8 @@ const gsVersion = plugin.settings().add({
     hidden: true,
 });
 
-window.setGSVersion = function(ver) {
-    gsVersion.set(ver);
+window.gsShowPatchNotes = function() {
+    gsVersion.set("uwu");
     window.location.reload();
 }
 
@@ -2796,7 +3053,7 @@ function processBinds(e) {
                 if (!ingame) {
                     break;
                 }
-                rollBgSmart();
+                rollBgSmart(true);
                 break;
             case resetFiltersKeybind?.value()[0]:
                 crispiness.set(100);
@@ -2804,7 +3061,6 @@ function processBinds(e) {
                 greyscale.set(0);
                 invert.set(false);
                 lightsOff.set(false);
-                $('.underscript-dialog').modal('hide');
                 break;
             case openGalascriptKeybind?.value()[0]:
                 gsVersion.show();
@@ -2853,12 +3109,12 @@ document.addEventListener("mouseup", e => processBinds(e));
 
 var awaitingMike = false;
 var awaitingKitty = false;
-var kittyAmount = 1;
-
+var lastCard;
 plugin.events.on('GameEvent', (data) => {
     var cardPlayed = (data.action === 'getMonsterPlayed' || data.action === 'getSpellPlayed');
     if (cardPlayed) {
         var card = JSON.parse(data.card);
+        lastCard = card;
     }
     if (data.action === 'getPlayableCards') {
         var cardIds = JSON.parse(data.playableCards)
@@ -2873,9 +3129,11 @@ plugin.events.on('GameEvent', (data) => {
     }
     if (cardPlayed && mikesArray.includes(card.id * -1 || card.id) && (card.ownerId === window.selfId) && mikeDropsEnabled?.value()) {
         awaitingMike = true;
+        mikesArray[mikesArray.indexOf(card.id)] *= -1;
     }
     if (cardPlayed && catsArray.includes(card.id * -1) && (card.ownerId === window.selfId) && kittyCatsEnabled?.value()) {
         awaitingKitty = true;
+        catsArray[catsArray.indexOf(card.id)] *= -1;
     }
     if (data.action === 'getPlayableCards') {
         if (awaitingMike) {
@@ -2884,7 +3142,7 @@ plugin.events.on('GameEvent', (data) => {
             awaitingMike = false;
         }
         if (awaitingKitty) {
-            kittytime(card);
+            kittytime(lastCard);
             awaitingKitty = false;
         }
     }
@@ -2906,40 +3164,80 @@ function actionNotification(icon, type, text) {
     })
 }
 
+var reroll;
+var evilKittyLanguage;
 function kittytime(card) {
+    reroll = false;
     const kittymind = [
-        `An evil Spaniard kitty changed your language to Spanish.`, // 0 loads default translations for es, doesnt actually change the setting
+        `${evilForeignKitty()}`,                                    // 0 loads default translations for random language out of most supported languages, doesnt actually change the setting
         `This kitty is asleep...`,                                  // 1 nothing; a break
-        `This kitty wants to talk!`,                                // 2 opens first 17 chat ids
-        `A kitty ended your turn prematurely.`,                     // 3 ends your turn, like mike drop
+        `Kitty got out all the chats to play!`,                     // 2 opens first 17 chat ids randomly across the screen
+        `Kitty found the emote control panel!`,                     // 3 searches for emotes, if none, reroll, if found, use a random one
         `A kitty fell off the counter ;(`,                          // 4 triggers big damage animation and sound
-        `This kitty wants you to meet her family!`,                 // 5 opens tribe menu for tems
+        `This kitty wants you to meet her family!`,                 // 5 opens tribe menu for tribe
         `A kitty bapped the light switch.`,                         // 6 toggles on/off dark mode
         `A kitty messed with the color pallete.`,                   // 7 shuffles soul colors
     ]
     var kittypoll = Math.floor(Math.random() * kittymind.length);
     switch (kittypoll) {
-        case 0: defaultTranslations('es');                                              break;
-        case 1:                                                                         break;
-        case 2: for (let i = 1; i <= 16; i++) {window.openRoom(i)}                      break;
-        case 3: window.socketGame?.send(JSON.stringify({action: "endTurn"}));           break;
-        case 4: window.shakeScreen();                                                   break;
-        case 5: window.showTribeCards('TEMMIE');                                        break;
-        case 6:
-            if ($("#gsFlashlight").length) {
-                removeFlashlight();
-            } else {
-                createFlashlight();
-            };
-                                                                                        break;
-        case 7: shuffleSouls(1);                                                        break;
+        case 0: defaultTranslations(evilKittyLanguage); break;
+        case 1: break;
+        case 2: chattyKitty(); break;
+        case 3: emotingKitty(); break;
+        case 4: window.shakeScreen(); break;
+        case 5: familyKitty(card); break;
+        case 6: if ($("#gsFlashlight").length) { removeFlashlight(); } else { createFlashlight(); }; break;
+        case 7: shuffleSouls(1); break;
         default: actionNotification('kittyCat', 'kitty', "Uh oh! Kitty broke the space-time continuum and returned an error. Please report this to Gala!"); return;
     }
+    if (reroll) {kittytime(card); return;}
     actionNotification('kittyCat', 'kitty', kittymind[kittypoll])
 }
 
 window.kittytime = kittytime
 
+function evilForeignKitty() {
+    const langs = ['en', 'es', 'ru', 'it', 'de', 'cn'];
+    const langsfrom = ['English', 'Spaniard', 'Russian', 'Italian', 'German', 'Chinese'];
+    var langpoll = langs.indexOf($.i18n().locale)
+    while (langs[langpoll] === $.i18n().locale) {
+        langpoll = Math.floor(Math.random() * langs.length);
+    }
+    evilKittyLanguage = langs[langpoll];
+    return `An evil ${langsfrom[langpoll]} kitty changed your language!`
+}
+
+function chattyKitty() {
+    for (let i = 1; i <= 16; i++) { openRoomRandom(i); };
+}
+
+function openRoomRandom(id) {
+    window.openRoom(id)
+    const $chat = $(`#chat-public-${id}`)
+    $chat.css('top', window.randInt(50, 400));
+    $chat.css('left', window.randInt(0, 1000));
+}
+
+window.chattyKitty = chattyKitty
+
+function emotingKitty() {
+    const emotes = window.chatEmotes.map(emote => emote.id) ?? [];
+    const emotepoll = Math.floor(Math.random() * emotes.length);
+    console.log(emotes, emotepoll, emotes[emotepoll])
+    const id = emotes[emotepoll].toString();
+    if (id) {
+        window.socketGame.send(JSON.stringify({action: "emote", id: id}));
+    } else {
+        reroll = true;
+    }
+}
+
+function familyKitty(card) {
+    const cardMainTribe = card.tribes[0] || null;
+    const tribes = ['SNAILS', 'TEMMIE', 'ARACHNID', 'DOG']
+    const tribepoll = Math.floor(Math.random() * tribes.length);
+    window.showTribeCards(cardMainTribe || tribes[tribepoll])
+}
 
 const flashlight = document.createElement("div");
 function createFlashlight() {
@@ -2947,7 +3245,9 @@ function createFlashlight() {
     document.body.appendChild(flashlight);
     window.addEventListener("mousemove", function(e) {
         var flashlight = document.getElementById("gsFlashlight");
-        flashlight.style.backgroundPosition = `${e.pageX - flashlightRadiusInput?.value() * 4098 / 2}px ${(e.pageY - flashlightRadiusInput?.value() * 4098 / 2) - window.scrollY}px`;
+        if (flashlight) {
+            flashlight.style.backgroundPosition = `${e.pageX - flashlightRadiusInput?.value() * 4098 / 2}px ${(e.pageY - flashlightRadiusInput?.value() * 4098 / 2) - window.scrollY}px`;
+        }
     });
 }
 function removeFlashlight() { // very intricate function right here
@@ -2957,6 +3257,8 @@ function removeFlashlight() { // very intricate function right here
 plugin.events.on(':preload', () => {
     staticStyles();
     frameStyles();
+    rarityStyles(raritySkins?.value());
+    cardModifier(visualModifier?.value())
     siteFilter(crispiness?.value(), blurriness?.value(), greyscale?.value(), invert?.value());
     updateFlashlightRadius(flashlightRadiusInput?.value());
     updateFlashlightImg(flashlightStyle?.value());
@@ -2979,7 +3281,7 @@ plugin.events.on(':preload', () => {
         gsVersion.set(pluginVersion);
         plugin.toast({
             title: `Galascript: Update ${pluginVersion}`,
-            text: convertMarkdown.makeHtml(patchNotes),
+            text: convertMarkdown.makeHtml(patchNotesShort),
         });
     }
 });
@@ -2989,29 +3291,37 @@ plugin.events.on('translation:loaded', () => {
     initCustomPower();
 });
 
-plugin.events.on(':load', () => {
-    if (statFilters?.value()) {createStatFilters()}
-});
+function setProfileSkin(profileSkin, music) {
+    var profileSkinBackgrounds = ['Vaporwave', 'Sans Bar', 'Holy War', 'Spider Party', 'Halloween2020', 'Memories of the Snow', 'Smartopia Arrived'];
+    var profileSkinMusics = ['Vaporwave', 'Spider Party', 'Memories of the Snow', 'Smartopia Arrived'];
+
+    if (profileSkinBackgrounds.indexOf(profileSkin.name) > -1) {
+        setBg(profileSkin.image, music, !profileSkinMusics.indexOf(profileSkin.name) > -1)
+    }
+}
 
 var catsArray = [];
 var mikesArray = [];
 plugin.events.on('GameStart', () => {
-    plugin.events.on('connect', () => {
-        const gameBg = sessionStorage.getItem(`underscript.bgm.${window.gameId}`);
-        const persistBg = plugin.settings().value('underscript.persist.bgm');
-        if (autoStartMusic?.value()) {
-            if (gameBg && persistBg) {
-                setBg(gameBg, 0);
+    plugin.events.on('connect', (data) => {
+        const profileSkin = JSON.parse(data.yourProfileSkin)
+        const savedBg = sessionStorage.getItem(`underscript.bgm.${window.gameId}`);
+        const underscriptPersistBg = plugin.settings().value('underscript.persist.bgm');
+
+        function loadBg(music) {
+            if (savedBg && underscriptPersistBg) {
+                setBg(savedBg, music);
             } else {
-                rollBgSmart(0);
+                rollBgSmart(music);
+                setProfileSkin(profileSkin, music)
             }
+        }
+
+        if (autoStartMusic?.value()) {
+            loadBg(true)
             $('html').unbind('click');
         } else {
-            if (gameBg && persistBg) {
-                setBg(gameBg, 1);
-            } else {
-                rollBgSmart(1);
-            }
+            loadBg(false)
         };
         rollEventArrays();
     });
@@ -3042,7 +3352,9 @@ function rollEventArrays() {
     window.mikesArray = mikesArray
 }
 
-// i am very proud of the stat filters. they make me feel cool
+plugin.events.on(':load', () => {
+    if (statFilters?.value()) {createStatFilters()}
+});
 
 function destroyStatFilters() {
     style('statFilterSpacing', 'remove', `
@@ -3202,9 +3514,67 @@ function createStatFilters() {
     });
 }
 
-// wasnt that so cool. enable it ingame. install my virus
+plugin.events.on('Settings:open', () => createTransHelper());
 
-// that was a joke
+let selectedEl = null;
+function createTransHelper() {
+    const transHelper = $('<div>', {
+        id: 'gsTransHelper',
+        css: {display: 'none',
+              position: 'absolute',
+              background: '#000',
+              padding: '10px',
+              border: '1px solid #aaa',
+              zIndex: '1800'
+             }
+    });
+    const transHelperOptions = [
+    $('<p>', {
+        class: 'gsTransHelperOption',
+    }),
+    $('<input>', {
+        class: 'gsTransHelperOption',
+        type: 'button',
+        value: 'Card name',
+    }),
+    $('<input>', {
+        class: 'gsTransHelperOption',
+        type: 'button',
+        value: 'Card description',
+    }),
+    ]
+
+    transHelperOptions.forEach(opt => transHelper.append(opt));
+
+    $('body').append(transHelper);
+
+    $('p.gsTransHelperOption').text('Replace with...');
+
+    $(document).on('click contextmenu', function (e) {
+        const $target = $(e.target);
+        if (!$target.closest(selectedEl).length) {
+            transHelper.hide();
+        }
+    });
+
+    const observer = new MutationObserver((mutations, obs) => {
+        document.querySelectorAll('[id^="underscript.plugin.Galascript.customTranslations"]').forEach(el => {
+            if (!el.dataset.gsMenuLoaded) {
+                el.addEventListener("contextmenu", (e) => {
+                    e.preventDefault();
+                    selectedEl = el;
+                    transHelper.css({
+                        display: 'block',
+                        left: `${e.pageX}px`,
+                        top: `${e.pageY}px`
+                    });
+                });
+                el.dataset.gsMenuLoaded = 'true';
+            }
+        })
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+}
 
 function creditTitle(title) {
     return `<h4>${title}</h4>`
@@ -3239,6 +3609,7 @@ ${creditRow("Steamworks", "Shyren")}
 ${creditRow("Inscrypted", "Dylan Hall")}
 ${creditRow("It's TV Time!", "Dylan Hall")}
 ${creditRow("Cold Place", "Dylan Hall")}
+${creditRow("Slay the Spire", "Bartwk")}
 ${creditTitle("Rarity icons")}
 ${creditRow("Hollow Knight", "Jaku")}
 ${creditRow("FNAFB", "JaimeezNuts")}
