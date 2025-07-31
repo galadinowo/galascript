@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.2
+// @version      1.0.2.1
 // @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
@@ -34,11 +34,12 @@ const customFrames = ["Staff", "Spamton", "Cyber World", "Hollow Knight", "Grimm
 const backgrounds = ["-", "Ruins - UT", "Quiet Water - UT", "Hotland - UT", "Snowdin - UT", "The Surface - UT", "MTT Resort - UT", "Waterfall - UT", "The CORE - UT",
                      "Judgement Hall - UT", "True Lab - UT", "Hometown - DR", "Scarlet Forest - DR", "Home - DR", "Field of Hopes and Dreams - DR", "Castle Town - DR",
                      "Card Castle - DR", "Jevil's Staircase - DR", "Temmie Village - UT", "Home - UT", "Snowy - UT", "Quiet Autumn - DR", "Alphys's Classroom - DR", "Grillby's - UT",
-                     "It's Raining Somewhere - UT", "Title Fountain - DR", "Dog Casino - UT", "sans. - UT", "Dog Shrine - UT", "Cyber World - DR", "Cyber City - DR",
+                     "Raining Somewhere Else - UT", "Title Fountain - DR", "Dog Casino - UT", "sans. - UT", "Dog Shrine - UT", "Cyber World - DR", "Cyber City - DR",
                      "Pandora Palace - DR", "Green Room - DR", "New Home - UT", "Lost Girl - DR", "Alphys's Lab - UT", "Acid Tunnel of Love - DR", "Castle Funk - DR",
                      "Spamton Alleyway - DR", "Spamton's World - DR", "Pandora Palace...? - DR", "Basement - DR", "GIGA Queen - DR", "Ruins - UTY", "Snowdin - UTY", "Honeydew Resort Band - UTY",
                      "Dunes - UTY", "East Mines - UTY", "Wild East - UTY", "Steamworks - UTY", "Greenhouse - UTY", "Steamworks Factory - UTY", "Ceroba's House - UTY", "Dalv's House - UTY",
-                     "Honeydew Resort - UTY", "Oasis - UTY", "Hotland Ride - UTY", "Waterfall Ride - UTY", "Golden Opportunity - UTY", "New Home - UTY", "Stage - UE"]
+                     "Honeydew Resort - UTY", "Oasis - UTY", "Hotland Ride - UTY", "Waterfall Ride - UTY", "Golden Opportunity - UTY", "New Home - UTY", "Stage - UE",
+                     "Adventure Board - DR", "Paradise - DR", "Cold Place - DR", "TV World - DR", "Holiday House - DR", "Dark Sanctuary - DR", "Gerson's Keep - DR", "Third Sanctuary - DR", "Where It Rained - DR",]
 const backgroundsMap = new Map(backgrounds.map((bg, i) => [i, { id: i, bg: bg }]));
 const preferenceTypes = ["Omit", "Play less often", "Play more often"]
 const allFrames = standardFrames.concat(customFrames)
@@ -108,52 +109,15 @@ plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/G
 
 const patchNotes =
 `
-- Various visual updates to the Pokecard 1996 frame
-    - Correction to how Max HP Indicator looks
-    - Removed hover background
-    - Tabless is no longer ugly
-- New frame: Slay the Spire, by Bartwk!
-- "Card rendering" renamed to "Cardpaint"; "Obscurity" renamed to "Cardsludge"
-    - Fixed a lot of Cardsludge settings just... not working!
-    - New Cardpaint setting: Rarity skins. Changes display of certain custom rarity sets.
-    - New Cardsludge setting: Modifier. An additional wacky visual modifier to cards.
-        - "True obscurity" moved to being an option within "Modifier." To hide the rarities on the back, use "Obscure card rarity"
-- Fixed "force everywhere" in "Ingame display behavior" not working in games
-- Changing frame, shuffling and resetting soul colors, and clearing filters no longer closes the menu
-- Change frame setting has a nice lil background now
-- Fixed bug where Timer and Bridge Seed's image changing was affecting their name with "Card skin names" on
-- Fixed custom background rolling system not being compatiable with profile skin BGs
-    - When a profile skin with a special background is equipped, it will always be active until manually rerolled, at which point the nerly rolled background will be remembered instead of the profile skin's background
-- Did not fix bug where ATK isn't immediately greyed out when a monster is paralyzed
-    - I don't know how
-    - Please agknowledge that I tried
-- Program indicator defaults to Off now
-    - It could be confusing; the average new player had no clue why the numbers were changing randomly
-    - Because they are dumbies
-- Added some new card aliases
-- Golden frame removed
-    - It is currently purchasable so a decision was made to keep it exclusive
-    - I mean it was ugly anyways
-- Various changes and fixes to Kitty cats
-    - Can no longer end your turn
-        - In place of it, a new Kitty ability has been born. I guess you'll have to find it out yourself!
-    - Language switching fixed to be immediately applied
-        - It is janky with Loop names and Card skin names please spare me
-    - Language can now change to one of six supported languages, but never the one currently used
-    - Chatty Kitty is now significantly more annoying
-- "Man" mulligan quote altered
-    - Old: There is a <player> here. Are they happy to see you?
-    - New: Well, there is a <player> here. They might be happy to see you. What do you think?
+- Support for every new DR 3&4 background
+- New card aliases for some new DR3&4 cards
 
-Do note that more Kitty abilities will make it in with time! Have fun :3
+Have fun!
 `;
 
 const patchNotesShort =
 
 `
-Some bug fixes, some Kitty cat changes, and a new frame!
-
-...The full patch notes were too big for this notification. Go to the bottom of the Galascript settings to view the whole thing!
 `;
 
 const convertMarkdown = new underscript.lib.showdown.Converter();
@@ -681,7 +645,7 @@ const checkSetInfoPowers = setInterval(() => {
             pushPower('prime', 'custom', 'status-prime', [card.fixedId], null);
         }
 
-        if (newPower?.value() && card.fixedId > 880) {
+        if (newPower?.value() && card.fixedId > 880 && card.fixedId !== 892 && card.fixedId !== 897 && card.fixedId !== 899) {
             pushPower('new', 'custom', 'status-new', [], null);
         }
 
@@ -991,7 +955,7 @@ function initAliases() {
     "card-alias-64": "mttex mtt ex",
     "card-alias-66": "wtf",
     "card-alias-68": "achance",
-    "card-alias-69": "fmemory",
+    "card-alias-69": "sblazing sblaze",
     "card-alias-71": "fenergy",
     "card-alias-82": "merchire",
     "card-alias-88": "btreat bctreat",
@@ -999,6 +963,7 @@ function initAliases() {
     "card-alias-92": "fon",
     "card-alias-95": "tow",
     "card-alias-106": "undyne the undying",
+    "card-alias-107": "watercooler buble boobie",
     "card-alias-110": "mttneo mtt neo",
     "card-alias-117": "oflowey",
     "card-alias-140": "polibear",
@@ -1078,7 +1043,33 @@ function initAliases() {
     "card-alias-853": "duel",
     "card-alias-869": "galadino",
     "card-alias-878": "cero ketsukane",
+    "card-alias-883": "plancer",
+    "card-alias-884": "psusie",
+    "card-alias-885": "zkris",
+    "card-alias-888": "wcloak",
+    "card-alias-893": "fraudyne",
+    "card-alias-893": "tcatcher",
     "card-alias-897": "tspawn titanspawn",
+    "card-alias-898": "tserpent",
+    "card-alias-902": "sguy",
+    "card-alias-903": "zsusie zusie",
+    "card-alias-904": "zralsei ralzei zootsei",
+    "card-alias-905": "lmower",
+    "card-alias-906": "planino planina pelnina pelnino",
+    "card-alias-907": "pelnina pelnino planino planina",
+    "card-alias-908": "rralsei rocksei",
+    "card-alias-909": "rkris",
+    "card-alias-912": "jstein jstien jackins your taking too long scairy",
+    "card-alias-913": "jstein jstien jackins your taking too long scairy",
+    "card-alias-914": "ctower cup tower",
+    "card-alias-915": "cposter",
+    "card-alias-917": "rposter",
+    "card-alias-919": "mposter",
+    "card-alias-920": "galadino",
+    "card-alias-922": "water cooler watercooler buble boobie",
+    "card-alias-923": "pkris",
+    "card-alias-926": "homophobia",
+    "card-alias-927": "gacha machine gpmachine gmachine",
   }, 'en');
 }
 
@@ -3281,7 +3272,7 @@ plugin.events.on(':preload', () => {
         gsVersion.set(pluginVersion);
         plugin.toast({
             title: `Galascript: Update ${pluginVersion}`,
-            text: convertMarkdown.makeHtml(patchNotesShort),
+            text: convertMarkdown.makeHtml(patchNotes),
         });
     }
 });
@@ -3295,8 +3286,8 @@ function setProfileSkin(profileSkin, music) {
     var profileSkinBackgrounds = ['Vaporwave', 'Sans Bar', 'Holy War', 'Spider Party', 'Halloween2020', 'Memories of the Snow', 'Smartopia Arrived'];
     var profileSkinMusics = ['Vaporwave', 'Spider Party', 'Memories of the Snow', 'Smartopia Arrived'];
 
-    if (profileSkinBackgrounds.indexOf(profileSkin.name) > -1) {
-        setBg(profileSkin.image, music, !profileSkinMusics.indexOf(profileSkin.name) > -1)
+    if (profileSkinBackgrounds.includes(profileSkin.name)) {
+        setBg(profileSkin.image, music, profileSkinMusics.includes(profileSkin.name))
     }
 }
 
