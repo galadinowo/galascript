@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.2.1
+// @version      1.0.2.2
 // @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
@@ -109,10 +109,16 @@ plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/G
 
 const patchNotes =
 `
-- Support for every new DR 3&4 background
-- New card aliases for some new DR3&4 cards
+- Visual improvements + proper shiny animation to Inscrypted frame
+- New Cardpaint setting, <i>Breaking fullarts</i>: Makes fullart skins act as breaking skins
+- Card quantity and UCP cost are now layered over skins with <i>Tabless</i> on
+- Fixed that bug with Paralyzing, finally...!
+- Fixed <i>Program indicators</i>, when off, showing in the corner of the card as plain text
+- Fixed 1225 displaying as C1225 with <i>Card skin names</i> on
 
-Have fun!
+Other additions, such as the Balatro Frame and Power Filters, are currently put on hold. I can't say for certain when they'll be done, but I've been dealing with a bit of burnout as well as other various personal issues. Sorry :pensive:
+
+...Regardless, have fun!
 `;
 
 const patchNotesShort =
@@ -204,7 +210,7 @@ const checkCreateCard = setInterval(() => {
             name = $.i18n('card-name-' + card.fixedId, loopNames?.value() && card.loop > 0 ? card.loop + 1 : 1);
             var cardImg = card.image.replaceAll(" Open", "").replace(/(\S)\d+$/, "$1");
             if (cardSkinNames?.value() && cardImg !== card.baseImage) {
-                name = card.image.replaceAll("_", " ").replaceAll(" Full", "").replaceAll(" FULL", "")
+                name = card.image.replaceAll("_", " ").replaceAll(" Full", "").replaceAll(" FULL", "").replaceAll("C1225", "1225")
             }
     }
     switch (JSON.stringify([obscCardImage?.value(), obscActive()])) {
@@ -337,15 +343,20 @@ const checkCreateCard = setInterval(() => {
 
     if (program > 0 && programIndicators?.value()) {
         program = `<div class="cardProgram cardCost">${program + cost}</div>\n`
+    } else {
+        program = ''
     }
 
     image = '<div class="cardImage"></div>\n'
 
 
     var disableBreaking = '';
-    const frames = ['pokecard-1996', 'slay-the-spire']
+    const frames = ['pokecard-1996', 'slay-the-spire', 'balatro']
     if (frames.includes(frameSkinName)) {
         disableBreaking = ' breaking-disabled'
+    }
+    if (card.typeSkin === 1 && breakingFullarts?.value()) {
+        disableBreaking = localStorage.getItem("breakingDisabled") ? ' breaking-skin breaking-disabled' : ' breaking-skin'
     }
 
     frameSkinName += '-frame';
@@ -405,6 +416,16 @@ const checkCreateCard = setInterval(() => {
         }
     } window.createCard = newCreateCard
 });
+
+
+const powersStandard = [
+    {
+        name: 'haste',
+        icon: 'haste',
+        key: 'haste',
+        condition: function(card) {card.haste},
+    },
+]
 
 const checkSetInfoPowers = setInterval(() => {
  if (typeof setInfoPowers === 'function'){
@@ -782,6 +803,27 @@ if (typeof plugin.addFilter === 'function') {
         }
     )
 
+    plugin.addFilter(
+        function gsPowerFiltersStandard(card, removed) {
+            if (!removed && $('#hasteInput').length) {
+                return $('#hasteInput').prop('checked') && !card.haste;
+            }
+            if (!removed && $('#chargeInput').length) {
+                return $('#chargeInput').prop('checked') && !card.charge;
+            }
+            if (!removed && $('#tauntInput').length) {
+                return $('#tauntInput').prop('checked') && !card.taunt;
+            }
+            if (!removed && $('#armorInput').length) {
+                return $('#armorInput').prop('checked') && !card.armor;
+            }
+            if (!removed && $('#candyInput').length) {
+                return $('#candyInput').prop('checked') && !card.candy;
+            }
+            return removed;
+        }
+    )
+
 }
 
 const checkUpdateCardVisual = setInterval(() => {
@@ -892,14 +934,10 @@ const checkUpdateCardVisual = setInterval(() => {
             default: atkSquish = 0.55; break;
         }
         $cardATK.attr("style", `transform: scaleX(${atkSquish})`);
-
-        if (card.paralyzed > 0) {
-            $htmlCard.removeClass('paralyzed').addClass('paralyzed');
+        $cardATK.removeClass('attack-buff').removeClass('attack-debuff').removeClass('paralyzed');
+        if (card.paralyzed !== 0) {
+            $htmlCard.addClass('paralyzed');
         } else {
-            $htmlCard.removeClass('paralyzed');
-
-            $cardATK.removeClass('attack-buff').removeClass('attack-debuff');
-
             if (attack > baseAttack) {
                 $cardATK.addClass('attack-buff');
             } else if (attack < baseAttack) {
@@ -1245,6 +1283,7 @@ function staticStyles() {
     .setting-advancedMap:has(#underscript\\.plugin\\.Galascript\\.customTranslations) {width: 350px; border-bottom: none !important;}
     .setting-advancedMap:has(#underscript\\.plugin\\.Galascript\\.customTranslations) input {width: 40%; height: 40px; text-wrap: auto; text-align: center; background-repeat: no-repeat; background-size: cover; background-position: center;}
     .gsTransHelperOption {display: block; background-color: black; border: none; margin: 0px 5px;}
+    .card.full-skin.breaking-skin .cardImage {background-size: auto !important}
     `)
 }
 
@@ -1346,7 +1385,7 @@ const observer = new MutationObserver((mutations, obs) => {
                 case "match frame": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/rarity-match.gif'; break;
                 case "Hollow Knight": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/hk-determination.png'; break;
                 case "FNAFB": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-ut-determination.png'; break;
-            }0
+            }
             el.style.setProperty('background-image', `url('${url}')`);
             el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.4)', 'important');
             el.style.setProperty('background-repeat', 'no-repeat');
@@ -1365,10 +1404,50 @@ const observer = new MutationObserver((mutations, obs) => {
             updateBackground(el.value);
         }
     });
+    document.querySelectorAll('.card.balatro-frame').forEach(el => { // random anim delay for balatro swaying anim
+        function transforms(x, y, el) {
+            const rect = el.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            const dx = (x - centerX) / rect.width;
+            const dy = (y - centerY) / rect.height;
+
+            const maxTilt = 40; // degrees
+            const rotateX = -dy * maxTilt;
+            const rotateY = dx * maxTilt;
+
+            return `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        }
+
+        function cardHover(e) {
+            const el = e.currentTarget;
+            const transform = transforms(e.clientX, e.clientY, el);
+            el.style.transform = transform;
+            el.style.animation = 'none';
+        }
+
+        function cardLeave(e) {
+            const el = e.currentTarget
+            el.style.transform = '';
+            el.style.animation = 'sway 6s ease-in-out infinite';
+        }
+
+        if (!el.dataset.gsBalatroAnims) {
+            el.dataset.gsBalatroAnims = 'true';
+            const delay = Math.random() * 6;
+            el.style.animationDelay = `-${delay}s`;
+            el.onmousemove = e => {
+                cardHover(e);
+            }
+            el.onmouseout = e => {
+                cardLeave(e);
+            }
+        }
+    });
 });
 
 observer.observe(document.body, { childList: true, subtree: true });
-
 
 function shinyDisplayToggle(val) {
     val = val === "cover" ? 1 : 0
@@ -1437,6 +1516,13 @@ function frameStyles() {
     style('static', 'add', `
     .cardSilence {background: transparent url("images/cardAssets/silence.png") no-repeat; visibility: hidden;}
     @keyframes float { 0% { transform: translatey(-4px); } 50% { transform: translatey(2px); } 100% { transform: translatey(-4px); } }
+    @keyframes sway {
+        0%   { transform: rotateX(0deg) rotateY(0deg) translateZ(0px); }
+        25%  { transform: rotateX(3deg) rotateY(-2deg) translateZ(2px); }
+        50%  { transform: rotateX(-3deg) rotateY(1deg) translateZ(-1px); }
+        75%  { transform: rotateX(1deg) rotateY(-1deg) translateZ(3px); }
+        100% { transform: rotateX(0deg) rotateY(0deg) translateZ(0px); }
+    }
 
     .spamton-frame .shinySlot {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/spamton-frame-shiny.png"); opacity: 0.4; mix-blend-mode: color-burn;}
     .spamton-frame .shinySlot.animated {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/spamton-frame-shiny-animated.gif"); opacity: 0.4; mix-blend-mode: color-burn;}
@@ -1457,8 +1543,8 @@ function frameStyles() {
     .steamworks-frame .cardATK, .steamworks-frame .cardHP, .steamworks-frame .cardRarity {top: 215px;}
     .steamworks-frame .cardQuantity, .steamworks-frame .cardUCPCost {top: 240px;}
 
-    .inscrypted-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .inscrypted-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .inscrypted-frame .shinySlot {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/inscrypted-frame-shiny.png");}
+    .inscrypted-frame .shinySlot.animated {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/inscrypted-frame-shiny-animated.gif");}
     .inscrypted-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/inscrypted-frame-spell.png");}
     .inscrypted-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/inscrypted-frame-monster.png");}
     .inscrypted-frame .cardName, .inscrypted-frame .cardCost {top: 9px;}
@@ -1577,6 +1663,24 @@ function frameStyles() {
     .slay-the-spire-frame .cardRarity {visibility: hidden}
     .slay-the-spire-frame .cardBackground {visibility: hidden}
 
+    *:has(> .balatro-frame) {perspective: 800px;}
+    .balatro-frame { animation: sway 6s ease-in-out infinite; height: 236px !important;}
+    .balatro-frame .shinySlot {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/balatro-frame-shiny.png"); opacity: 0.3; mix-blend-mode: hard-light;}
+    .balatro-frame .shinySlot.animated {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/balatro-frame-shiny-animated.gif"); opacity: 0.3; mix-blend-mode: hard-light;}
+    .balatro-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/balatro-frame-spell.png");}
+    .balatro-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/balatro-frame-monster.png");}
+    .balatro-frame .cardHeader, .balatro-frame .cardFooter {background-color: rgba(0, 0, 0, 0);}
+    .balatro-frame .cardFrame {background-size: 100%; image-rendering: pixelated;}
+    .balatro-frame .cardName, .balatro-frame .cardDesc {visibility: hidden}
+    .balatro-frame .cardCost, .balatro-frame .cardATK, .balatro-frame .cardHP {visibility: hidden}
+    .balatro-frame .cardBackground {visibility: hidden}
+    .balatro-frame .cardRarity {visibility: hidden}
+    .balatro-frame .cardImage {background-color: black !important;}
+    .balatro-frame.monster.standard-skin .cardImage {top: 5px; left: 5px; width: 165px; height: 225px; background-size: cover !important; image-rendering: pixelated;}
+    .balatro-frame.breaking-skin .cardImage, .balatro-frame.full-skin .cardImage {top: 5px; left: 5px; width: 165px; height: 225px; background-size: 132% !important; background-position-y: 50% !important; z-index: 0 !important}
+    .balatro-frame .cardRarity {visibility: hidden}
+    .balatro-frame .cardQuantity, .balatro-frame .cardUCPCost {top: 240px;}
+
     .vmas-frame .shinySlot {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/vmas-frame-shiny.png"); opacity: 0.3; mix-blend-mode: hard-light;}
     .vmas-frame .shinySlot.animated {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/vmas-frame-shiny-animated.gif"); opacity: 0.3; mix-blend-mode: hard-light;}
     .vmas-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/vmas-frame-spell.png");}
@@ -1689,7 +1793,7 @@ function tablessToggle(val) {
     .cardsList .card, .cardSkinList .card {height: 246px;}
     .cardsList .card:has(.cardQuantity) .cardRarity, .cardSkinList .card:has(.cardQuantity) .cardRarity {opacity: 0.4;}
     .cardsList .card:has(.cardUCPCost) .cardRarity, .cardSkinList .card:has(.cardUCPCost) .cardRarity {opacity: 0.4;}
-    .card .cardQuantity, .card .cardUCPCost {top: 210px; z-index: 5; border: none; background-color: unset}
+    .card .cardQuantity, .card .cardUCPCost {top: 210px; z-index: 8; border: none; background-color: unset}
     .slay-the-spire-frame .cardQuantity, .slay-the-spire-frame .cardUCPCost {top: 222px;}
     .pokecard-1996-frame .cardQuantity, .pokecard-1996-frame .cardUCPCost {top: 212px;}
     .halloween2020-frame .cardQuantity, .halloween2020-frame .cardUCPCost {top: 216px;}
@@ -2088,6 +2192,15 @@ const loopNames = plugin.settings().add({
     key: 'loopNames',
     name: 'Loop names',
     note: 'When a card has 1 or more Loop, its name will be changed to its plural form<br><br><span style="color:thistle;">Change applies on card update</span>',
+    category: 'Cardpaint',
+    default: false,
+    onChange: (val) => refreshCards()
+});
+
+const breakingFullarts = plugin.settings().add({
+    key: 'breakingFullarts',
+    name: 'Breaking fullarts',
+    note: 'Makes the "Full art" skin type instead<br>behave like a Breaking skin<br><br><span style="color:thistle;">Change applies on card update</span>',
     category: 'Cardpaint',
     default: false,
     onChange: (val) => refreshCards()
@@ -3249,7 +3362,7 @@ plugin.events.on(':preload', () => {
     staticStyles();
     frameStyles();
     rarityStyles(raritySkins?.value());
-    cardModifier(visualModifier?.value())
+    cardModifier(visualModifier?.value());
     siteFilter(crispiness?.value(), blurriness?.value(), greyscale?.value(), invert?.value());
     updateFlashlightRadius(flashlightRadiusInput?.value());
     updateFlashlightImg(flashlightStyle?.value());
@@ -3504,6 +3617,47 @@ function createStatFilters() {
         window.showPage(0);
     });
 }
+
+function createPowerFiltersStandard() {
+    const includePaths = ['/Crafting', '/Decks', '/DecksAdmin'];
+    if (!includePaths.includes(window.location.pathname)) { return; }
+
+    const hasteInput = $('<label>')
+    hasteInput.append($('<input>', {
+        id: 'hasteInput',
+        type: 'checkbox',
+        class: 'powerInput',
+        onchange: 'applyFilters(); showPage(0);'
+    }))
+    hasteInput.append($('<img>', {
+        src: 'images/powers/haste.png',
+        width: '24px',
+    }))
+
+    const chargeInput = $('<label>')
+    chargeInput.append($('<input>', {
+        id: 'chargeInput',
+        type: 'checkbox',
+        class: 'powerInput',
+        onchange: 'applyFilters(); showPage(0);'
+    }))
+    chargeInput.append($('<img>', {
+        src: 'images/powers/charge.png',
+        width: '24px',
+    }))
+
+    const newFilter = $('<p>', {
+        style: 'text-align: center; font-size: 16px;',
+        class: 'filter'
+    })
+
+    newFilter.append(hasteInput)
+    newFilter.append(chargeInput)
+
+    $('.filter:last').after(newFilter)
+}
+
+window.beppy = createPowerFiltersNormal
 
 plugin.events.on('Settings:open', () => createTransHelper());
 
