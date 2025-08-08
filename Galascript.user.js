@@ -111,8 +111,6 @@ const patchNotes =
 `
 Quick, tiny patch to fix <i>Breaking fullarts</i> displaying incorrectly when Prettycards is not installed
 
-To make up for such a small update, I have added secret lizard emoji somewhere within Galascript. The first person to encounter and post it gets their own custom intro message when fought against :3
-
 Have fun!
 `;
 
@@ -3183,7 +3181,7 @@ function processBinds(e) {
                     break;
                 }
                 if (window.turn < 5) {
-                    plugin.toast({title: "🦎 You can't surrender before turn 5!", text: "You pressed the set key for <i>Surrender</i>."})
+                    plugin.toast({title: "You can't surrender before turn 5!", text: "You pressed the set key for <i>Surrender</i>."})
                     break;
                 }
                 window.socketGame.send(JSON.stringify({action: "surrender"}));
