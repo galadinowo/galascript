@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.2.2
+// @version      1.0.2.3
 // @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
@@ -109,16 +109,11 @@ plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/G
 
 const patchNotes =
 `
-- Visual improvements + proper shiny animation to Inscrypted frame
-- New Cardpaint setting, <i>Breaking fullarts</i>: Makes fullart skins act as breaking skins
-- Card quantity and UCP cost are now layered over skins with <i>Tabless</i> on
-- Fixed that bug with Paralyzing, finally...!
-- Fixed <i>Program indicators</i>, when off, showing in the corner of the card as plain text
-- Fixed 1225 displaying as C1225 with <i>Card skin names</i> on
+Quick, tiny patch to fix <i>Breaking fullarts</i> displaying incorrectly when Prettycards is not installed
 
-Other additions, such as the Balatro Frame and Power Filters, are currently put on hold. I can't say for certain when they'll be done, but I've been dealing with a bit of burnout as well as other various personal issues. Sorry :pensive:
+To make up for such a small update, I have added secret lizard emoji somewhere within Galascript. The first person to encounter and post it gets their own custom intro message when fought against :3
 
-...Regardless, have fun!
+Have fun!
 `;
 
 const patchNotesShort =
@@ -1283,7 +1278,7 @@ function staticStyles() {
     .setting-advancedMap:has(#underscript\\.plugin\\.Galascript\\.customTranslations) {width: 350px; border-bottom: none !important;}
     .setting-advancedMap:has(#underscript\\.plugin\\.Galascript\\.customTranslations) input {width: 40%; height: 40px; text-wrap: auto; text-align: center; background-repeat: no-repeat; background-size: cover; background-position: center;}
     .gsTransHelperOption {display: block; background-color: black; border: none; margin: 0px 5px;}
-    .card.full-skin.breaking-skin .cardImage {background-size: auto !important}
+    .card.full-skin.breaking-skin .cardImage {background-size: auto !important; background-position: center !important}
     `)
 }
 
@@ -3146,8 +3141,10 @@ const gsVersion = plugin.settings().add({
 });
 
 window.gsShowPatchNotes = function() {
-    gsVersion.set("uwu");
-    window.location.reload();
+    plugin.toast({
+        title: `Galascript: Update ${pluginVersion}`,
+        text: convertMarkdown.makeHtml(patchNotes),
+    });
 }
 
 function processBinds(e) {
@@ -3186,7 +3183,7 @@ function processBinds(e) {
                     break;
                 }
                 if (window.turn < 5) {
-                    plugin.toast({title: "You can't surrender before turn 5.", text: "You pressed the set key for <i>Surrender</i>."})
+                    plugin.toast({title: "🦎 You can't surrender before turn 5!", text: "You pressed the set key for <i>Surrender</i>."})
                     break;
                 }
                 window.socketGame.send(JSON.stringify({action: "surrender"}));
