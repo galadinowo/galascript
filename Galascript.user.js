@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.2.3
+// @version      1.0.3
 // @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
@@ -30,7 +30,7 @@ function style(group, operation, ...css) {
     }
 }
 const standardFrames = ["Undertale", "Deltarune", "Time to get serious", "Vaporwave", "Spider Party", "Halloween2020", "Christmas2020"]
-const customFrames = ["Staff", "Spamton", "Cyber World", "Hollow Knight", "Grimm Troupe", "Void", "FNAFB", "Outbreak", "Mirror Temple", "VMas", "Steamworks", "Inscrypted", "Its TV Time", "Cold Place", "Slay the Spire", "Pokecard 1996"]
+const customFrames = ["Staff", "Spamton", "Cyber World", "Hollow Knight", "Grimm Troupe", "Void", "FNAFB", "Outbreak", "Mirror Temple", "Snails", "Waterfall", "Yet Darker", "VMas", "Steamworks", "Bone", "Furry Sans", "Inscrypted", "Its TV Time", "Cold Place", "Slay the Spire", "Balatro", "Pokecard 1996"]
 const backgrounds = ["-", "Ruins - UT", "Quiet Water - UT", "Hotland - UT", "Snowdin - UT", "The Surface - UT", "MTT Resort - UT", "Waterfall - UT", "The CORE - UT",
                      "Judgement Hall - UT", "True Lab - UT", "Hometown - DR", "Scarlet Forest - DR", "Home - DR", "Field of Hopes and Dreams - DR", "Castle Town - DR",
                      "Card Castle - DR", "Jevil's Staircase - DR", "Temmie Village - UT", "Home - UT", "Snowy - UT", "Quiet Autumn - DR", "Alphys's Classroom - DR", "Grillby's - UT",
@@ -38,8 +38,9 @@ const backgrounds = ["-", "Ruins - UT", "Quiet Water - UT", "Hotland - UT", "Sno
                      "Pandora Palace - DR", "Green Room - DR", "New Home - UT", "Lost Girl - DR", "Alphys's Lab - UT", "Acid Tunnel of Love - DR", "Castle Funk - DR",
                      "Spamton Alleyway - DR", "Spamton's World - DR", "Pandora Palace...? - DR", "Basement - DR", "GIGA Queen - DR", "Ruins - UTY", "Snowdin - UTY", "Honeydew Resort Band - UTY",
                      "Dunes - UTY", "East Mines - UTY", "Wild East - UTY", "Steamworks - UTY", "Greenhouse - UTY", "Steamworks Factory - UTY", "Ceroba's House - UTY", "Dalv's House - UTY",
-                     "Honeydew Resort - UTY", "Oasis - UTY", "Hotland Ride - UTY", "Waterfall Ride - UTY", "Golden Opportunity - UTY", "New Home - UTY", "Stage - UE",
-                     "Adventure Board - DR", "Paradise - DR", "Cold Place - DR", "TV World - DR", "Holiday House - DR", "Dark Sanctuary - DR", "Gerson's Keep - DR", "Third Sanctuary - DR", "Where It Rained - DR",]
+                     "Honeydew Resort - UTY", "Oasis - UTY", "Hotland Ride - UTY", "Waterfall Ride - UTY", "Golden Opportunity - UTY", "New Home Balcony - UTY", "Stage - UE",
+                     "Adventure Board - DR", "Paradise - DR", "Cold Place - DR", "TV World - DR", "Holiday House - DR", "Dark Sanctuary - DR", "Gerson's Study - DR", "Third Sanctuary - DR", "Where It Rained - DR",
+                     "UG Apartments - UTY", "New Home - UTY", "Second Sanctuary - DR"]
 const backgroundsMap = new Map(backgrounds.map((bg, i) => [i, { id: i, bg: bg }]));
 const preferenceTypes = ["Omit", "Play less often", "Play more often"]
 const allFrames = standardFrames.concat(customFrames)
@@ -67,22 +68,6 @@ const nullcard = {
     "maxHp": '?',
     "originalAttack": '?',
     "originalHp": '?',
-    "dodge": 0,
-    "armor": false,
-    "paralyzed": 0,
-    "silence": false,
-    "kr": false,
-    "burn": 0,
-    "cantAttack": false,
-    "charge": false,
-    "taunt": false,
-    "invulnerable": false,
-    "haste": false,
-    "transparency": false,
-    "candy": false,
-    "shockEnabled": false,
-    "supportEnabled": false,
-    "wanted": false,
     "id": 0,
     "fixedId": 0,
     "typeCard": 0,
@@ -97,37 +82,38 @@ const nullcard = {
     "extension": "BASE",
     "tribes": [],
     "selectCards": [],
+    "statuses": [],
     "typeSkin": 0,
     "playedTurn": 0,
     "ownerId": 0,
-    "bullseyeEnabled": false,
-    "loop": 0,
-    "program": 0
 }
 
 plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/Galascript.user.js');
 
 const patchNotes =
-`
-Quick, tiny patch to fix <i>Breaking fullarts</i> displaying incorrectly when Prettycards is not installed
-
-Have fun!
+`'Sup.
+- Added <i>Custom translations</i> setting, allowing you to customize UC's text easily (in <i>To your liking</i>)
+- Added <i>Status filters</i> setting, allowing you to sort monsters in your collection based on what statuses they have (in <i>QoL</i>)
+- Added <i>Snails</i>, <i>Waterfall</i>, <i>Yet Darker</i>, <i>Bone</i>, <i>Furry Sans</i>, and <i>Balatro</i> frames
+    - <i>Balatro</i> frame is WIP and does not display stats!
+- Added <i>Celeste</i> rarity skin
+- Added card aliases and backgrounds for Season 110
+- <i>Program</i> power now On by default, due to it being added to the base game with a new sprite
+- Fixed <i>Legendmaker</i> power not working due to the new rank names
+- Changed <i>Legendmaker</i> power and art to reflect T rank
+- Fixed <i>Mulligan information</i> still occasionally putting info in other dialogs that it shouldn't
+- Fixed greyed-out Paralyzed ATK not immediately updating when healed off or removed
+- Fixed backgrounds becoming fucked up and mismatched often... hopefully...
+- Added three new options for <i>Stat base</i> setting: <i>0.1</i>, <i>0.01</i>, and <i>10000</i>. Because they are definitely needed
+- Added Speednick's custom entry message (He found a lizard!)
 `;
 
 const patchNotesShort =
 
-`
+`The patch notes are, once again, too large for a normal notification! Read the full notes at the bottom of Galascript's settings. Have fun!
 `;
 
 const convertMarkdown = new underscript.lib.showdown.Converter();
-
-function wrapClamp(value, min, max) {
-    if (value < min) {
-        return max - ((min - value) % (max - min));
-    } else {
-        return min + ((value - min) % (max - min));
-    }
-}
 
 const seed = window.gameId
 function pullRandom(stat, from, i, raw) {
@@ -143,7 +129,13 @@ function pullRandom(stat, from, i, raw) {
     var s = ((seed ^ from ^ i) * 2654435761) >>> 0;
     var roll = (s * a % m) / m
     var rollFinal = Math.floor(roll * maxCardId())
-    var newStat = window.getCard(rollFinal)?.[stat]
+    var newStat;
+    if (stat === 'program') {
+        var index = window.getCard(rollFinal)?.statuses.findIndex(status => status.name === stat)
+        newStat = window.getCard(rollFinal)?.statuses[index]?.counter
+    } else {
+        newStat = window.getCard(rollFinal)?.[stat]
+    }
     return newStat ?? pullRandom(stat, from + 1, i, 1);
 }
 
@@ -189,18 +181,19 @@ const checkCreateCard = setInterval(() => {
     var fauxHp = "";
     var fauxStatusId = "";
     var fauxTribesId = "";
+    var cardLoop = findStatus(card, 'loop');
     switch (JSON.stringify([obscCardName?.value(), obscActive()])) {
         case '["obfuscate",1]':
             name = obfuscationText?.value();
             break;
         case '["to set card",1]':
-            name = $.i18n('card-name-' + window.getCardWithName(obscSetCard?.value()).fixedId, loopNames?.value() && card.loop > 0 ? card.loop + 1 : 1)
+            name = $.i18n('card-name-' + window.getCardWithName(obscSetCard?.value()).fixedId, loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1)
             break;
         case '["to random card",1]':
-            name = $.i18n('card-name-' + pullRandom('id', card, 1), loopNames?.value() && card.loop > 0 ? card.loop + 1 : 1)
+            name = $.i18n('card-name-' + pullRandom('id', card, 1), loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1)
             break;
         default:
-            name = $.i18n('card-name-' + card.fixedId, loopNames?.value() && card.loop > 0 ? card.loop + 1 : 1);
+            name = $.i18n('card-name-' + card.fixedId, loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1);
             var cardImg = card.image.replaceAll(" Open", "").replace(/(\S)\d+$/, "$1");
             if (cardSkinNames?.value() && cardImg !== card.baseImage) {
                 name = card.image.replaceAll("_", " ").replaceAll(" Full", "").replaceAll(" FULL", "").replaceAll("C1225", "1225")
@@ -255,7 +248,7 @@ const checkCreateCard = setInterval(() => {
             fauxStatusId = pullRandom('id', card, 5);
             break;
         default:
-            program = card.program;
+            program = findStatus(card, 'program');
     }
     if (program === 0) program = "";
 
@@ -360,11 +353,11 @@ const checkCreateCard = setInterval(() => {
     <div class="cardFrame"></div>
     <div class="cardBackground"></div>
     <div class="cardHeader"></div>
-    <div class="faux cardFauxCost">${fauxCost}</div>
-    <div class="faux cardFauxATK">${fauxAttack}</div>
-    <div class="faux cardFauxHP">${fauxHp}</div>
-    <div class="faux cardFauxStatus">${fauxStatusId}</div>
-    <div class="faux cardFauxTribes">${fauxTribesId}</div>
+    <div class="cardFauxElement cardFauxCost">${fauxCost}</div>
+    <div class="cardFauxElement cardFauxATK">${fauxAttack}</div>
+    <div class="cardFauxElement cardFauxHP">${fauxHp}</div>
+    <div class="cardFauxElement cardFauxStatus">${fauxStatusId}</div>
+    <div class="cardFauxElement cardFauxTribes">${fauxTribesId}</div>
     <div class="cardName" data-i18n="[html]card-name-${card.fixedId}"><div>${name}</div></div>
     <div class="cardCost">${cost}</div>
     ${program}
@@ -390,9 +383,9 @@ const checkCreateCard = setInterval(() => {
         <div class="cardFrame"></div>
         <div class="cardBackground"></div>
         <div class="cardHeader"></div>
-        <div class="faux cardFauxCost">${fauxCost}</div>
-        <div class="faux cardFauxStatus">${fauxStatusId}</div>
-        <div class="faux cardFauxTribes">${fauxTribesId}</div>
+        <div class="cardFauxElement cardFauxCost">${fauxCost}</div>
+        <div class="cardFauxElement cardFauxStatus">${fauxStatusId}</div>
+        <div class="cardFauxElement cardFauxTribes">${fauxTribesId}</div>
         <div class="cardName ${cardSoul}"><div data-i18n="[html]card-name-${card.fixedId}">${name}</div></div>
         <div class="cardCost">${cost}</div>
         ${program}
@@ -410,20 +403,125 @@ const checkCreateCard = setInterval(() => {
     } window.createCard = newCreateCard
 });
 
-
-const powersStandard = [
+function findStatus(card, statusName) {
+    const statuses = card.statuses
+    const foundStatus = statuses?.find(status => status.name === statusName)
+    if (foundStatus) {
+        return foundStatus.counter ?? true
+    } else {
+        return false
+    }
+}
+const filterPowersStandard = [
     {
         name: 'haste',
         icon: 'haste',
-        key: 'haste',
-        condition: function(card) {card.haste},
+        condition: function(card) {return findStatus(card, 'haste')},
+    },
+    {
+        name: 'charge',
+        icon: 'charge',
+        condition: function(card) {return findStatus(card, 'charge')},
+    },
+    {
+        name: 'taunt',
+        icon: 'taunt',
+        condition: function(card) {return findStatus(card, 'taunt')},
+    },
+    {
+        name: 'armor',
+        icon: 'armor',
+        condition: function(card) {return findStatus(card, 'armor')},
+    },
+    {
+        name: 'candy',
+        icon: 'candy',
+        condition: function(card) {return findStatus(card, 'candy')},
+    },
+    {
+        name: 'dodge',
+        icon: 'dodge',
+        condition: function(card) {return findStatus(card, 'dodge')},
+    },
+    {
+        name: 'transparency',
+        icon: 'transparency',
+        condition: function(card) {return findStatus(card, 'transparency')},
+    },
+    {
+        name: 'disarmed',
+        icon: 'disarmed',
+        condition: function(card) {return findStatus(card, 'disarmed')},
+    },
+    {
+        name: 'loop',
+        icon: 'loop',
+        condition: function(card) {return findStatus(card, 'loop')},
+    },
+    {
+        name: 'program',
+        icon: 'program',
+        condition: function(card) {return findStatus(card, 'program')},
+    },
+    {
+        name: 'shock',
+        icon: 'shock',
+        condition: function(card) {return findStatus(card, 'shock')},
+    },
+    {
+        name: 'support',
+        icon: 'support',
+        condition: function(card) {return findStatus(card, 'support')},
+    },
+    {
+        name: 'bullseye',
+        icon: 'bullseye',
+        condition: function(card) {return findStatus(card, 'bullseye')},
+    },
+    {
+        name: 'wanted',
+        icon: 'wanted',
+        condition: function(card) {return findStatus(card, 'wanted')},
+    },
+    {
+        name: 'darkspawn',
+        icon: 'darkspawn',
+        condition: function(card) {return findStatus(card, 'darkspawn')},
     },
 ]
+const filterPowersGalascript = [
+    {
+        name: 'target',
+        icon: 'target',
+        condition: function(card) {return card.target != undefined},
+    },
+    {
+        name: 'new',
+        icon: 'new',
+        condition: function(card) {return card.fixedId > 928},
+    },
+]
+
+const isPrime = num => {
+for(let i = 2, s = Math.sqrt(num); i <= s; i++) {
+    if(num % i === 0) return false;
+}
+return num > 1;
+}
+
+var oldError = false;
 
 const checkSetInfoPowers = setInterval(() => {
  if (typeof setInfoPowers === 'function'){
     clearInterval(checkSetInfoPowers);
     function newSetInfoPowers(monsterContainer, card) {
+    if (card.statuses === undefined) {
+        if (!oldError) {
+            console.error(`You are using the old card status format, somehow... Report this to Gala!`);
+            oldError = true;
+        }
+        return;
+    }
     monsterContainer.find('.cardStatus').empty();
     var powers = [];
     var powersType = [];
@@ -434,48 +532,25 @@ const checkSetInfoPowers = setInterval(() => {
     var fauxStatusId = monsterContainer.find('.cardFauxStatus').text()
     if (fauxStatusId) {
         let setCard = window.getCard(Number(fauxStatusId))
-        card.loop = setCard.loop;
-        card.program = setCard.program;
         card.target = setCard.target;
-        card.taunt = setCard.taunt;
-        card.charge = setCard.charge;
-        card.haste = setCard.haste;
-        card.candy = setCard.candy;
-        card.armor = setCard.armor;
-        card.dodge = setCard.dodge;
-        card.cantAttack = setCard.cantAttack;
-        card.transparency = setCard.transparency;
-        card.shockEnabled = setCard.shockEnabled;
-        card.supportEnabled = setCard.supportEnabled;
-        card.bullseyeEnabled = setCard.bullseyeEnabled;
-        card.wanted = setCard.wanted;
-        card.darkspawn = setCard.darkspawn;
+        card.statuses = setCard.statuses;
     }
-    const isPrime = num => {
-    for(let i = 2, s = Math.sqrt(num); i <= s; i++) {
-        if(num % i === 0) return false;
-    }
-    return num > 1;
-    }
-    function pushPower(sprite, type, key, args, number){
+    function pushPower(sprite, key, args, number){
         if (obscCardPowers?.value() === 'obfuscate' && obscActive()) {
             sprite = 'unknown'
-            type = 'custom'
-            key = 'status-unknown'
+            key = 'gs.status-unknown'
             args = []
             number = null
         }
         if (numStack?.value() && number) {
             for (var i = 0; i < number; i++) {
                 powers.push(sprite);
-                powersType.push(type);
-                powersStringKeys.push(key + '-stacked');
+                powersStringKeys.push((key.startsWith('gs.') ? '' : 'gs.') + key + '-stacked');
                 powersStringArgs.push([]);
                 powersStringNumbers.push(null);
             }
         } else {
             powers.push(sprite);
-            powersType.push(type);
             powersStringKeys.push(key);
             powersStringArgs.push(args);
             powersStringNumbers.push(number);
@@ -485,27 +560,19 @@ const checkSetInfoPowers = setInterval(() => {
     var baseCard = window.getCard(card.fixedId) || nullcard; // SHOULD fix the issue with getCard locking up in an old allCards cache ...
 
     if (turnsPower?.value() && card.playedTurn > 0) {
-        pushPower('turn', 'custom', 'status-turn', [Math.floor(card.playedTurn / 2), window.turn - Math.floor(card.playedTurn / 2)], Math.floor(card.playedTurn / 2));
+        pushPower('turn', 'gs.status-turn', [Math.floor(card.playedTurn / 2), window.turn - Math.floor(card.playedTurn / 2)], Math.floor(card.playedTurn / 2));
     }
 
     if (!noCostBuffs?.value() && card.cost < card.originalCost) {
-        pushPower('bonusCost', 'base', 'status-cost-debuff', [card.originalCost], null);
+        pushPower('bonusCost', 'status-cost-debuff', [card.originalCost], null);
     }
 
     if (!noCostBuffs?.value() && card.cost > card.originalCost) {
-        pushPower('malusCost', 'base', 'status-cost-buff', [card.originalCost], null);
+        pushPower('malusCost', 'status-cost-buff', [card.originalCost], null);
     }
 
     if (card.rarity === "DETERMINATION") {
-        pushPower('determination', 'base', 'status-determination', [], null);
-    }
-
-    if (card.loop > 0) {
-        pushPower('loop', 'base', 'status-loop', [card.loop], card.loop);
-    }
-
-    if (programPower?.value() && card.program > 0) {
-        pushPower('program', 'custom', 'status-program', [card.program], card.program);
+        pushPower('determination', 'status-determination', [], null);
     }
 
     var cardTarget;
@@ -518,165 +585,102 @@ const checkSetInfoPowers = setInterval(() => {
             case 'ALL': cardTarget = 'anything'; break;
             default: cardTarget = card.target;
         }
-        pushPower('target', 'custom', 'status-target', [cardTarget], null);
+        pushPower('target', 'gs.status-target', [cardTarget], null);
     }
 
     if (shinyPower?.value() && card.shiny) {
-        pushPower('shiny', 'custom', 'status-shiny', [], null);
+        pushPower('shiny', 'gs.status-shiny', [], null);
     }
 
-    if (legendPower?.value() && card.owner?.oldDivision === 'LEGEND') {
-        pushPower('legendmaker', 'custom', 'status-legend', [], null);
+    if (legendPower?.value() && card.owner?.oldDivision === 'T') {
+        pushPower('legendmaker', 'gs.status-legend', [], null);
     }
 
     if (card.typeCard === 0) {
 
         if (totemPower?.value() && (baseCard.hp === 7 || baseCard.cost === 7)) {
-            pushPower('totem', 'custom', 'status-totem', [], null);
-        }
-
-        if (card.taunt) {
-            pushPower('taunt', 'base', 'status-taunt', [], null);
-        }
-
-        if (card.charge) {
-            pushPower('charge', 'base', 'status-charge', [], null);
-        }
-
-        if (card.haste) {
-            pushPower('haste', 'base', 'status-haste', [], null);
+            pushPower('totem', 'gs.status-totem', [], null);
         }
 
         if (!noStatBuffs?.value() && card.attack > card.originalAttack) {
-            pushPower('bonusAtk', 'base', 'status-atk-buff', [card.originalAttack], null);
+            pushPower('bonusAtk', 'status-atk-buff', [card.originalAttack], null);
         }
 
         if (!noStatBuffs?.value() && card.attack < card.originalAttack) {
-            pushPower('malusAtk', 'base', 'status-atk-debuff', [card.originalAttack], null);
+            pushPower('malusAtk', 'status-atk-debuff', [card.originalAttack], null);
         }
 
         if (!noStatBuffs?.value() && card.maxHp > card.originalHp) {
-            pushPower('bonusHp', 'base', 'status-hp-buff', [card.originalHp], null);
+            pushPower('bonusHp', 'status-hp-buff', [card.originalHp], null);
         }
 
         if (!noStatBuffs?.value() && card.maxHp < card.originalHp) {
-            pushPower('malusHp', 'base', 'status-hp-debuff', [card.originalHp], null);
+            pushPower('malusHp', 'status-hp-debuff', [card.originalHp], null);
         }
 
         if (baseStatChangePower?.value() && (baseCard.hp !== card.originalHp || baseCard.attack !== card.originalAttack || baseCard.cost !== card.originalCost)) {
             var baseCardTranslated = $.i18n('{{CARD:' + card.fixedId + '|1}}');
-            pushPower('baseStatChange', 'base', 'status-base-stat-change', [baseCardTranslated, baseCard.cost, baseCard.attack, baseCard.hp, card.originalCost, card.originalAttack, card.originalHp], null);
-        }
-
-        if (card.paralyzed) {
-            pushPower('paralyzed', 'base', 'status-paralyzed', [], null);
-        }
-
-        if (card.candy) {
-            pushPower('candy', 'base', 'status-candy', [], null);
-        }
-
-        if (card.kr) {
-            pushPower('poison', 'base', 'status-kr', [], null);
-        }
-
-        if (card.armor) {
-            pushPower('armor', 'base', 'status-armor', [], null);
-        }
-
-        if (card.dodge > 0) {
-            pushPower('dodge', 'base', 'status-dodge', [card.dodge], card.dodge);
-        }
-
-        if (card.burn > 0) {
-            pushPower('burn', 'base', 'status-burn', [card.burn], card.burn);
-        }
-
-        if (card.cantAttack) {
-            pushPower('cantAttack', 'base', 'status-disarmed', [], null);
-        }
-
-        if (card.anotherChance) {
-            pushPower('anotherChance', 'custom', 'status-another-chance', [], null);
-        }
-
-        if (card.invulnerable) {
-            pushPower('invulnerable', 'base', 'status-invulnerable', [], null);
-        }
-
-        if (card.transparency) {
-            pushPower('transparency', 'base', 'status-transparency', [], null);
-        }
-
-        if (!noSilence?.value() && card.silence) {
-            pushPower('silenced', 'base', 'status-silenced', [], null);
+            pushPower('baseStatChange', 'status-base-stat-change', [baseCardTranslated, baseCard.cost, baseCard.attack, baseCard.hp, card.originalCost, card.originalAttack, card.originalHp], null);
         }
 
         if (card.caughtMonster !== undefined) {
             var caughtCardTranslated = $.i18n('{{CARD:' + card.caughtMonster.fixedId + '|1}}');
-            pushPower('box', 'base', 'status-caught', [caughtCardTranslated, card.caughtMonster.owner.username], null);
-        }
-
-        if (card.shockEnabled) {
-            pushPower('shock', 'base', 'status-shock', [], null);
-        }
-
-        if (card.supportEnabled) {
-            pushPower('support', 'base', 'status-support', [], null);
-        }
-
-        if (card.bullseyeEnabled) {
-            pushPower('bullseye', 'base', 'status-bullseye', [], null);
-        }
-
-        if (card.wanted) {
-            pushPower('wanted', 'base', 'status-wanted', [], null);
-        }
-
-        if (card.darkspawn) {
-            pushPower('darkspawn', 'base', 'status-darkspawn', [], null);
+            pushPower('box', 'status-caught', [caughtCardTranslated, card.caughtMonster.owner.username], null);
         }
 
         if (deadPower?.value() && card.hp < 1) {
-            pushPower('dead', 'custom', 'status-dead', [], null);
+            pushPower('dead', 'gs.status-dead', [], null);
         }
 
         if (barrierPower?.value() && card.fixedId === 801) {
-            pushPower('smellsLikeLemons', 'custom', 'status-smells-like-lemons', [], null);
-            pushPower('immuneToMadjick', 'custom', 'status-immune-to-madjick', [], null);
+            pushPower('smellsLikeLemons', 'gs.status-smells-like-lemons', [], null);
+            pushPower('immuneToMadjick', 'gs.status-immune-to-madjick', [], null);
         }
 
         if (undereventPower?.value() && card.fixedId === 874) {
-            pushPower('underevent2024', 'base', 'status-underevent-2024', [], null);
+            pushPower('underevent2024', 'status-underevent-2024', [], null);
         }
     }
 
         if (checkPower?.value()) {
-            pushPower('check', 'custom', 'status-check', [cardLog(card)], null);
+            pushPower('check', 'gs.status-check', [cardLog(card)], null);
         }
 
         if (primePower?.value() && isPrime(card.fixedId)) {
-            pushPower('prime', 'custom', 'status-prime', [card.fixedId], null);
+            pushPower('prime', 'gs.status-prime', [card.fixedId], null);
         }
 
-        if (newPower?.value() && card.fixedId > 880 && card.fixedId !== 892 && card.fixedId !== 897 && card.fixedId !== 899) {
-            pushPower('new', 'custom', 'status-new', [], null);
+        if (newPower?.value() && card.fixedId > 928) {
+            pushPower('new', 'gs.status-new', [], null);
         }
 
         if (kittyCatsEnabled?.value() && (catsArray.includes(card.id * -1) || catsArray.includes(card.id)) && !card.playedTurn && card.ownerId === window.userId) {
-            pushPower('kittyCat', 'custom', 'status-kitty-cat', [], null);
+            pushPower('kittyCat', 'gs.status-kitty-cat', [], null);
         }
 
         if (mikeDropsEnabled?.value() && (mikesArray.includes(card.id * -1) || mikesArray.includes(card.id)) && !card.playedTurn && card.ownerId === window.userId) {
-            pushPower('mikeDrop', 'custom', 'status-mike-drop', [], null);
+            pushPower('mikeDrop', 'gs.status-mike-drop', [], null);
         }
+
+    var statuses = card.statuses;
+    if (statuses !== undefined) {
+        for (var i = 0; i < statuses.length; i++) {
+            var status = statuses[i];
+            if (
+               !(status.name === 'program' && programPower?.value()) &&
+               !(status.name === 'silence' && !noSilence?.value())
+               ) {
+                pushPower(status.name, `status-${status.name}`, [status.counter], status.counter)
+            }
+        }
+    }
 
     if (!noGenerated?.value() && card.creatorInfo !== undefined && card.creatorInfo.typeCreator >= 0) {
         var creatorCardTranslated = '';
         if (card.creatorInfo.typeCreator === 0) {creatorCardTranslated = $.i18n('{{CARD:' + card.creatorInfo.id + '|1}}');}
         else if (card.creatorInfo.typeCreator === 1) {creatorCardTranslated = $.i18n('{{ARTIFACT:' + card.creatorInfo.id + '}}');}
         else if (card.creatorInfo.typeCreator === 2) {creatorCardTranslated = $.i18n('{{SOUL:' + card.creatorInfo.name + '}}');}
-        pushPower('created', 'base', 'status-created', [creatorCardTranslated], null);
+        pushPower('created', 'status-created', [creatorCardTranslated], null);
     }
 
     for (let i = 0; i < powersStringArgs.length; i++) {
@@ -690,10 +694,15 @@ const checkSetInfoPowers = setInterval(() => {
     for (let i = 0; i < powersStringKeys.length; i++) {
 
         var $cardContainerImage = monsterContainer.find('.cardStatus');
-        var url = powersType[i] === 'base' ? `images/powers/${powers[i]}.png` : `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${powers[i]}.png`;
+        var url =
+        powersStringKeys[i].startsWith("gs.") && $.i18n(powersStringKeys[i].replace("gs.", "").replace("-stacked", "")).includes("status-") ?
+            `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${powers[i]}.png`
+        :
+            `images/powers/${powers[i]}.png`;
+
         $cardContainerImage.append(`<img style="right: ${i * spacing}px;" power="${powers[i]}" class="infoPowers helpPointer" src="${url}" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});">`);
 
-        if (powersStringNumbers[i] !== null) {
+        if (powersStringNumbers[i] !== null && powersStringNumbers[i] > 1) {
             $cardContainerImage.append(`<span style="right: ${i * spacing}px;" class="infoPowersDetails helpPointer" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});">${powersStringNumbers[i]}</span>`);
         }
     }
@@ -774,8 +783,8 @@ if (typeof plugin.addFilter === 'function') {
             if (removed && removedInSearch) {
                 var searchValue = $('#searchInput').val().toLowerCase();
                 var alias = ""
-                if (!$.i18n('card-alias-' + card.fixedId).includes('card-alias')) {
-                    alias = $.i18n('card-alias-' + card.fixedId).toLowerCase().replace(/(<.*?>)/g, '');
+                if (!$.i18n('gs.card-alias-' + card.fixedId).includes('card-alias')) {
+                    alias = $.i18n('gs.card-alias-' + card.fixedId).toLowerCase().replace(/(<.*?>)/g, '');
                     removed = !alias.includes(searchValue)
                 }
             }
@@ -796,26 +805,27 @@ if (typeof plugin.addFilter === 'function') {
         }
     )
 
-    plugin.addFilter(
-        function gsPowerFiltersStandard(card, removed) {
-            if (!removed && $('#hasteInput').length) {
-                return $('#hasteInput').prop('checked') && !card.haste;
+    filterPowersStandard.forEach((power) => {
+        plugin.addFilter(
+            function gsPowerFilter(card, removed) {
+                if (!removed && $(`#${power.name}Input`).length) {
+                    removed = $(`#${power.name}Input`).prop('checked') && !power.condition(card);
+                }
+                return removed;
             }
-            if (!removed && $('#chargeInput').length) {
-                return $('#chargeInput').prop('checked') && !card.charge;
+        )
+    })
+
+    filterPowersGalascript.forEach((power) => {
+        plugin.addFilter(
+            function gsPowerFilter(card, removed) {
+                if (!removed && $(`#${power.name}Input`).length) {
+                    removed = $(`#${power.name}Input`).prop('checked') && !power.condition(card);
+                }
+                return removed;
             }
-            if (!removed && $('#tauntInput').length) {
-                return $('#tauntInput').prop('checked') && !card.taunt;
-            }
-            if (!removed && $('#armorInput').length) {
-                return $('#armorInput').prop('checked') && !card.armor;
-            }
-            if (!removed && $('#candyInput').length) {
-                return $('#candyInput').prop('checked') && !card.candy;
-            }
-            return removed;
-        }
-    )
+        )
+    })
 
 }
 
@@ -824,20 +834,37 @@ const checkUpdateCardVisual = setInterval(() => {
         clearInterval(checkUpdateCardVisual);
         function newUpdateCardVisual($htmlCard, card) {
         var cost = card.cost
-        var statbase = $htmlCard.hasClass("base1000") ? 1000 : $htmlCard.hasClass("base100") ? 100 : $htmlCard.hasClass("base10") ? 10 : 1;
+        var statbase = 1;
+        const baseClass = $htmlCard.attr("class").match(/base([0-9.]+)/);
+        if (baseClass) {
+            statbase = baseClass[1];
+        }
+
+        function stat(num) {
+            num = num * statbase
+            if (String(num).includes(".")) {
+                return num.toPrecision(1);
+            } else {
+                return num;
+            }
+        }
+
         var fauxCost = $htmlCard.find('.cardFauxCost').text();
         if (obscActive() && ['obfuscate', 'to set card', 'to random card'].includes(obscCardCost?.value())) {
             cost = fauxCost - (card.originalCost - card.cost)
             if (isNaN(cost)) {cost = fauxCost}
         }
-        var attack = card.attack * statbase;
-        var baseAttack = card.originalAttack * statbase;
-        var hp = card.hp * statbase;
-        var maxHp = card.maxHp * statbase;
-        var baseHp = card.originalHp * statbase;
+
+        var attack = stat(card.attack);
+        var baseAttack = stat(card.originalAttack);
+        var hp = stat(card.hp);
+        var maxHp = stat(card.maxHp);
+        var baseHp = stat(card.originalHp);
         var fauxAttack = $htmlCard.find('.cardFauxATK').text();
         var fauxHp = $htmlCard.find('.cardFauxHP').text();
         var fauxMaxHp = $htmlCard.find('.cardFauxHP').text();
+
+
         if (obscActive() && ['obfuscate', 'to set card', 'to random card'].includes(obscCardStats?.value())) {
             attack = fauxAttack - (card.originalAttack - card.attack)
             hp = fauxHp - (card.originalHp - card.hp)
@@ -888,7 +915,7 @@ const checkUpdateCardVisual = setInterval(() => {
                 default: maxHpSquish = 0.25; break;                                          // are exactly what i want
             }
             $cardCurrentHp.attr("style", `transform: scaleX(${hpSquish})`);
-            $cardMaxHp.attr("style", `transform: scaleX(${maxHpSquish})`);
+            $cardMaxHp.attr("style", `transform: scaleX(${maxHpSquish})`);                   // update: im not ever doing that am i
         } else {
             switch (hp.toString().length) {
                 case 1: hpSquish = 1; break;
@@ -927,8 +954,9 @@ const checkUpdateCardVisual = setInterval(() => {
             default: atkSquish = 0.55; break;
         }
         $cardATK.attr("style", `transform: scaleX(${atkSquish})`);
-        $cardATK.removeClass('attack-buff').removeClass('attack-debuff').removeClass('paralyzed');
-        if (card.paralyzed !== 0) {
+        $cardATK.removeClass('attack-buff').removeClass('attack-debuff');
+        $htmlCard.removeClass('paralyzed');
+        if (findStatus(card, 'paralyzed') > 0) {
             $htmlCard.addClass('paralyzed');
         } else {
             if (attack > baseAttack) {
@@ -976,131 +1004,134 @@ window.defaultTranslations = defaultTranslations
 function initAliases() {
   if (!$) return;
   $.i18n().load({
-    "card-alias-8": "mommy",
-    "card-alias-30": "bp",
-    "card-alias-32": "memhead",
-    "card-alias-38": "rg1",
-    "card-alias-39": "rg2",
-    "card-alias-60": "paps",
-    "card-alias-62": "asdree",
-    "card-alias-64": "mttex mtt ex",
-    "card-alias-66": "wtf",
-    "card-alias-68": "achance",
-    "card-alias-69": "sblazing sblaze",
-    "card-alias-71": "fenergy",
-    "card-alias-82": "merchire",
-    "card-alias-88": "btreat bctreat",
-    "card-alias-89": "pgas polgas pollgas pollugas",
-    "card-alias-92": "fon",
-    "card-alias-95": "tow",
-    "card-alias-106": "undyne the undying",
-    "card-alias-107": "watercooler buble boobie",
-    "card-alias-110": "mttneo mtt neo",
-    "card-alias-117": "oflowey",
-    "card-alias-140": "polibear",
-    "card-alias-145": "db1",
-    "card-alias-146": "db2",
-    "card-alias-150": "ncg",
-    "card-alias-183": "pod",
-    "card-alias-201": "dmtt",
-    "card-alias-203": "aod",
-    "card-alias-214": "casdyne",
-    "card-alias-237": "phamster moni!!!",
-    "card-alias-239": "snowsign ssign",
-    "card-alias-254": "cpaps",
-    "card-alias-258": "bquiz",
-    "card-alias-262": "mmm",
-    "card-alias-265": "mr. generosity mr generosity",
-    "card-alias-267": "crystomb ctomb",
-    "card-alias-288": "groom",
-    "card-alias-296": "wormjar wormsjar jow",
-    "card-alias-299": "polibear",
-    "card-alias-315": "rg3",
-    "card-alias-316": "rg4",
-    "card-alias-318": "falvin",
-    "card-alias-414": "pmascot",
-    "card-alias-421": "astruck asstruck",
-    "card-alias-437": "shyagent sagent ralsei neo",
-    "card-alias-453": "cotg",
-    "card-alias-455": "phouse",
-    "card-alias-471": "cblaster",
-    "card-alias-490": "pod",
-    "card-alias-503": "libloox",
-    "card-alias-504": "blancer",
-    "card-alias-505": "skris",
-    "card-alias-508": "hoodsei hsei",
-    "card-alias-515": "hhathy",
-    "card-alias-520": "absart abs art",
-    "card-alias-531": "ttoriel",
-    "card-alias-532": "etdb",
-    "card-alias-533": "gertomb gtomb",
-    "card-alias-549": "copdyne",
-    "card-alias-552": "cow",
-    "card-alias-567": "blowbick",
-    "card-alias-573": "elimduck elim duck",
-    "card-alias-579": "bqueen",
-    "card-alias-581": "gmascot",
-    "card-alias-642": "pblook poliblook",
-    "card-alias-661": "cws cyber sign cybersign",
-    "card-alias-673": "bplush",
-    "card-alias-700": "vb",
-    "card-alias-707": "captn rouxl",
-    "card-alias-714": "cjester",
-    "card-alias-716": "rpaps",
-    "card-alias-717": "sneo",
-    "card-alias-726": "pkris",
-    "card-alias-734": "cwire",
-    "card-alias-742": "cg1",
-    "card-alias-743": "cg2",
-    "card-alias-754": "fheads",
-    "card-alias-756": "spamshop sshop",
-    "card-alias-758": "bneo",
-    "card-alias-760": "butsei",
-    "card-alias-761": "bstatue",
-    "card-alias-763": "cpanel",
-    "card-alias-767": "bdancer baldancer",
-    "card-alias-772": "jfs",
-    "card-alias-773": "shytomb stomb",
-    "card-alias-774": "dlancer dancer",
-    "card-alias-775": "galadino",
-    "card-alias-776": "tlights",
-    "card-alias-782": "talphys",
-    "card-alias-794": "gq",
-    "card-alias-815": "dalvdrobe",
-    "card-alias-828": "mommy",
-    "card-alias-838": "zmartlet",
-    "card-alias-848": "sansino csans",
-    "card-alias-853": "chutomb ctomb",
-    "card-alias-853": "duel",
-    "card-alias-869": "galadino",
-    "card-alias-878": "cero ketsukane",
-    "card-alias-883": "plancer",
-    "card-alias-884": "psusie",
-    "card-alias-885": "zkris",
-    "card-alias-888": "wcloak",
-    "card-alias-893": "fraudyne",
-    "card-alias-893": "tcatcher",
-    "card-alias-897": "tspawn titanspawn",
-    "card-alias-898": "tserpent",
-    "card-alias-902": "sguy",
-    "card-alias-903": "zsusie zusie",
-    "card-alias-904": "zralsei ralzei zootsei",
-    "card-alias-905": "lmower",
-    "card-alias-906": "planino planina pelnina pelnino",
-    "card-alias-907": "pelnina pelnino planino planina",
-    "card-alias-908": "rralsei rocksei",
-    "card-alias-909": "rkris",
-    "card-alias-912": "jstein jstien jackins your taking too long scairy",
-    "card-alias-913": "jstein jstien jackins your taking too long scairy",
-    "card-alias-914": "ctower cup tower",
-    "card-alias-915": "cposter",
-    "card-alias-917": "rposter",
-    "card-alias-919": "mposter",
-    "card-alias-920": "galadino",
-    "card-alias-922": "water cooler watercooler buble boobie",
-    "card-alias-923": "pkris",
-    "card-alias-926": "homophobia",
-    "card-alias-927": "gacha machine gpmachine gmachine",
+    "gs.card-alias-8": "mommy",
+    "gs.card-alias-30": "bp",
+    "gs.card-alias-32": "memhead",
+    "gs.card-alias-38": "rg1",
+    "gs.card-alias-39": "rg2",
+    "gs.card-alias-60": "paps",
+    "gs.card-alias-62": "asdree",
+    "gs.card-alias-64": "mttex mtt ex",
+    "gs.card-alias-66": "wtf",
+    "gs.card-alias-68": "achance",
+    "gs.card-alias-69": "sblazing sblaze",
+    "gs.card-alias-71": "fenergy",
+    "gs.card-alias-82": "merchire",
+    "gs.card-alias-88": "btreat bctreat",
+    "gs.card-alias-89": "pgas polgas pollgas pollugas",
+    "gs.card-alias-92": "fon",
+    "gs.card-alias-95": "tow",
+    "gs.card-alias-106": "undyne the undying",
+    "gs.card-alias-107": "watercooler buble boobie",
+    "gs.card-alias-110": "mttneo mtt neo",
+    "gs.card-alias-117": "oflowey",
+    "gs.card-alias-140": "polibear",
+    "gs.card-alias-145": "db1",
+    "gs.card-alias-146": "db2",
+    "gs.card-alias-150": "ncg",
+    "gs.card-alias-183": "pod",
+    "gs.card-alias-201": "dmtt",
+    "gs.card-alias-203": "aod",
+    "gs.card-alias-214": "casdyne",
+    "gs.card-alias-237": "phamster moni!!!",
+    "gs.card-alias-239": "snowsign ssign",
+    "gs.card-alias-254": "cpaps",
+    "gs.card-alias-258": "bquiz",
+    "gs.card-alias-262": "mmm",
+    "gs.card-alias-265": "mr. generosity mr generosity",
+    "gs.card-alias-267": "crystomb ctomb",
+    "gs.card-alias-288": "groom",
+    "gs.card-alias-296": "wormjar wormsjar jow",
+    "gs.card-alias-299": "polibear",
+    "gs.card-alias-315": "rg3",
+    "gs.card-alias-316": "rg4",
+    "gs.card-alias-318": "falvin",
+    "gs.card-alias-414": "pmascot",
+    "gs.card-alias-421": "astruck asstruck",
+    "gs.card-alias-437": "shyagent sagent ralsei neo",
+    "gs.card-alias-453": "cotg",
+    "gs.card-alias-455": "phouse",
+    "gs.card-alias-471": "cblaster",
+    "gs.card-alias-490": "pod",
+    "gs.card-alias-503": "libloox",
+    "gs.card-alias-504": "blancer",
+    "gs.card-alias-505": "skris",
+    "gs.card-alias-508": "hoodsei hsei",
+    "gs.card-alias-515": "hhathy",
+    "gs.card-alias-520": "absart abs art",
+    "gs.card-alias-531": "ttoriel",
+    "gs.card-alias-532": "etdb",
+    "gs.card-alias-533": "gertomb gtomb",
+    "gs.card-alias-549": "copdyne",
+    "gs.card-alias-552": "cow",
+    "gs.card-alias-567": "blowbick",
+    "gs.card-alias-573": "elimduck elim duck",
+    "gs.card-alias-579": "bqueen",
+    "gs.card-alias-581": "gmascot",
+    "gs.card-alias-642": "pblook poliblook",
+    "gs.card-alias-661": "cws cyber sign cybersign",
+    "gs.card-alias-673": "bplush",
+    "gs.card-alias-700": "vb",
+    "gs.card-alias-707": "captn rouxl",
+    "gs.card-alias-714": "cjester",
+    "gs.card-alias-716": "rpaps",
+    "gs.card-alias-717": "sneo",
+    "gs.card-alias-726": "pkris",
+    "gs.card-alias-734": "cwire",
+    "gs.card-alias-742": "cg1",
+    "gs.card-alias-743": "cg2",
+    "gs.card-alias-754": "fheads",
+    "gs.card-alias-756": "spamshop sshop",
+    "gs.card-alias-758": "bneo",
+    "gs.card-alias-760": "butsei",
+    "gs.card-alias-761": "bstatue",
+    "gs.card-alias-763": "cpanel",
+    "gs.card-alias-767": "bdancer baldancer",
+    "gs.card-alias-772": "jfs",
+    "gs.card-alias-773": "shytomb stomb",
+    "gs.card-alias-774": "dlancer dancer",
+    "gs.card-alias-775": "galadino",
+    "gs.card-alias-776": "tlights",
+    "gs.card-alias-782": "talphys",
+    "gs.card-alias-794": "gq",
+    "gs.card-alias-815": "dalvdrobe",
+    "gs.card-alias-828": "mommy",
+    "gs.card-alias-838": "zmartlet",
+    "gs.card-alias-848": "sansino csans",
+    "gs.card-alias-853": "chutomb ctomb",
+    "gs.card-alias-853": "duel",
+    "gs.card-alias-869": "galadino",
+    "gs.card-alias-878": "cero ketsukane",
+    "gs.card-alias-883": "plancer",
+    "gs.card-alias-884": "psusie",
+    "gs.card-alias-885": "zkris",
+    "gs.card-alias-888": "wcloak",
+    "gs.card-alias-893": "fraudyne",
+    "gs.card-alias-893": "tcatcher",
+    "gs.card-alias-897": "tspawn titanspawn",
+    "gs.card-alias-898": "tserpent",
+    "gs.card-alias-902": "sguy",
+    "gs.card-alias-903": "zsusie zusie",
+    "gs.card-alias-904": "zralsei ralzei zootsei",
+    "gs.card-alias-905": "lmower",
+    "gs.card-alias-906": "planino planina pelnina pelnino",
+    "gs.card-alias-907": "pelnina pelnino planino planina",
+    "gs.card-alias-908": "rralsei rocksei",
+    "gs.card-alias-909": "rkris",
+    "gs.card-alias-912": "jstein jstien jackins your taking too long scairy",
+    "gs.card-alias-913": "jstein jstien jackins your taking too long scairy",
+    "gs.card-alias-914": "ctower cup tower",
+    "gs.card-alias-915": "cposter",
+    "gs.card-alias-917": "rposter",
+    "gs.card-alias-919": "mposter",
+    "gs.card-alias-920": "galadino",
+    "gs.card-alias-922": "water cooler watercooler buble boobie",
+    "gs.card-alias-923": "pkris",
+    "gs.card-alias-926": "homophobia",
+    "gs.card-alias-927": "gacha machine gpmachine gmachine",
+    "gs.card-alias-929": "elnina elnino lanino lanina",
+    "gs.card-alias-931": "tfuzzy",
+    "gs.card-alias-932": "pvase",
   }, 'en');
 }
 
@@ -1162,26 +1193,16 @@ function initMulliganInfo() {
                                    `This battle is     ${soulColor('Pissing')} me off<br><br>
                                    I am the  original        ${soulColor(enemyUser)}`,];
             function funnyIntro() {
-                if (enemyUser === "Crystal") {
-                    return `${soulIcon()} Free elo.`; // requested by crystal herself
-                }
-                if (enemyUser === "Sktima" || enemyUser === "RefractedSktima" || enemyUser === "Diamaincrah") {
-                    return `${soulIcon()} You're about to have a bad time.`;
-                }
-                if (enemyUser === "frogman") {
-                    return `Pet the ${player('frog')} :D`;
-                }
-                if (enemyUser === "Dware") {
-                    return `Beware the ${player()}`;
-                }
-                if (enemyUser === "The Rat") {
-                    return `${player('rat')}`;
-                }
-                if (enemyUser === "galadino") {
-                    return `${player()} wanted her own entrance message. Here it is!<br>Oh, and you're probably gonna win. I should mention that.`;
-                }
-                if (enemyUser === "StellarSting") {
-                    return `meme deck user pray they dont highroll`;
+                if (enemyUser === "Sktima" || enemyUser === "RefractedSktima" || enemyUser === "Diamaincrah") {enemyUser = "sans"}
+                switch (enemyUser) {
+                    case "Crystal":                   return `${soulIcon()} Free elo.`;
+                    case "sans":                      return `${soulIcon()} You're about to have a bad time.`;
+                    case "frogman":                   return `Pet the ${player('frog')} :D`;
+                    case "Dware":                     return `Beware the ${player()}`;
+                    case "The Rat":                   return `${player('rat')}`;
+                    case "galadino":                  return `${soulIcon()} Wow, what a really cool and awesome opponent there!`;
+                    case "StellarSting":              return `${soulIcon()} meme deck user pray they dont highroll`;
+                    case "speednick1972":             return `Draw out your sword, ${soulIcon(yourSoul)} ${soulColor(yourUser, yourSoul)},<br>and paint ${soulIcon()} me a beautiful fight!`;
                 }
                 var result = introductions[Math.floor(Math.random() * introductions.length)];
                 introductions.splice(introductions.indexOf(result), 1);
@@ -1189,42 +1210,46 @@ function initMulliganInfo() {
             }
             var info = `${funnyIntro()}<br><br>
                         ${window.userTurn === window.userId ? 'You go first.' : 'You go second.'}`;
-            $('.bootstrap-dialog-message > p').html(info)
+            $('.bootstrap-dialog-message:has(.mulligan) > p').html(info)
         }
     });
 }
 
 function initCustomPower() {
     $.i18n().load({
-        "status-dummy": "$1",
-        "status-unknown": "Hmmm... there's a power here, but you can't exactly make it out.",
-        "status-unknown-stacked": "Hmmm...  there's a power here, but you can't exactly make it out.",
-        "tribe-unknown": "Hmmm... this monster has a tribe, but which one?",
-        "status-program": "This card's {{KW:PROGRAM}} subeffect will trigger if $1 {{GOLD}} is spent.",
-        "status-target": "This card has a target effect. It can target $1.",
-        "status-turn": "This card was played on turn $1. It has lived for $2 {{PLURAL:$2|turn|turns}}.",
-        "status-shiny": "This card is shiny.",
-        "status-dead": "This monster dead as hell.",
-        "status-legend": "This card's owner got {{DIVISION:LEGEND}} last season.",
-        "status-immune-to-madjick": "This card is imune to {{CARD:16|1}}.",
-        "status-smells-like-lemons": "This card smells like lemons.",
-        "status-totem": "This card is compatible with {{CARD:545|1}}.",
-        "status-prime": "This card's ID, $1, is a prime number! The more you know.",
-        "status-new": "This card is new! Wowie. I bet it's really cool.",
-        "status-trap": "TBD",
-        "status-kitty-cat": "This card is secretly possessed by a kitty and will do something random when played.",
-        "status-mike-drop": "This card ends your turn immediately when played.",
-        "status-check": "$1",
-        "status-loop-stacked": "This card can trigger its {{KW:LOOP}} effect an additional time.",
-        "status-program-stacked": "This card's {{KW:PROGRAM}} subeffect will trigger if an additional {{GOLD}} is spent. It can also be copied by {{CARD:661|1}}.",
-        "status-turn-stacked": "This card was played an additional turn.",
-        "status-dodge-stacked": "This monster will negate an additional instance of {{DMG}} to itself.",
+        "gs.status-unknown": "Hmmm... there's a power here, but you can't exactly make it out.",
+        "gs.status-unknown-stacked": "Hmmm...  there's a power here, but you can't exactly make it out.",
+        "gs.tribe-unknown": "Hmmm... this monster has a tribe, but which one?",
+        "gs.status-target": "This card has a target effect. It can target $1.",
+        "gs.status-turn": "This card was played on turn $1. It has lived for $2 {{PLURAL:$2|turn|turns}}.",
+        "gs.status-shiny": "This card is shiny.",
+        "gs.status-dead": "This monster dead as hell.",
+        "gs.status-legend": "This card's owner got {{DIVISION:T}} rank last season!",
+        "gs.status-immune-to-madjick": "This card is imune to {{CARD:16|1}}.",
+        "gs.status-smells-like-lemons": "This card smells like lemons.",
+        "gs.status-totem": "This card is compatible with {{CARD:545|1}}.",
+        "gs.status-prime": "This card's ID, $1, is a prime number! The more you know.",
+        "gs.status-new": "This card is new! Wowie. I bet it's really cool.",
+        "gs.status-kitty-cat": "This card is secretly possessed by a kitty and will do something random when played.",
+        "gs.status-mike-drop": "This card ends your turn immediately when played.",
+        "gs.status-check": "$1",
+        "gs.status-loop-stacked": "This card can trigger its {{KW:LOOP}} effect an additional time.",
+        "gs.status-program-stacked": "If you have an additional {{GOLD}}, spend it to trigger this effect.",
+        "gs.status-turn-stacked": "This card was played an additional turn.",
+        "gs.status-dodge-stacked": "This monster will negate an additional instance of {{DMG}} to itself.",
     }, 'en');
+}
+
+
+function initCustomTranslations() {
+    const translations = Object.fromEntries(customTranslations.value());
+    const values = Object.values(translations)
+    $.i18n().load(translations, $.i18n().locale);
 }
 
 function staticStyles() {
     style('static', 'add',
-    `.faux {visibility: hidden;}
+    `.cardFauxElement {visibility: hidden;}
     .cardImage > img {visibility: hidden;}
     .cardName div[style*="font-size: 7px;"] {white-space: nowrap;}
     #gsFlashlight {position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; pointer-events: none; z-index: 100; image-rendering: pixelated;}
@@ -1273,10 +1298,16 @@ function staticStyles() {
     .setting-Galascript-button h5 {font-size: 16px; font-weight: bold; width: 380px;}
     .setting-Galascript-button .coolguy {float: right; color: thistle;}
     #underscript\\.plugin\\.Galascript\\.kittyCatsChance, #underscript\\.plugin\\.Galascript\\.mikeDropsChance {width: 32px;}
-    .setting-advancedMap:has(#underscript\\.plugin\\.Galascript\\.customTranslations) {width: 350px; border-bottom: none !important;}
-    .setting-advancedMap:has(#underscript\\.plugin\\.Galascript\\.customTranslations) input {width: 40%; height: 40px; text-wrap: auto; text-align: center; background-repeat: no-repeat; background-size: cover; background-position: center;}
-    .gsTransHelperOption {display: block; background-color: black; border: none; margin: 0px 5px;}
+    .setting-advancedMap_text_text:has(#underscript\\.plugin\\.Galascript\\.customTranslations) {width: 350px; border-bottom: none !important;}
+    .setting-advancedMap_text_text:has(#underscript\\.plugin\\.Galascript\\.customTranslations) input {width: 40%; align-self: stretch; text-wrap: auto; text-align: center; background-repeat: no-repeat; background-size: cover; background-position: center;}
+    .setting-advancedMap_text_text:has(#underscript\\.plugin\\.Galascript\\.customTranslations) textarea {min-height: 40px; height: 40px; width: 40%; resize: vertical; text-align: center; font-size: 12px; scrollbar-width: thin; scrollbar-color: white black}
     .card.full-skin.breaking-skin .cardImage {background-size: auto !important; background-position: center !important}
+    .gsTransHelperOption {display: block; border: none; padding: 0px 5px; width: 90%; text-align: left; transition: none;}
+    .gsTransHelperOption:not([class*="SwitchHighlight"]) { background-color: black; }
+    p.gsTransHelperOption {color: thistle; margin: unset;}
+    input.gsTransHelperOption {margin: 0px 12px;}
+    input.gsTransHelperOption:hover {padding: 0px 0px 0px 10px;}
+    #gsPowerFilterRow img {width: 24px;}
     `)
 }
 
@@ -1311,7 +1342,7 @@ const observer = new MutationObserver((mutations, obs) => {
         el.oninput = e => {
             updateBackground(e.target.value);
         }
-        el.onmouseover = e => {
+        el.onfocus = e => {
             updateBackground(e.target.value);
         }
         if (!el.dataset.gsSettingBgLoaded) {
@@ -1319,18 +1350,70 @@ const observer = new MutationObserver((mutations, obs) => {
             updateBackground(el.value);
         }
     });
+
     document.querySelectorAll('[id^="underscript.plugin.Galascript.customTranslations."]:not([id$="value"])').forEach(el => { // dynamic backgrounds for custom translation setting
         function updateBackground (value) {
-            const card = window.getCard(Number(value.replace(/\D/g,'')))
-            const image = card?.baseImage ?? "Blank"
-            el.style.setProperty('background-image', `url('/images/cards/${image}.png')`);
+            el.style.setProperty('background', 'no-repeat');
+            if (value.startsWith("card-") || value.startsWith("gs.card-")) {
+                const card = window.getCard(Number(value.replace(/\D/g,'')))
+                const image = card?.baseImage ?? "Blank"
+                el.style.setProperty('background-image', `url('/images/cards/${image}.png')`);
+                el.style.setProperty('background-size', '100%');
+                el.style.setProperty('background-position-y', 'bottom');
+
+            } else if (value.startsWith("artifact-")) {
+                const artifactImg = allArtifacts.find(art => art.id === Number(value.replace(/\D/g,'')))?.image
+                el.style.setProperty('background-image', `url('/images/artifacts/${artifactImg}.png')`);
+                el.style.setProperty('background-size', '42%');
+                el.style.setProperty('background-position', 'center');
+
+            } else if (value.startsWith("status-") || value.startsWith("gs.status-")) {
+                const git = value.startsWith("gs.") && $.i18n(value.replace("gs.", "").replace("-stacked", "")).includes("status-")
+                const stacked = value.includes("-stacked")
+                const camelCaseBitch = value.replace(/-([a-z])/g, function(match, char) {
+                    return '-' + char.toUpperCase();
+                });
+                const statusImageBitch = camelCaseBitch.replace("gs.", "").replace("status-", "").replace("-Stacked", "").replaceAll("-", "")
+                var statusImg = statusImageBitch.charAt(0).toLowerCase() + statusImageBitch.slice(1)
+
+                function cap(string) {
+                    return string.charAt(0).toUpperCase() + string.slice(1);
+                }
+                if (statusImg.includes("Debuff")) {
+                    statusImg = "malus" + cap(statusImg.replace("Debuff", ""))
+                }
+                if (statusImg.includes("Buff")) {
+                    statusImg = "bonus" + cap(statusImg.replace("Buff", ""))
+                }
+                switch (statusImg) {
+                    case "caught": statusImg = "box"; break;
+                    case "thorns": statusImg = "silenced"; break;
+                    case "anotherChance": statusImg = "silenced"; break;
+                }
+                const url = git ? `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${statusImg}.png` : `/images/powers/${statusImg}.png`
+                el.style.setProperty('image-rendering', 'pixelated');
+                el.style.setProperty('background-image', `url('${url}')`);
+                el.style.setProperty('background-size', '42%');
+                el.style.setProperty('background-position', '50% 50%');
+                if (stacked) {
+                    el.style.setProperty('background-repeat', 'repeat-x')
+                }
+            } else if (value.startsWith("kw-")) {
+                el.style.setProperty('background-image', `url('/images/cards/Blank.png')`)
+            } else if (value.length) {
+                el.style.setProperty('background-image', `url('https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/missing.png')`)
+                el.style.setProperty('image-rendering', 'pixelated');
+                el.style.setProperty('background-repeat', 'repeat');
+                el.style.setProperty('background-size', '42%');
+                el.style.setProperty('background-position', 'center');
+            }
             el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.4)', 'important');
             el.style.setProperty('background-blend-mode', 'darken');
         };
         el.oninput = e => {
             updateBackground(e.target.value);
         }
-        el.onmouseover = e => {
+        el.onfocus = e => {
             updateBackground(e.target.value);
         }
         if (!el.dataset.gsSettingBgLoaded) {
@@ -1338,6 +1421,7 @@ const observer = new MutationObserver((mutations, obs) => {
             updateBackground(el.value);
         }
     });
+
     document.querySelectorAll('[id="underscript.plugin.Galascript.frameSpoof"]').forEach(el => { // dynamic backgrounds for frame skins option
         function updateBackground (value) {
             var underscored = value.toString().replace(/\s+/g, '_');
@@ -1345,6 +1429,10 @@ const observer = new MutationObserver((mutations, obs) => {
             var url;
             if (standardFrames.includes(value)) {
                 url = `images/frameSkins/${underscored}/frame_monster.png`
+            } else if (value === "Waterfall") {
+                url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/waterfall-frame.png`
+            } else if (value === "Yet Darker") {
+                url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/yet-darker-frame.png`
             } else if (value === "Pokecard 1996") {
                 url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/pokecard-1996-frame-common.png`
             } else if (value === "Slay the Spire") {
@@ -1362,7 +1450,7 @@ const observer = new MutationObserver((mutations, obs) => {
         el.oninput = e => {
             updateBackground(e.target.value);
         }
-        el.onmouseover = e => {
+        el.onfocus = e => {
             updateBackground(e.target.value);
         }
         if (!el.dataset.gsSettingBgLoaded) {
@@ -1378,6 +1466,7 @@ const observer = new MutationObserver((mutations, obs) => {
                 case "match frame": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/rarity-match.gif'; break;
                 case "Hollow Knight": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/hk-determination.png'; break;
                 case "FNAFB": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-ut-determination.png'; break;
+                case "Celeste": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-ut-determination.png'; break;
             }
             el.style.setProperty('background-image', `url('${url}')`);
             el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.4)', 'important');
@@ -1389,7 +1478,7 @@ const observer = new MutationObserver((mutations, obs) => {
         el.oninput = e => {
             updateBackground(e.target.value);
         }
-        el.onmouseover = e => {
+        el.onfocus = e => {
             updateBackground(e.target.value);
         }
         if (!el.dataset.gsSettingBgLoaded) {
@@ -1406,7 +1495,7 @@ const observer = new MutationObserver((mutations, obs) => {
             const dx = (x - centerX) / rect.width;
             const dy = (y - centerY) / rect.height;
 
-            const maxTilt = 40; // degrees
+            const maxTilt = 40;
             const rotateX = -dy * maxTilt;
             const rotateY = dx * maxTilt;
 
@@ -1580,7 +1669,7 @@ function frameStyles() {
     .cold-place-frame .cardATK {top: 159px;}
     .cold-place-frame .cardHP {top: 190px;}
     .cold-place-frame .cardCost, .cold-place-frame .cardATK, .cold-place-frame .cardHP {left: 119px; transform: scale(0.7);}
-    .cold-place-frame .cardRarity {top: 222px; left: 82px; height: 16px;}
+    .cold-place-frame .cardRarity {top: 222px; left: 82px; height: 16px; background-size: contain !important}
     .cold-place-frame .cardQuantity, .cold-place-frame .cardUCPCost {top: 238px;}
     .cold-place-frame .cardUCPDiscount {top: 130px;}
     .cold-place-frame .cardFooter {background-color: rgba(0, 0, 0, 0);}
@@ -1634,7 +1723,7 @@ function frameStyles() {
     .slay-the-spire-frame .cardName {top: 18px; text-align: center !important; left: 31px; transform: scale(1.1); width: 120px;}
     .slay-the-spire-frame .cardHeader, .slay-the-spire-frame .cardFooter {background-color: rgba(0, 0, 0, 0);}
     .slay-the-spire-frame .cardCost {top: 6px; left: -1px;}
-    .slay-the-spire-frame .cardImage {background-color: black !important;}
+    .slay-the-spire-frame .cardImage {background-color: black !important; background-position: center !important;}
     .slay-the-spire-frame.monster.standard-skin .cardImage {top: 39px; left: 15px; width: 150px; height: 100px; background-size: cover !important;}
     .slay-the-spire-frame.spell.standard-skin .cardImage {top: 39px; left: 15px; width: 150px; height: 100px; background-size: cover !important;}
     .slay-the-spire-frame.breaking-skin .cardImage, .slay-the-spire-frame.full-skin .cardImage {top: 39px; left: 15px; width: 150px; height: 100px; background-size: cover !important; background-position-y: 26% !important; z-index: 0 !important}
@@ -1657,22 +1746,32 @@ function frameStyles() {
     .slay-the-spire-frame .cardBackground {visibility: hidden}
 
     *:has(> .balatro-frame) {perspective: 800px;}
-    .balatro-frame { animation: sway 6s ease-in-out infinite; height: 236px !important;}
+    .balatro-frame { animation: sway 6s ease-in-out infinite; height: 236px !important; text-shadow: 0 0 black !important; }
+    .balatro-frame:hover { z-index: 10; }
     .balatro-frame .shinySlot {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/balatro-frame-shiny.png"); opacity: 0.3; mix-blend-mode: hard-light;}
     .balatro-frame .shinySlot.animated {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/balatro-frame-shiny-animated.gif"); opacity: 0.3; mix-blend-mode: hard-light;}
     .balatro-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/balatro-frame-spell.png");}
     .balatro-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/balatro-frame-monster.png");}
     .balatro-frame .cardHeader, .balatro-frame .cardFooter {background-color: rgba(0, 0, 0, 0);}
     .balatro-frame .cardFrame {background-size: 100%; image-rendering: pixelated;}
-    .balatro-frame .cardName, .balatro-frame .cardDesc {visibility: hidden}
-    .balatro-frame .cardCost, .balatro-frame .cardATK, .balatro-frame .cardHP {visibility: hidden}
+    .balatro-frame.monster .cardName, .balatro-frame .cardDesc {visibility: hidden}
+    .balatro-frame.spell .cardName {top: 204px; text-align: center !important; left: 28px; transform: scaleX(0.99) scaleY(1.2); width: 120px; text-transform: uppercase; color: #4F6367 !important;}
+    .balatro-frame.monster .cardCost, .balatro-frame .cardATK, .balatro-frame .cardHP {visibility: hidden}
+    .balatro-frame.spell .cardCost {top: 5px; text-align: center !important; left: 28px; transform: scaleX(1.1) scaleY(0.6); width: 120px; text-transform: uppercase; color: #4F6367 !important;}
     .balatro-frame .cardBackground {visibility: hidden}
     .balatro-frame .cardRarity {visibility: hidden}
-    .balatro-frame .cardImage {background-color: black !important;}
+    .balatro-frame .cardImage {background-color: black !important; background-position: center !important;}
+    .balatro-frame .cardStatus {left: 35px; top: 15px; transform: rotate(-90deg) scale(2); image-rendering: pixelated;}
+    .balatro-frame.spell .cardStatus {left: 40px}
+    .balatro-frame .cardStatus > img {transform: rotate(90deg)}
+    .balatro-frame .cardStatus > span {transform: rotate(90deg) translateY(6px)}
+    .balatro-frame .cardTribes {visibility: hidden}
     .balatro-frame.monster.standard-skin .cardImage {top: 5px; left: 5px; width: 165px; height: 225px; background-size: cover !important; image-rendering: pixelated;}
+    .balatro-frame.spell.standard-skin .cardImage {top: 5px; left: 20px; width: 136px; height: 225px; background-size: cover !important; image-rendering: pixelated; background-color: #DAB772 !important; background-blend-mode: luminosity;}
     .balatro-frame.breaking-skin .cardImage, .balatro-frame.full-skin .cardImage {top: 5px; left: 5px; width: 165px; height: 225px; background-size: 132% !important; background-position-y: 50% !important; z-index: 0 !important}
+    .balatro-frame.spell.breaking-skin .cardImage, .balatro-frame.spell.full-skin .cardImage {left: 20px; width: 140px; background-size: 140% !important; background-position-y: 70% !important; background-color: #DAB772 !important; background-blend-mode: luminosity;}
     .balatro-frame .cardRarity {visibility: hidden}
-    .balatro-frame .cardQuantity, .balatro-frame .cardUCPCost {top: 240px;}
+    .balatro-frame .cardQuantity, .balatro-frame .cardUCPCost {top: 230px;}
 
     .vmas-frame .shinySlot {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/vmas-frame-shiny.png"); opacity: 0.3; mix-blend-mode: hard-light;}
     .vmas-frame .shinySlot.animated {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/vmas-frame-shiny-animated.gif"); opacity: 0.3; mix-blend-mode: hard-light;}
@@ -1747,6 +1846,49 @@ function frameStyles() {
     .mirror-temple-frame .cardATK {animation: float 6s ease-in-out infinite;}
     .mirror-temple-frame .cardHP {animation: float 6s ease-in-out infinite; animation-delay: -1s;}
     .mirror-temple-frame .cardQuantity, .mirror-temple-frame .cardUCPCost {top: 240px;}
+
+    .snails-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
+    .snails-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .snails-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/snails-frame-spell.png");}
+    .snails-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/snails-frame-monster.png");}
+    .snails-frame .cardName, .snails-frame .cardCost {top: 9px;}
+    .snails-frame .cardDesc, .snails-frame .cardSilence {top: 129px;}
+    .snails-frame .cardATK, .snails-frame .cardHP, .snails-frame .cardRarity {top: 213px;}
+    .snails-frame .cardQuantity, .snails-frame .cardUCPCost {top: 240px;}
+
+    .waterfall-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
+    .waterfall-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .waterfall-frame .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/waterfall-frame.png");}
+    .waterfall-frame .cardName, .waterfall-frame .cardCost {top: 9px;}
+    .waterfall-frame .cardDesc, .waterfall-frame .cardSilence {top: 129px;}
+    .waterfall-frame .cardATK, .waterfall-frame .cardHP, .waterfall-frame .cardRarity {top: 213px;}
+    .waterfall-frame .cardQuantity, .waterfall-frame .cardUCPCost {top: 240px;}
+
+    .yet-darker-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
+    .yet-darker-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .yet-darker-frame .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/yet-darker-frame.png");}
+    .yet-darker-frame .cardName, .yet-darker-frame .cardCost {top: 9px;}
+    .yet-darker-frame .cardDesc, .yet-darker-frame .cardSilence {top: 129px;}
+    .yet-darker-frame .cardATK, .yet-darker-frame .cardHP, .yet-darker-frame .cardRarity {top: 213px;}
+    .yet-darker-frame .cardQuantity, .yet-darker-frame .cardUCPCost {top: 240px;}
+
+    .bone-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
+    .bone-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .bone-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/bone-frame-spell.png");}
+    .bone-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/bone-frame-monster.png");}
+    .bone-frame .cardName, .bone-frame .cardCost {top: 9px;}
+    .bone-frame .cardDesc, .bone-frame .cardSilence {top: 129px;}
+    .bone-frame .cardATK, .bone-frame .cardHP, .bone-frame .cardRarity {top: 213px;}
+    .bone-frame .cardQuantity, .bone-frame .cardUCPCost {top: 240px;}
+
+    .furry-sans-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
+    .furry-sans-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .furry-sans-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/furry-sans-frame-spell.png");}
+    .furry-sans-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/furry-sans-frame-monster.png");}
+    .furry-sans-frame .cardName, .furry-sans-frame .cardCost {top: 9px;}
+    .furry-sans-frame .cardDesc, .furry-sans-frame .cardSilence {top: 129px;}
+    .furry-sans-frame .cardATK, .furry-sans-frame .cardHP, .furry-sans-frame .cardRarity {top: 213px;}
+    .furry-sans-frame .cardQuantity, .furry-sans-frame .cardUCPCost {top: 240px;}
     `)
 }
 
@@ -1765,6 +1907,9 @@ function rarityStyles(type) {
                 .fnafb-frame[data-rarity="${r}"][data-extension="BASE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-ut-${r.toLowerCase()}.png) no-repeat transparent !important;}
                 .fnafb-frame[data-rarity="${r}"][data-extension="DELTARUNE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-dr-${r.toLowerCase()}.png) no-repeat transparent !important;}
                 .fnafb-frame[data-rarity="${r}"][data-extension="UTY"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-uty-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                .mirror-temple-frame[data-rarity="${r}"][data-extension="BASE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-ut-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                .mirror-temple-frame[data-rarity="${r}"][data-extension="DELTARUNE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-dr-${r.toLowerCase()}.png) no-repeat transparent !important; transform: scale(2) translateY(-1px); image-rendering: pixelated;}
+                .mirror-temple-frame[data-rarity="${r}"][data-extension="UTY"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-ut-${r.toLowerCase()}.png) no-repeat transparent !important;}
                 `);
                 break;
             case "Hollow Knight":
@@ -1775,6 +1920,13 @@ function rarityStyles(type) {
                 .card[data-rarity="${r}"][data-extension="BASE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-ut-${r.toLowerCase()}.png) no-repeat transparent !important;}
                 .card[data-rarity="${r}"][data-extension="DELTARUNE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-dr-${r.toLowerCase()}.png) no-repeat transparent !important;}
                 .card[data-rarity="${r}"][data-extension="UTY"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-uty-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                `);
+                break;
+            case "Celeste":
+                style('rarityStyle', 'add', `
+                .card[data-rarity="${r}"][data-extension="BASE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-ut-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                .card[data-rarity="${r}"][data-extension="DELTARUNE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-dr-${r.toLowerCase()}.png) no-repeat transparent !important; transform: scale(2) translateY(-1px); image-rendering: pixelated;}
+                .card[data-rarity="${r}"][data-extension="UTY"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-ut-${r.toLowerCase()}.png) no-repeat transparent !important;}
                 `);
                 break;
         }
@@ -1798,7 +1950,7 @@ function tablessToggle(val) {
 function cardModifier(val) {
     style('cardModifier', 'remove')
     if (!obscActive()) { refreshCards(); return; }
-    const rarities = ['TOKEN', 'BASE', 'COMMON', 'RARE', 'EPIC', 'LEGENDARY', 'DETERMINATION'];
+    const rarities = ['TOKEN', 'COMMON', 'RARE', 'EPIC', 'LEGENDARY', 'DETERMINATION'];
     style('static', 'add', `
     @keyframes spin {
         0%  {transform: rotate(0deg);}
@@ -1843,7 +1995,6 @@ function cardModifier(val) {
         case "spin": modifier = `.card {animation: spin 4s infinite linear;}`; break;
         case "treadmill": modifier = `.card {animation: treadmill 15s infinite linear;} .card:hover {animation-play-state: paused;}`; break;
     }
-    console.log(modifier)
     style('cardModifier', 'add', modifier)
 }
 
@@ -1852,12 +2003,12 @@ function updateSoulColor(soul, color) {
         ${color === soulColors[soul] ? `
             img[src*="images/souls/${soul}.png"] {filter: drop-shadow(0px); transform: translateY(0px);}
             img[src*="images/souls/big/${soul}.png"] {filter: drop-shadow(0px); transform: translateY(0px);}
-            div:not(.breaking-skin):has(.cardName.${soul}) > .cardImage {background-color: pebis; background-blend-mode: unset;}
+            div:not(.breaking-skin):has(.cardName.${soul}):not(.balatro-frame) > .cardImage {background-color: pebis; background-blend-mode: unset;}
             .${soul}:not(li span):not([onmouseover]):not(.pokecard-1996-frame .${soul}):not(#deckCardsCanvas *) {color: ${color}; text-shadow: revert}
         ` : `
             img[src*="images/souls/${soul}.png"] {filter: drop-shadow(5000px 5000px 0 ${color}); transform: translate(-5000px, -5000px);}
             img[src*="images/souls/big/${soul}.png"] {filter: drop-shadow(5000px 5000px 0 ${color}); transform: translate(-5000px, -5000px);}
-            div:not(.breaking-skin):has(.cardName.${soul}) > .cardImage {background-color: ${color} !important; background-blend-mode: luminosity;}
+            div:not(.breaking-skin):has(.cardName.${soul}):not(.balatro-frame) > .cardImage {background-color: ${color} !important; background-blend-mode: luminosity;}
             .${soul}:not(li span):not([onmouseover]):not(.pokecard-1996-frame .${soul}):not(#deckCardsCanvas *) {color: ${color}}
             ${color === "#000000" ? `
                 .${soul}:not(li span):not([onmouseover]):not(#deckCardsCanvas *) {text-shadow: 0px 0px 10px #fff, 0px 0px 10px #fff;}
@@ -1916,23 +2067,22 @@ function defaultSouls() {
     patienceColor.set(soulColors.PATIENCE);
 }
 
-function setBg(bg, music, detachMusic) {
+function setBg(bg, detachMusic) {
+    console.log(`Set bg to ${bg}. Detach: ${detachMusic}`)
+    window.music.pause();
     $('body').css('background', '#000 url(\'images/backgrounds/' + bg + '.png\') no-repeat');
     $('body').css('background-size', 'cover');
     if (plugin.settings().value('underscript.persist.bgm')) {
         sessionStorage.setItem(`underscript.bgm.${window.gameId}`, bg);
     }
-    if (music) {
-        window.music.pause();
         if (detachMusic) {
-            window.playBackgroundMusic(rollBgSmart(music, true));
+            bgm = rollBgSmart(true);
         } else {
-            window.playBackgroundMusic(bg);
+            bgm = bg;
         }
-    }
 }
 
-function rollBgSmart(music, returnNum) {
+function rollBgSmart(returnNum) {
     var newBg = window.randomInt(1, backgrounds.length - 1);
     for (let [key, value] of bgMixtape.value()) {
         key = Number(key)
@@ -1949,7 +2099,7 @@ function rollBgSmart(music, returnNum) {
     if (returnNum) {
         return newBg;
     }
-    setBg(newBg, music);
+    setBg(newBg);
 }
 
 function getValue(el, remove = false) {
@@ -2109,6 +2259,27 @@ class keybindSetting extends underscript.utils.SettingType {
 const keybind = new keybindSetting();
 plugin.settings().addType(keybind);
 
+class textareaSetting extends underscript.utils.SettingType {
+    constructor(name = 'text') {
+    super(name);
+    }
+
+    value(val) {
+        return `${val}`;
+    }
+
+    element(value, update) {
+        return $('<textarea>')
+            .val(value)
+            .on('blur.script', (e) => update(e.target.value))
+            .css({
+            'background-color': 'transparent',
+        });
+    }
+}
+
+const textarea = new textareaSetting();
+
 function refreshCards() { if (typeof window.showPage === 'function' && window.pages.length) window.showPage(window.currentPage); }
 
 const cardAliases = plugin.settings().add({
@@ -2127,14 +2298,6 @@ const mulliganInfo = plugin.settings().add({
     default: true,
 });
 
-const autoStartMusic = plugin.settings().add({
-    key: 'autoStartMusic',
-    name: 'Automatically start music',
-    note: 'Normally, the game requires that you first click the page to play the background music<br>With this on, it\'ll attempt to immediately start playing, with no user input<br><br><span style="color:thistle;">Do note, however, that some browsers still aren\'t able to play audio without user input</span>',
-    category: 'QoL',
-    default: false,
-});
-
 const programIndicators = plugin.settings().add({
     key: 'programIndicators',
     name: 'Program indicator',
@@ -2142,6 +2305,15 @@ const programIndicators = plugin.settings().add({
     category: 'QoL',
     default: false,
     onChange: (val) => refreshCards()
+});
+
+const statsOnTop = plugin.settings().add({
+    key: 'statsOnTop',
+    name: 'Stats on top',
+    note: 'Displays card stats over obstructing skins',
+    category: 'QoL',
+    default: false,
+    onChange: (val) => statsOnTopToggle(val)
 });
 
 const statFilters = plugin.settings().add({
@@ -2153,13 +2325,14 @@ const statFilters = plugin.settings().add({
     onChange: (val) => {if (val) {createStatFilters()} else {destroyStatFilters()}}
 });
 
-const statsOnTop = plugin.settings().add({
-    key: 'statsOnTop',
-    name: 'Stats on top',
-    note: 'Displays card stats over obstructing skins',
+const powerFilters = plugin.settings().add({
+    key: 'powerFilters',
+    name: 'Status filters',
+    note: 'Adds filters for certain statuses in your collection',
     category: 'QoL',
-    default: false,
-    onChange: (val) => statsOnTopToggle(val)
+    type: "select", options: ["off", "standard", "standard + galascript"],
+    default: 'off',
+    onChange: (val) => {if (val !== 'off') {destroyPowerFilters(); createPowerFilters()} else {destroyPowerFilters()}}
 });
 
 const maxHpIndicator = plugin.settings().add({
@@ -2226,6 +2399,9 @@ const frameSpoof = plugin.settings().add({
             case 'Slay the Spire':
                 powerBounds.set(135);
                 break;
+            case 'Balatro':
+                powerBounds.set(135);
+                break;
         }
         switch (val) {
             case 'Pokecard 1996':
@@ -2236,6 +2412,9 @@ const frameSpoof = plugin.settings().add({
                 break;
             case 'Slay the Spire':
                 powerBounds.set(102);
+                break;
+            case 'Balatro':
+                powerBounds.set(79);
                 break;
         }
       refreshCards();
@@ -2256,7 +2435,7 @@ const raritySkins = plugin.settings().add({
     name: 'Rarity skin',
     note: 'Use a selection of custom rarity icons<br>"match frame" uses the custom rarity icon associated with the frame, if any',
     category: 'Cardpaint',
-    type: "select", options: ["off", "match frame", "Hollow Knight", "FNAFB"],
+    type: "select", options: ["off", "match frame", "Hollow Knight", "FNAFB", "Celeste"],
     default: "match frame",
     onChange: (val) => rarityStyles(val)
 });
@@ -2276,7 +2455,7 @@ const statBase = plugin.settings().add({
     name: 'Stat base',
     note: 'Displays ATK and HP stats in different base number multiples<br><br><span style="color:thistle;">Change applies on card update</span>',
     category: 'Cardpaint',
-    type: "select", options: ["1", "10", "100", "1000"],
+    type: "select", options: ["0.01", "0.1", "1", "10", "100", "1000", "10000"],
     default: "1",
     onChange: (val) => refreshCards()
 });
@@ -2630,11 +2809,14 @@ const bgMixtape = plugin.settings().add({
 const customTranslations = plugin.settings().add({
     key: 'customTranslations',
     name: 'Custom translations',
-    note: 'Use custom translations for UC',
+    note: 'Use custom translations ingame<br><br>Right-click on either box to open the Translation Helper! The<br>Translation Helper provides a bunch of easy to use formatting options,<br>aiming to make the process more easily understandable<br><br><span style="color:salmon;">Malformed or self-referencing values are extremely likely to cause issues</span>',
     category: 'To your liking',
     type: 'advancedMap',
     default: [["card-15", ";)"]],
-    hidden: true // eek! im not ready yet
+    type: {
+        value: textarea,
+    },
+    onChange: (val) => { $.i18n().load("translation", $.i18n().locale).then(() => {initCustomTranslations(); refreshCards();}); }
 });
 
 const obscurityInfo = plugin.settings().add({
@@ -2923,23 +3105,23 @@ const undereventPower = plugin.settings().add({
     onChange: (val) => refreshCards()
 });
 
+const programPower = plugin.settings().add({
+    key: 'programPower',
+    name: 'Program',
+    note: 'Displays the program value',
+    category: 'Too many powers!!!',
+    data: { src: 'images/powers/program.png' },
+    type: powerCheckbox,
+    default: true,
+    onChange: (val) => refreshCards()
+});
+
 const newPower = plugin.settings().add({
     key: 'newPower',
     name: 'New',
     note: 'Displays if the card is... new!!! Yay!!!',
     category: 'Too many powers!!!',
     data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/new.png' },
-    type: powerCheckbox,
-    default: false,
-    onChange: (val) => refreshCards()
-});
-
-const programPower = plugin.settings().add({
-    key: 'programPower',
-    name: 'Program',
-    note: 'Displays the program value',
-    category: 'Too many powers!!!',
-    data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/program.png' },
     type: powerCheckbox,
     default: false,
     onChange: (val) => refreshCards()
@@ -2991,8 +3173,8 @@ const deadPower = plugin.settings().add({
 
 const legendPower = plugin.settings().add({
     key: 'legendPower',
-    name: 'Legendmaker',
-    note: 'Displays if the card\'s owner got LEGEND last season',
+    name: 'King of Rolypoly',
+    note: 'Displays if the card\'s owner got T rank last season<br><br>Literally: <img style="height: 24px; width: 48px;" src="https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/tennapose.gif"> <hr style="border-top: 3px dotted red;"/> Have you ever seen such a <img style="height: 24px;" src="https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/tennapose.gif"> ?<br><img style="height: 256px; width: 356px;" src="https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/tennapose.gif">',
     category: 'Too many powers!!!',
     data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/legendmaker.png' },
     type: powerCheckbox,
@@ -3152,7 +3334,8 @@ function processBinds(e) {
                 if (!ingame) {
                     break;
                 }
-                rollBgSmart(true);
+                rollBgSmart();
+                window.playBackgroundMusic(bgm);
                 break;
             case resetFiltersKeybind?.value()[0]:
                 crispiness.set(100);
@@ -3322,7 +3505,6 @@ window.chattyKitty = chattyKitty
 function emotingKitty() {
     const emotes = window.chatEmotes.map(emote => emote.id) ?? [];
     const emotepoll = Math.floor(Math.random() * emotes.length);
-    console.log(emotes, emotepoll, emotes[emotepoll])
     const id = emotes[emotepoll].toString();
     if (id) {
         window.socketGame.send(JSON.stringify({action: "emote", id: id}));
@@ -3380,7 +3562,7 @@ plugin.events.on(':preload', () => {
         gsVersion.set(pluginVersion);
         plugin.toast({
             title: `Galascript: Update ${pluginVersion}`,
-            text: convertMarkdown.makeHtml(patchNotes),
+            text: convertMarkdown.makeHtml(patchNotesShort),
         });
     }
 });
@@ -3388,40 +3570,45 @@ plugin.events.on(':preload', () => {
 plugin.events.on('translation:loaded', () => {
     if (cardAliases?.value()) {initAliases();};
     initCustomPower();
+    initCustomTranslations();
+    loadLibraries();
 });
 
-function setProfileSkin(profileSkin, music) {
+
+function setProfileSkin(profileSkin) {
     var profileSkinBackgrounds = ['Vaporwave', 'Sans Bar', 'Holy War', 'Spider Party', 'Halloween2020', 'Memories of the Snow', 'Smartopia Arrived'];
     var profileSkinMusics = ['Vaporwave', 'Spider Party', 'Memories of the Snow', 'Smartopia Arrived'];
 
     if (profileSkinBackgrounds.includes(profileSkin.name)) {
-        setBg(profileSkin.image, music, profileSkinMusics.includes(profileSkin.name))
+        setBg(profileSkin.image, !profileSkinMusics.includes(profileSkin.name))
+    } else {
+        rollBgSmart()
     }
 }
 
 var catsArray = [];
 var mikesArray = [];
+var bgm;
 plugin.events.on('GameStart', () => {
     plugin.events.on('connect', (data) => {
         const profileSkin = JSON.parse(data.yourProfileSkin)
         const savedBg = sessionStorage.getItem(`underscript.bgm.${window.gameId}`);
         const underscriptPersistBg = plugin.settings().value('underscript.persist.bgm');
-
-        function loadBg(music) {
+        console.log(profileSkin, savedBg, underscriptPersistBg)
+        function loadBg() {
             if (savedBg && underscriptPersistBg) {
-                setBg(savedBg, music);
+                setBg(savedBg);
             } else {
-                rollBgSmart(music);
-                setProfileSkin(profileSkin, music)
+                setProfileSkin(profileSkin)
             }
         }
 
-        if (autoStartMusic?.value()) {
-            loadBg(true)
+        loadBg()
+        $('html').unbind('click');
+        $('html').click(function () {
+            window.playBackgroundMusic(bgm);
             $('html').unbind('click');
-        } else {
-            loadBg(false)
-        };
+        });
         rollEventArrays();
     });
 });
@@ -3453,6 +3640,7 @@ function rollEventArrays() {
 
 plugin.events.on(':load', () => {
     if (statFilters?.value()) {createStatFilters()}
+    if (powerFilters?.value() !== 'off') {createPowerFilters()}
 });
 
 function destroyStatFilters() {
@@ -3469,7 +3657,7 @@ function destroyStatFilters() {
 }
 
 function createStatFilters() {
-    const includePaths = ['/Crafting', '/Decks', '/DecksAdmin'];
+    const includePaths = ['/Crafting', '/Decks'];
     if (!includePaths.includes(window.location.pathname)) { return; }
     style('statFilterSpacing', 'replace', `
         td[style*="width: 200px"] {display: table; margin-bottom: -20px;}
@@ -3613,52 +3801,220 @@ function createStatFilters() {
     });
 }
 
-function createPowerFiltersStandard() {
-    const includePaths = ['/Crafting', '/Decks', '/DecksAdmin'];
+function createPowerFilters() {
+    const includePaths = ['/Crafting', '/Decks'];
     if (!includePaths.includes(window.location.pathname)) { return; }
+    style('powerFiltersSpacing', 'remove')
 
-    const hasteInput = $('<label>')
-    hasteInput.append($('<input>', {
-        id: 'hasteInput',
-        type: 'checkbox',
-        class: 'powerInput',
-        onchange: 'applyFilters(); showPage(0);'
-    }))
-    hasteInput.append($('<img>', {
-        src: 'images/powers/haste.png',
-        width: '24px',
-    }))
-
-    const chargeInput = $('<label>')
-    chargeInput.append($('<input>', {
-        id: 'chargeInput',
-        type: 'checkbox',
-        class: 'powerInput',
-        onchange: 'applyFilters(); showPage(0);'
-    }))
-    chargeInput.append($('<img>', {
-        src: 'images/powers/charge.png',
-        width: '24px',
-    }))
-
-    const newFilter = $('<p>', {
+    const $newFilterRow = $('<p>', {
         style: 'text-align: center; font-size: 16px;',
-        class: 'filter'
+        class: 'filter',
+        id: 'gsPowerFilterRow',
     })
 
-    newFilter.append(hasteInput)
-    newFilter.append(chargeInput)
+    var powers = {}
+    if (powerFilters?.value() === 'standard' || powerFilters?.value() === 'standard + galascript') {
+        style('powerFiltersSpacing', 'add', '.filter {margin: 0 0 4px;}')
+        filterPowersStandard.forEach((power) => {
+            var $powerFilter = $('<label>')
+            $powerFilter.append($('<input>', {
+                id: `${power.name}Input`,
+                type: 'checkbox',
+                class: 'powerInput',
+                onchange: 'applyFilters(); showPage(0);'
+            }))
+            $powerFilter.append($('<img>', {
+                src: `images/powers/${power.icon}.png`
+            }))
+            powers[`${power.name}Input`] = $powerFilter
+        })
+    }
+    if (powerFilters?.value() === 'standard + galascript') {
+        filterPowersGalascript.forEach((power) => {
+            var $powerFilter = $('<label>')
+            $powerFilter.append($('<input>', {
+                id: `${power.name}Input`,
+                type: 'checkbox',
+                class: 'powerInput',
+                onchange: 'applyFilters(); showPage(0);'
+            }))
+            $powerFilter.append($('<img>', {
+                src: `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${power.icon}.png`
+            }))
+            powers[`${power.name}Input`] = $powerFilter
+        })
+    }
+    if (window.location.pathname === '/Decks') {
+        if (powerFilters?.value() === 'standard') {
+            style('powerFiltersSpacing', 'add', '#gsPowerFilterRow img {margin: 0 0px;}');
+        } else {
+            style('powerFiltersSpacing', 'add', '#gsPowerFilterRow img {margin: 0 -1px;}');
+        }
+    } else {
+        if (powerFilters?.value() === 'standard') {
+            style('powerFiltersSpacing', 'add', '#gsPowerFilterRow img {margin: 0 2px;}');
+        } else {
+            style('powerFiltersSpacing', 'add', '#gsPowerFilterRow img {margin: 0 1px;}');
+        }
+    }
 
-    $('.filter:last').after(newFilter)
+    for (const $filter in powers) {
+        $newFilterRow.append(powers[$filter]);
+    }
+
+    $('.filter:last').after($newFilterRow)
 }
 
-window.beppy = createPowerFiltersNormal
+function destroyPowerFilters() {
+    $('#gsPowerFilterRow').remove()
+    style('powerFiltersSpacing', 'remove')
+}
 
 plugin.events.on('Settings:open', () => createTransHelper());
 
-let selectedEl = null;
+var selectedEl = null;
+var siblingEl = null;
+var pluralize = 1;
+var allArtifacts = [];
+var allTribes = [];
+var allKeywords = [];
+var allStatus = [];
+var allSouls = [];
+var allRarities = [];
+var allDivisions = [];
+
+function loadLibraries() {
+    if (!allArtifacts.length) {
+        $.ajax({
+            url: `${location.origin}/DecksConfig`,
+            type: "GET",
+            contentType: "application/json",
+            success: function (data) {
+                allArtifacts = JSON.parse(data.allArtifacts);
+            }
+        });
+    }
+    if (!allTribes.length) {
+        window.allCards.forEach(function (card) {
+            card.tribes.forEach(function (tribe) {
+                if (!allTribes.includes(tribe)) {allTribes.push(tribe)}
+            });
+        });
+    }
+    if (!allKeywords.length) {
+        Object.entries($.i18n().messageStore.messages.en).forEach(([key, value])=> {
+            if (key.startsWith("kw-") && !key.includes("desc")) {
+                const keyword = key.replace("kw-", "").toUpperCase()
+                if (!allKeywords.includes(keyword)) {allKeywords.push(keyword)}
+            }
+        });
+        allKeywords.push("KR")
+    }
+    if (!allStatus.length) {
+        var gsStatus = [];
+        Object.entries($.i18n().messageStore.messages.en).forEach(([key, value])=> {
+            if (key.startsWith("status-")) {
+                const status = key.replace("status-", "").toUpperCase()
+                if (!allStatus.includes(status)) {allStatus.push(status)}
+            }
+            if (key.startsWith("gs.status-")) {
+                const status = key.replace("gs.status-", "galascript: ").toUpperCase()
+                if (!gsStatus.includes(status)) {gsStatus.push(status)}
+            }
+        });
+        allStatus = allStatus.sort()
+        gsStatus = gsStatus.sort()
+        allStatus = allStatus.concat(gsStatus)
+    }
+    if (!allSouls.length) {
+        Object.keys($.i18n().messageStore.messages.en).forEach((key) => {
+            if (key.startsWith("soul-") && !key.includes("desc")) {
+                const soul = key.replace("soul-", "").toUpperCase()
+                if (!allSouls.includes(soul)) {allSouls.push(soul)}
+            }
+        });
+    }
+    if (!allRarities.length) {
+        Object.keys($.i18n().messageStore.messages.en).forEach((key)=> {
+            if (key.startsWith("rarity-") && !key.includes("MYTHIC")) {
+                const rarity = key.replace("rarity-", "").toUpperCase()
+                if (!allRarities.includes(rarity)) {allRarities.push(rarity)}
+            }
+        });
+    }
+    if (!allDivisions.length) {
+        Object.keys($.i18n().messageStore.messages.en).forEach((key)=> {
+            if (key.startsWith("division-")) {
+                const div = key.replace("division-", "").toUpperCase()
+                if (!allDivisions.includes(div)) {allDivisions.push(div)}
+            }
+        });
+    }
+}
+
+function bootstrapPrompt(title, text, other, func) {
+    window.BootstrapDialog.show({
+        title: title,
+        size: window.BootstrapDialog.SIZE_NORMAL,
+        message: function() {
+            if (typeof other === 'string') {
+                return $('<div>')
+                    .append(
+                        $('<p>').text(text),
+                        $('<input>', {
+                            type: 'text',
+                            id: 'gsBootstrapPrompt',
+                            class: 'form-control',
+                            placeholder: other
+                        })
+                    );
+            } else if (typeof other === 'object') {
+                const $el = $('<div>')
+                    .append(
+                        $('<p>').text(text)
+                    );
+                const $sel =
+                    $('<select>', {
+                        id: 'gsBootstrapPrompt',
+                        class: 'form-control',
+                        css: {'color': 'white'},
+                    })
+                $.each(other, function(i, val) {
+                    $sel.append( $('<option></option>').val(val).html(val).css({'color': val.includes("GALASCRIPT:") ? "thistle" : ""}) )
+                });
+                $el.append($sel)
+                return $el;
+            }
+        },
+        buttons: [{
+            label: $.i18n('dialog-confirm'),
+            cssClass: 'btn-primary',
+            action: function (dialog) {
+                dialog.close();
+                const input =  $('#gsBootstrapPrompt').val();
+                if (typeof func === "function") {
+                    func(input);
+                }
+                selectedEl.focus();
+            }
+        }, {
+            label: $.i18n('dialog-cancel'),
+            cssClass: 'btn-default',
+            action: function (dialog) {
+                dialog.close();
+            }
+        }]
+    });
+}
+
+function insert(text) {
+    var pos = selectedEl.selectionStart
+    var content = selectedEl.value
+    selectedEl.value = content.substring(0, pos) + text + content.substring(pos)
+}
+
 function createTransHelper() {
-    const transHelper = $('<div>', {
+    const $transHelper = $('<div>', {
         id: 'gsTransHelper',
         css: {display: 'none',
               position: 'absolute',
@@ -3668,32 +4024,365 @@ function createTransHelper() {
               zIndex: '1800'
              }
     });
-    const transHelperOptions = [
-    $('<p>', {
-        class: 'gsTransHelperOption',
-    }),
-    $('<input>', {
-        class: 'gsTransHelperOption',
-        type: 'button',
-        value: 'Card name',
-    }),
-    $('<input>', {
-        class: 'gsTransHelperOption',
-        type: 'button',
-        value: 'Card description',
-    }),
+    const transHelperKeyContent = [
+        $('<p>', {
+            class: 'gsTransHelperOption',
+            id: 'category1'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnCardName',
+            value: 'Card name'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnCardDesc',
+            value: 'Card description'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnCardAlias',
+            value: 'Card alias (Galascript)'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnKeywordName',
+            value: 'Keyword name'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnKeywordDesc',
+            value: 'Keyword description'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnStatusDesc',
+            value: 'Status (icon) description'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnArtifactName',
+            value: 'Artifact name'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnArtifactDesc',
+            value: 'Artifact description'
+        })
     ]
 
-    transHelperOptions.forEach(opt => transHelper.append(opt));
+    const transHelperValueContent = [
+        $('<p>', {
+            class: 'gsTransHelperOption',
+            id: 'category1'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnCardName',
+            value: 'Card name'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnCardDesc',
+            value: 'Card description'
+        }),
+        $('<p>', {
+            class: 'gsTransHelperOption',
+            id: 'category2'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption cost-color',
+            type: 'button',
+            id: 'gsBtnCOST',
+            value: 'cost'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption atk-color',
+            type: 'button',
+            id: 'gsBtnATK',
+            value: 'ATK'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption hp-color',
+            type: 'button',
+            id: 'gsBtnHP',
+            value: 'HP'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption yellow',
+            type: 'button',
+            id: 'gsBtnG',
+            value: 'G'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption PATIENCE',
+            type: 'button',
+            id: 'gsBtnCardRef',
+            value: 'Card reference'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption underlined',
+            type: 'button',
+            id: 'gsBtnKeyword',
+            value: 'Keyword'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption underlined',
+            type: 'button',
+            id: 'gsBtnTribe',
+            value: 'Tribe'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption underlined',
+            type: 'button',
+            id: 'gsBtnArtifact',
+            value: 'Artifact'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption DETERMINATION',
+            type: 'button',
+            id: 'gsBtnRarity',
+            value: 'Rarity'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption underlined',
+            type: 'button',
+            id: 'gsBtnSoul',
+            value: 'SOUL'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnStats',
+            value: 'Stats'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnPlural',
+            value: 'Pluralization set'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption SwitchHighlight_Left',
+            type: 'button',
+            id: 'gsBtnSwitchLeft',
+            value: 'Left Switch'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption SwitchHighlight_Right',
+            type: 'button',
+            id: 'gsBtnSwitchRight',
+            value: 'Right Switch'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption T_NEON',
+            type: 'button',
+            id: 'gsBtnDivision',
+            value: 'Division'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption ucp',
+            type: 'button',
+            id: 'gsBtnUCP',
+            value: 'UCP'
+        }),
+    ]
 
-    $('body').append(transHelper);
+    function setMenu(x) {
+        $transHelper.empty();
+        if (x === 'key') {
+            transHelperKeyContent.forEach(opt => $transHelper.append(opt));
 
-    $('p.gsTransHelperOption').text('Replace with...');
+            $('#category1').text('New...');
+
+            $('#gsBtnCardName').on('click', function() {
+                bootstrapPrompt("New card name", "Select the card.", window.allCards.map(card => card.name).sort(), function (input) {
+                    var id = window.getCardWithName(input)?.id ?? 0
+                    selectedEl.value = `card-name-${id}`
+                    siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][`card-name-${id}`]
+                    siblingEl.focus();
+                })
+            });
+            $('#gsBtnCardDesc').on('click', function() {
+                bootstrapPrompt("New card description", "Select the card.", window.allCards.map(card => card.name).sort(), function (input) {
+                    var id = window.getCardWithName(input)?.id ?? 0
+                    selectedEl.value = `card-${id}`
+                    siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][`card-${id}`]
+                    siblingEl.focus();
+                })
+            });
+            $('#gsBtnCardAlias').on('click', function() {
+                bootstrapPrompt("New card alias", "Select the card. Card aliases are used for the \"Card Alias Lookup\" setting.", window.allCards.map(card => card.name).sort(), function (input) {
+                    var id = window.getCardWithName(input)?.id ?? 0
+                    selectedEl.value = `gs.card-alias-${id}`
+                    siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][`gs.card-alias-${id}`] ?? ""
+                    siblingEl.focus();
+                })
+            });
+            $('#gsBtnKeywordName').on('click', function() {
+                bootstrapPrompt("New keyword name", "Select the keyword.", allKeywords.sort(), function (input) {
+                    if (input === "KR") {
+                        selectedEl.value = `stat-kr`
+                        siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][`stat-kr`]
+                    } else {
+                        selectedEl.value = `kw-${input.toLowerCase()}`
+                        siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][`kw-${input.toLowerCase()}`]
+                    }
+                    siblingEl.focus();
+                })
+            });
+            $('#gsBtnKeywordDesc').on('click', function() {
+                bootstrapPrompt("New keyword description", "Select the keyword.", allKeywords.sort(), function (input) {
+                    selectedEl.value = `kw-${input.toLowerCase()}-desc`
+                    siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][`kw-${input.toLowerCase()}-desc`]
+                    siblingEl.focus();
+                })
+            });
+            $('#gsBtnStatusDesc').on('click', function() {
+                bootstrapPrompt("New status description", "Select the status.", allStatus, function (input) {
+                    var status;
+                    if (input.startsWith("GALASCRIPT: ")) {
+                        status = `gs.status-${input.replace("GALASCRIPT: ", "").toLowerCase()}`
+                    } else {
+                        status = `status-${input.toLowerCase()}`
+                    }
+                    selectedEl.value = status
+                    siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][status]
+                    siblingEl.focus();
+                })
+            });
+            $('#gsBtnArtifactName').on('click', function() {
+                bootstrapPrompt("New artifact name", "Select the artifact.", allArtifacts.map(art => art.name).sort(), function (input) {
+                    const idArtifact = allArtifacts.find(art => art.name === input)?.id ?? 0
+                    selectedEl.value = `artifact-name-${idArtifact}`
+                    siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][`artifact-name-${idArtifact}`]
+                    siblingEl.focus();
+                })
+            });
+            $('#gsBtnArtifactDesc').on('click', function() {
+                bootstrapPrompt("New artifact description", "Select the artifact.", allArtifacts.map(art => art.name).sort(), function (input) {
+                    const idArtifact = allArtifacts.find(art => art.name === input)?.id ?? 0
+                    selectedEl.value = `artifact-${idArtifact}`
+                    siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][`artifact-${idArtifact}`]
+                    siblingEl.focus();
+                })
+            });
+        } else if (x === 'value') {
+            transHelperValueContent.forEach(opt => $transHelper.append(opt));
+
+            $('#category1').text('Replace...');
+            $('#category2').text('Insert...');
+
+            $('#gsBtnCardName').on('click', function() {
+                bootstrapPrompt("Getting card name", "Select the card.", window.allCards.map(card => card.name).sort(), function (input) {
+                    var id = window.getCardWithName(input)?.id ?? 0
+                    selectedEl.value = $.i18n().messageStore.messages[$.i18n().locale][`card-name-${id}`];
+                })
+            });
+            $('#gsBtnCardDesc').on('click', function() {
+                bootstrapPrompt("Getting card description", "Select the card.", window.allCards.map(card => card.name).sort(), function (input) {
+                    var id = window.getCardWithName(input)?.id ?? 0
+                    selectedEl.value = $.i18n().messageStore.messages[$.i18n().locale][`card-${id}`];
+                })
+            });
+            $('#gsBtnCOST').on('click', function() {
+                insert('{{COST}}');
+                selectedEl.focus();
+            });
+            $('#gsBtnATK').on('click', function() {
+                insert('{{ATK}}');
+                selectedEl.focus();
+            });
+            $('#gsBtnHP').on('click', function() {
+                insert('{{HP}}');
+                selectedEl.focus();
+            });
+            $('#gsBtnG').on('click', function() {
+                insert('{{GOLD}}');
+                selectedEl.focus();
+            });
+            $('#gsBtnCardRef').on('click', function() {
+                bootstrapPrompt("Inserting card reference", "Select the card.", window.allCards.map(card => card.name).sort(), function (input) {
+                    insert(`{{CARD:${window.getCardWithName(input)?.id ?? 0}|1}}`);
+                }, true)
+            });
+            $('#gsBtnCardRef').attr('onmouseover', 'displayCardHelp(this, 775)')
+            $('#gsBtnCardRef').attr('onmouseleave', 'removeCardHover()')
+
+            $('#gsBtnKeyword').on('click', function() {
+                bootstrapPrompt("Inserting keyword", "Select the keyword.", allKeywords.sort(), function (input) {
+                    if (input === "KR") {
+                        insert(`{{KR}}`);
+                    } else {
+                        insert(`{{KW:${input}}}`);
+                    }
+                })
+            });
+            $('#gsBtnTribe').on('click', function() {
+                bootstrapPrompt("Inserting tribe", "Select the tribe.", allTribes.sort(), function (input) {
+                    insert(`{{TRIBE:${input}}}`)
+                })
+            });
+            $('#gsBtnArtifact').on('click', function() {
+                bootstrapPrompt("Inserting artifact", "Select the artifact.", allArtifacts.map(art => art.name).sort(), function (input) {
+                    const idArtifact = allArtifacts.find(art => art.name === input)?.id ?? 0
+                    insert(`{{ARTIFACT:${idArtifact}}}`)
+                })
+            });
+            $('#gsBtnRarity').on('click', function() {
+                bootstrapPrompt("Inserting rarity", "Select the rarity.", allRarities, function (input) {
+                    insert(`{{RARITY:${input}}}`)
+                })
+            });
+            $('#gsBtnSoul').on('click', function() {
+                bootstrapPrompt("Inserting SOUL", "Select the SOUL.", allSouls, function (input) {
+                    insert(`{{SOUL:${input}}}`)
+                })
+            });
+            $('#gsBtnStats').on('click', function() {
+                insert('{{STATS:1|1|1}}')
+                selectedEl.focus();
+            });
+            $('#gsBtnPlural').on('click', function() {
+                insert('{{PLURAL:$1|Sample|Samples}}')
+                selectedEl.focus();
+            });
+            $('#gsBtnSwitchLeft').on('click', function() {
+                insert('{{SWITCH_LEFT:1|Sample}}')
+                selectedEl.focus();
+            });
+            $('#gsBtnSwitchRight').on('click', function() {
+                insert('{{SWITCH_RIGHT:1|Sample}}')
+                selectedEl.focus();
+            });
+            $('#gsBtnDivision').on('click', function() {
+                bootstrapPrompt("Inserting ranked division", "Select the ranked division. Note: Old rank names currently do not work.", allDivisions, function (input) {
+                    insert(`{{DIVISION:${input}}}`)
+                })
+            });
+            $('#gsBtnUCP').on('click', function() {
+                insert('{{UCP:Sample}}');
+                selectedEl.focus();
+            });
+        }
+    }
+
+    $('body').append($transHelper);
 
     $(document).on('click contextmenu', function (e) {
         const $target = $(e.target);
         if (!$target.closest(selectedEl).length) {
-            transHelper.hide();
+            $transHelper.hide();
         }
     });
 
@@ -3703,7 +4392,10 @@ function createTransHelper() {
                 el.addEventListener("contextmenu", (e) => {
                     e.preventDefault();
                     selectedEl = el;
-                    transHelper.css({
+                    siblingEl = $(el).siblings(":not(button, div)")[0];
+                    setMenu(el.id.endsWith('value') ? 'value' : 'key')
+                    loadLibraries()
+                    $transHelper.css({
                         display: 'block',
                         left: `${e.pageX}px`,
                         top: `${e.pageY}px`
@@ -3744,8 +4436,13 @@ ${creditRow("Grimm Troupe", "Crystal & Acid")}
 ${creditRow("FNAFB", "Crystal")}
 ${creditRow("Outbreak", "Jaku")}
 ${creditRow("Mirror Temple", "Emerald")}
+${creditRow("Snails", "Emerald")}
+${creditRow("Waterfall", "Emerald")}
+${creditRow("Yet Darker", "Za")}
 ${creditRow("VMas", "StellarSting")}
 ${creditRow("Steamworks", "Shyren")}
+${creditRow("Bone", "Diamaincrah")}
+${creditRow("Furry Sans", "Diamaincrah")}
 ${creditRow("Inscrypted", "Dylan Hall")}
 ${creditRow("It's TV Time!", "Dylan Hall")}
 ${creditRow("Cold Place", "Dylan Hall")}
@@ -3753,6 +4450,7 @@ ${creditRow("Slay the Spire", "Bartwk")}
 ${creditTitle("Rarity icons")}
 ${creditRow("Hollow Knight", "Jaku")}
 ${creditRow("FNAFB", "JaimeezNuts")}
+${creditRow("Celeste", "Emerald")}
 ${creditTitle("Free-to-use Frame assets")}
 ${creditRow("Pokecard 1996 - Monster, Shiny", link("ILKCMP", "https://www.deviantart.com/ilkcmp", "deviantart_thistle"))}
 ${creditRow("Pokecard 1996 - Spell", link("icycatelf", "https://www.deviantart.com/icycatelf", "deviantart_thistle"))}
