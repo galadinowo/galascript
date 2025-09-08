@@ -18,6 +18,6 @@ I just think jumping in blind is a fun idea. That's all :3
 
 ## Bugs! Ow ouchie
 
-There's always bound to be some bugs, I'm not perfect! The best way to tell me about them is on Discord, through [my UCR channel](https://discord.com/channels/710243487303335976/1108713785046335518), [my UCO thread](https://discord.com/channels/330092826513899530/1335757313167851583), or simply through my DMs directly (user: galadino).
+There's always bound to be some bugs, I'm not perfect! The best way to tell me about them is on Discord, through [the Galascript channel in UCO](https://discord.com/channels/330092826513899530/1396215791946301542) or my DMs directly (user: galadino).
 
 Have fun!
