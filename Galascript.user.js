@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.3
+// @version      1.0.4
 // @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
@@ -30,7 +30,7 @@ function style(group, operation, ...css) {
     }
 }
 const standardFrames = ["Undertale", "Deltarune", "Time to get serious", "Vaporwave", "Spider Party", "Halloween2020", "Christmas2020"]
-const customFrames = ["Staff", "Spamton", "Cyber World", "Hollow Knight", "Grimm Troupe", "Void", "FNAFB", "Outbreak", "Mirror Temple", "Snails", "Waterfall", "Yet Darker", "VMas", "Steamworks", "Bone", "Furry Sans", "Inscrypted", "Its TV Time", "Cold Place", "Slay the Spire", "Balatro", "Pokecard 1996"]
+const customFrames = ["Respective", "Staff", "Spamton", "Cyber World", "Hollow Knight", "Grimm Troupe", "Void", "FNAFB", "Outbreak", "Mirror Temple", "Snails", "Waterfall", "Yet Darker", "VMas", "Steamworks", "Bone", "Furry Sans", "OvenBreak", "Inscrypted", "Its TV Time", "Cold Place", "Slay the Spire", "Balatro", "Pokecard 1996"]
 const backgrounds = ["-", "Ruins - UT", "Quiet Water - UT", "Hotland - UT", "Snowdin - UT", "The Surface - UT", "MTT Resort - UT", "Waterfall - UT", "The CORE - UT",
                      "Judgement Hall - UT", "True Lab - UT", "Hometown - DR", "Scarlet Forest - DR", "Home - DR", "Field of Hopes and Dreams - DR", "Castle Town - DR",
                      "Card Castle - DR", "Jevil's Staircase - DR", "Temmie Village - UT", "Home - UT", "Snowy - UT", "Quiet Autumn - DR", "Alphys's Classroom - DR", "Grillby's - UT",
@@ -40,7 +40,7 @@ const backgrounds = ["-", "Ruins - UT", "Quiet Water - UT", "Hotland - UT", "Sno
                      "Dunes - UTY", "East Mines - UTY", "Wild East - UTY", "Steamworks - UTY", "Greenhouse - UTY", "Steamworks Factory - UTY", "Ceroba's House - UTY", "Dalv's House - UTY",
                      "Honeydew Resort - UTY", "Oasis - UTY", "Hotland Ride - UTY", "Waterfall Ride - UTY", "Golden Opportunity - UTY", "New Home Balcony - UTY", "Stage - UE",
                      "Adventure Board - DR", "Paradise - DR", "Cold Place - DR", "TV World - DR", "Holiday House - DR", "Dark Sanctuary - DR", "Gerson's Study - DR", "Third Sanctuary - DR", "Where It Rained - DR",
-                     "UG Apartments - UTY", "New Home - UTY", "Second Sanctuary - DR"]
+                     "UG Apartments - UTY", "New Home - UTY", "Second Sanctuary - DR", "Hotland High - UT", "Doghole - UT", "Underwater Town - UT", "Abandoned Town - UT", "Church - DR"]
 const backgroundsMap = new Map(backgrounds.map((bg, i) => [i, { id: i, bg: bg }]));
 const preferenceTypes = ["Omit", "Play less often", "Play more often"]
 const allFrames = standardFrames.concat(customFrames)
@@ -91,37 +91,39 @@ const nullcard = {
 plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/Galascript.user.js');
 
 const patchNotes =
-`'Sup.
-- Added <i>Custom translations</i> setting, allowing you to customize UC's text easily (in <i>To your liking</i>)
-- Added <i>Status filters</i> setting, allowing you to sort monsters in your collection based on what statuses they have (in <i>QoL</i>)
-- Added <i>Snails</i>, <i>Waterfall</i>, <i>Yet Darker</i>, <i>Bone</i>, <i>Furry Sans</i>, and <i>Balatro</i> frames
-    - <i>Balatro</i> frame is WIP and does not display stats!
-- Added <i>Celeste</i> rarity skin
-- Added card aliases and backgrounds for Season 110
-- <i>Program</i> power now On by default, due to it being added to the base game with a new sprite
-- Fixed <i>Legendmaker</i> power not working due to the new rank names
-- Changed <i>Legendmaker</i> power and art to reflect T rank
-- Fixed <i>Mulligan information</i> still occasionally putting info in other dialogs that it shouldn't
-- Fixed greyed-out Paralyzed ATK not immediately updating when healed off or removed
-- Fixed backgrounds becoming fucked up and mismatched often... hopefully...
-- Added three new options for <i>Stat base</i> setting: <i>0.1</i>, <i>0.01</i>, and <i>10000</i>. Because they are definitely needed
-- Added Speednick's custom entry message (He found a lizard!)
-`;
-
-const patchNotesShort =
-
-`The patch notes are, once again, too large for a normal notification! Read the full notes at the bottom of Galascript's settings. Have fun!
+`
+- New frame: <i>OvenBreak</i>
+    - <i>Balatro</i> frame finished
+    - Collapsed <i>Respective frames</i> option into its own frame
+- 3 new rarity icon sets: <i>Balatro</i>, <i>OvenBreak</i>, and <i>OvenBreak (Alt)</i>
+- Added power skins, with 4 unique options: <i>Ancient</i>, <i>Neon</i>, <i>Balatro</i>, and <i>Showdown</i>
+- Added setting to control <i>Card highlights</i>, controlling how highlighted cards are displayed
+- 5 new <i>Action powers</i>: <i>Equation</i>, <i>Brick</i>, <i>Stupor</i>, <i>Bitflipped</i>, and <i>Sludge</i>
+- <i>Action power</i> settings are now hidden if not enabled
+- Added new settings for <i>Kitty cat</i> to enable and disable certain effects
+- Added <i>Former glory</i> power, giving Trashy Ranged and Thorns, and The Heroine Another Chance
+- All settings should now work instantaneously; no need to wait for card updates or reloading
+- 0, 2 and 5 options added for <i>Stat base</i>. Again, no one asked for these
+- You can now click <span style="color: thistle">tips</span> to dismiss them
+    - These can be brought back at the bottom of settings via the <i>Restore tips</i> button
+- You can now import and export your settings, found at the bottom of your settings!
+- <i>Patch notes</i> and <i>Credits</i> buttons now bring up a seperate menu for viewing pleasure
+- Added <i>Log chat</i> within <i>QoL</i>, which makes it so messages and emotes from you or the enemy will be logged in the Underscript battle log
+- <i>Auto start music</i> setting has been removed due to changes to the background system; you will now always have to first click the page to hear the music
+- Added support for the 5 new backgrounds this season
+- Added translation support for Rarities and Tribes, plus miscellaneous Galascript strings
+- Copies are monochrome. Well, at least, they can be, in <i>Filters</i>
+- Fixed literally every bug! If you find one, I find you.
 `;
 
 const convertMarkdown = new underscript.lib.showdown.Converter();
 
 const seed = window.gameId
-function pullRandom(stat, from, i, raw) {
+function pullRandom(stat, from = 1, i = 1, raw) {
     if (!raw) {
         switch (obscRandomType?.value()) {
             case 'universal': from = from.fixedId; break;
             case 'independant': from = from.id; break;
-            default: from = 1;
         }
     }
     var m = 2**35 - 31
@@ -172,233 +174,290 @@ function getNestedProperty(obj, property) {return property.split('.').reduce((o,
 
 const checkCreateCard = setInterval(() => {
     if (typeof createCard === 'function') {
-    clearInterval(checkCreateCard);
-    function newCreateCard(card) {
-    var name, image, cost, attack, hp, maxHp, shiny, hpSquish, maxHpSquish, htmlHp, htmlAtk, rarity, extension;
-    var program = "";
-    var fauxCost = "";
-    var fauxAttack = "";
-    var fauxHp = "";
-    var fauxStatusId = "";
-    var fauxTribesId = "";
-    var cardLoop = findStatus(card, 'loop');
-    switch (JSON.stringify([obscCardName?.value(), obscActive()])) {
-        case '["obfuscate",1]':
-            name = obfuscationText?.value();
-            break;
-        case '["to set card",1]':
-            name = $.i18n('card-name-' + window.getCardWithName(obscSetCard?.value()).fixedId, loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1)
-            break;
-        case '["to random card",1]':
-            name = $.i18n('card-name-' + pullRandom('id', card, 1), loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1)
-            break;
-        default:
-            name = $.i18n('card-name-' + card.fixedId, loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1);
-            var cardImg = card.image.replaceAll(" Open", "").replace(/(\S)\d+$/, "$1");
-            if (cardSkinNames?.value() && cardImg !== card.baseImage) {
-                name = card.image.replaceAll("_", " ").replaceAll(" Full", "").replaceAll(" FULL", "").replaceAll("C1225", "1225")
+        clearInterval(checkCreateCard);
+        function newCreateCard(card, $htmlCard) {
+            var name, image, cost, attack, hp, maxHp, shiny, hpSquish, maxHpSquish, htmlHp, htmlAtk, rarity, extension;
+            var program = "";
+            var fauxCost = "";
+            var fauxAttack = "";
+            var fauxHp = "";
+            var fauxStatusId = "";
+            var fauxTribesId = "";
+            const obsc = obscActive(card);
+            var cardLoop = findStatus(card, 'loop');
+            switch (JSON.stringify([obscCardName?.value(), obsc])) {
+                case '["obfuscate",1]':
+                    name = obfuscationText?.value();
+                    break;
+                case '["to set card",1]':
+                    name = $.i18n('card-name-' + window.getCardWithName(obscSetCard?.value()).fixedId, loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1)
+                    break;
+                case '["to random card",1]':
+                    name = $.i18n('card-name-' + pullRandom('id', card, 1), loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1)
+                    break;
+                default:
+                    name = $.i18n('card-name-' + card.fixedId, loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1);
+                    var cardImg = card.image.replaceAll(" Open", "").replace(/(\S)\d+$/, "$1");
+                    if (cardSkinNames?.value() && cardImg !== card.baseImage) {
+                        name = card.image.replaceAll("_", " ").replaceAll(" Full", "").replaceAll(" FULL", "").replaceAll("C1225", "1225")
+                    }
             }
-    }
-    switch (JSON.stringify([obscCardImage?.value(), obscActive()])) {
-        case '["to set card",1]':
-            card.image = window.getCardWithName(obscSetCard?.value()).baseImage;
-            card.typeSkin = 0;
-            break;
-        case '["to random card",1]':
-            card.image = pullRandom('baseImage', card, 2);
-            card.typeSkin = 0;
-            break;
-    }
-    var description = "";
-    switch (JSON.stringify([obscCardDesc?.value(), obscActive()])) {
-        case '["obfuscate",1]':
-            description = obfuscationText?.value();
-            break;
-        case '["to set card",1]':
-            description = $.i18n('card-' + window.getCardWithName(obscSetCard?.value()).fixedId);
-            break;
-        case '["to random card",1]':
-            description = $.i18n('card-' + pullRandom('id', card, 3));
-            break;
-        default:
-            description = $.i18n('card-' + card.fixedId)
-    }
+            switch (JSON.stringify([obscCardImage?.value(), obsc])) {
+                case '["to set card",1]':
+                    card.image = window.getCardWithName(obscSetCard?.value()).baseImage;
+                    card.typeSkin = 0;
+                    break;
+                case '["to random card",1]':
+                    card.image = pullRandom('baseImage', card, 2);
+                    card.typeSkin = 0;
+                    break;
+            }
+            var description = "";
+            switch (JSON.stringify([obscCardDesc?.value(), obsc])) {
+                case '["obfuscate",1]':
+                    description = obfuscationText?.value();
+                    break;
+                case '["to set card",1]':
+                    description = $.i18n('card-' + window.getCardWithName(obscSetCard?.value()).fixedId);
+                    break;
+                case '["to random card",1]':
+                    description = $.i18n('card-' + pullRandom('id', card, 3));
+                    break;
+                default:
+                    description = $.i18n('card-' + card.fixedId)
+            }
 
-    switch (JSON.stringify([obscCardRarity?.value(), obscActive()])) {
-        case '["to set card",1]':
-            card.rarity = window.getCardWithName(obscSetCard?.value()).rarity;
-            card.extension = window.getCardWithName(obscSetCard?.value()).extension;
-            break;
-        case '["to random card",1]':
-            card.rarity = pullRandom('rarity', card, 4);
-            card.extension = pullRandom('extension', card, 4);
-            break;
-        case '["hide",1]':
-            card.rarity = 'BASE'
-            break;
-    }
+            switch (JSON.stringify([obscCardRarity?.value(), obsc])) {
+                case '["to set card",1]':
+                    card.rarity = window.getCardWithName(obscSetCard?.value()).rarity;
+                    card.extension = window.getCardWithName(obscSetCard?.value()).extension;
+                    break;
+                case '["to random card",1]':
+                    card.rarity = pullRandom('rarity', card, 4);
+                    card.extension = pullRandom('extension', card, 4);
+                    break;
+                case '["hide",1]':
+                    card.rarity = 'BASE'
+                    break;
+            }
 
-    switch (JSON.stringify([obscCardPowers?.value(), obscActive()])) {
-        case '["to set card",1]':
-            program = window.getCardWithName(obscSetCard?.value()).program;
-            fauxStatusId = window.getCardWithName(obscSetCard?.value()).id
-            break;
-        case '["to random card",1]':
-            program = pullRandom('program', card, 5);
-            fauxStatusId = pullRandom('id', card, 5);
-            break;
-        default:
-            program = findStatus(card, 'program');
-    }
-    if (program === 0) program = "";
+            switch (JSON.stringify([obscCardPowers?.value(), obsc])) {
+                case '["to set card",1]':
+                    program = findStatus(window.getCardWithName(obscSetCard?.value()), 'program');
+                    fauxStatusId = window.getCardWithName(obscSetCard?.value()).id
+                    break;
+                case '["to random card",1]':
+                    program = pullRandom('program', card, 5);
+                    fauxStatusId = pullRandom('id', card, 5);
+                    break;
+                default:
+                    program = findStatus(card, 'program');
+            }
+            if (program === 0) program = "";
 
-    switch (JSON.stringify([obscCardTribes?.value(), obscActive()])) {
-        case '["to set card",1]':
-            fauxTribesId = window.getCardWithName(obscSetCard?.value()).id
-            break;
-        case '["to random card",1]':
-            fauxTribesId = pullRandom('id', card, 6);
-            break;
-    }
+            switch (JSON.stringify([obscCardTribes?.value(), obsc])) {
+                case '["to set card",1]':
+                    fauxTribesId = window.getCardWithName(obscSetCard?.value()).id
+                    break;
+                case '["to random card",1]':
+                    fauxTribesId = pullRandom('id', card, 6);
+                    break;
+            }
 
-    cost = card.cost;
+            cost = card.cost;
 
-    switch (JSON.stringify([obscCardCost?.value(), obscActive()])) {
-        case '["obfuscate",1]':
-            fauxCost = obfuscationText?.value();
-            break;
-        case '["to set card",1]':
-            fauxCost = window.getCardWithName(obscSetCard?.value()).cost;
-            break;
-        case '["to random card",1]':
-            fauxCost = pullRandom('cost', card, 7);
-            break;
-    }
-    if (card.hasOwnProperty('attack')) {
-        attack = card.attack;
-        hp = card.hp;
-        maxHp = card.maxHp;
-        htmlHp = `<span class="currentHP">${hp}</span><span class="maxHP">${maxHp}</span>`;
-        htmlAtk = `<span class="currentATK">${attack}</span>`;
-        switch (JSON.stringify([obscCardStats?.value(), obscActive()])) {
-            case '["obfuscate",1]':
-                fauxAttack = obfuscationText?.value();
-                fauxHp = obfuscationText?.value();
-                break;
-            case '["to set card",1]':
-                fauxAttack = window.getCardWithName(obscSetCard?.value()).attack;
-                fauxHp = window.getCardWithName(obscSetCard?.value()).hp;
-                break;
-            case '["to random card",1]':
-                fauxAttack = pullRandom('attack', card, 8);
-                fauxHp = pullRandom('hp', card, 9);
-                break;
-        }
-    }
+            switch (JSON.stringify([obscCardCost?.value(), obsc])) {
+                case '["obfuscate",1]':
+                    fauxCost = obfuscationText?.value();
+                    break;
+                case '["to set card",1]':
+                    fauxCost = window.getCardWithName(obscSetCard?.value()).cost;
+                    break;
+                case '["to random card",1]':
+                    fauxCost = pullRandom('cost', card, 7);
+                    break;
+            }
+            if (card.hasOwnProperty('attack')) {
+                attack = card.attack;
+                hp = card.hp;
+                maxHp = card.maxHp;
+                htmlHp = `<span class="currentHP">${hp}</span><span class="maxHP">${maxHp}</span>`;
+                htmlAtk = `<span class="currentATK">${attack}</span>`;
+                switch (JSON.stringify([obscCardStats?.value(), obsc])) {
+                    case '["obfuscate",1]':
+                        fauxAttack = obfuscationText?.value();
+                        fauxHp = obfuscationText?.value();
+                        break;
+                    case '["to set card",1]':
+                        fauxAttack = window.getCardWithName(obscSetCard?.value()).attack;
+                        fauxHp = window.getCardWithName(obscSetCard?.value()).hp;
+                        break;
+                    case '["to random card",1]':
+                        fauxAttack = pullRandom('attack', card, 8);
+                        fauxHp = pullRandom('hp', card, 9);
+                        break;
+                }
+            }
 
-    shiny = card.shiny ? " shiny" : ""; // i just like ternary operators
+            shiny = card.shiny ? " shiny" : ""; // i just like ternary operators
 
-    var frameSkinName = 'undertale';
-
-    /*
-
-            if
-                - the card has a frame skin name, or frameSpoofBehavior is set to 'force everywhere'
-                - the frameSpoof setting is not 'off'
-                    and:
-                        - in a game
-                        ? card is owned by you, and frameSpoofBehavior is 'allies only'
-                        ? frameSpoofBehavior is 'allies + enemies'
-                        ? frameSpoofBehavior is 'force everywhere'
-                    or:
-                        - not in a game
-    */
-
-    if (((card.hasOwnProperty('frameSkinName') || frameSpoofBehavior?.value() === 'force everywhere') && frameSpoof?.value() !== 'off') && ((ingame && (frameSpoofBehavior?.value() === 'allies only' && card?.ownerId === window.userId || frameSpoofBehavior?.value() === 'allies + enemies' || frameSpoofBehavior?.value() === 'force everywhere')) || !ingame)) {
-        card.frameSkinName = frameSpoof?.value()
-    }
-
-    if ((card.hasOwnProperty('frameSkinName') || frameSpoofBehavior?.value() === 'force everywhere') && respectiveFrames?.value()) {
-        if (card.extension === 'BASE' || card.extension === 'UTY') {card.frameSkinName = 'undertale'}
-        if (card.extension === 'DELTARUNE' ) {card.frameSkinName = 'deltarune'}
-    }
-
-    if (card.hasOwnProperty('frameSkinName')) {
-        frameSkinName = card.frameSkinName.toString().replace(/\s+/g, '-').toLowerCase();
-    }
-
-    if (program > 0 && programIndicators?.value()) {
-        program = `<div class="cardProgram cardCost">${program + cost}</div>\n`
-    } else {
-        program = ''
-    }
-
-    image = '<div class="cardImage"></div>\n'
+            var frameSkinName = 'undertale';
 
 
-    var disableBreaking = '';
-    const frames = ['pokecard-1996', 'slay-the-spire', 'balatro']
-    if (frames.includes(frameSkinName)) {
-        disableBreaking = ' breaking-disabled'
-    }
-    if (card.typeSkin === 1 && breakingFullarts?.value()) {
-        disableBreaking = localStorage.getItem("breakingDisabled") ? ' breaking-skin breaking-disabled' : ' breaking-skin'
-    }
+            const canBeApplied = card.hasOwnProperty('frameSkinName') || frameSpoofBehavior?.value() === 'force everywhere'
+            const enableCustomFrame = canBeApplied && frameSpoof?.value() !== 'off'
+            const appliedToAllies = frameSpoofBehavior?.value() === 'allies only' && card?.ownerId === window.userId
+            const appliedToEnemies = frameSpoofBehavior?.value() === 'enemies only' && card?.ownerId === window.opponentId
+            const appliedToAll = frameSpoofBehavior?.value() === 'allies + enemies' || frameSpoofBehavior?.value() === 'force everywhere'
+            const ingameDisplay = ingame && (appliedToAllies || appliedToEnemies || appliedToAll)
 
-    frameSkinName += '-frame';
+            if (enableCustomFrame && (ingameDisplay || !ingame)) {
+                card.frameSkinName = frameSpoof?.value()
+            }
 
-    var htmlCard =
-    `<div id="${card.id}" class="card monster ${frameSkinName}${shiny}${disableBreaking} base${statBase?.value()}" data-rarity="${card.rarity}" data-extension="${card.extension}">
-    <div class="shinySlot"></div>
-    <div class="cardFrame"></div>
-    <div class="cardBackground"></div>
-    <div class="cardHeader"></div>
-    <div class="cardFauxElement cardFauxCost">${fauxCost}</div>
-    <div class="cardFauxElement cardFauxATK">${fauxAttack}</div>
-    <div class="cardFauxElement cardFauxHP">${fauxHp}</div>
-    <div class="cardFauxElement cardFauxStatus">${fauxStatusId}</div>
-    <div class="cardFauxElement cardFauxTribes">${fauxTribesId}</div>
-    <div class="cardName" data-i18n="[html]card-name-${card.fixedId}"><div>${name}</div></div>
-    <div class="cardCost">${cost}</div>
-    ${program}
-    <div class="cardStatus"></div>
-    <div class="cardTribes"></div>
-    <div class="cardImage"></div>
-    <div class="cardSilence"></div>
-    <div class="cardAction"></div>
-    <div class="cardSilence"></div>
-    <div class="cardDesc"><div data-i18n="[html]card-${card.fixedId}">${description}</div></div>
-    <div class="cardFooter"></div>
-    <div class="cardATK">${htmlAtk}</div>
-    <div class="cardRarity"></div>
-    <div class="cardHP">${htmlHp}</div>
-    </div>`;
+            if (card.hasOwnProperty('frameSkinName')) {
+                frameSkinName = card.frameSkinName.toString().replace(/\s+/g, '-').toLowerCase();
+            }
 
-    if (card.typeCard === 1) {
+            if (program > 0 && programIndicators?.value()) {
+                program = `<div class="cardProgram cardCost">${program + cost}</div>\n`
+            } else {
+                program = ''
+            }
 
-        var cardSoul = card.hasOwnProperty('soul') ? card.soul.name : '';
-        htmlCard =
-        `<div id="${card.id}" class="card spell ${frameSkinName}${shiny}${disableBreaking}" data-rarity="${card.rarity}" data-extension="${card.extension}">
-        <div class="shinySlot"></div>
-        <div class="cardFrame"></div>
-        <div class="cardBackground"></div>
-        <div class="cardHeader"></div>
-        <div class="cardFauxElement cardFauxCost">${fauxCost}</div>
-        <div class="cardFauxElement cardFauxStatus">${fauxStatusId}</div>
-        <div class="cardFauxElement cardFauxTribes">${fauxTribesId}</div>
-        <div class="cardName ${cardSoul}"><div data-i18n="[html]card-name-${card.fixedId}">${name}</div></div>
-        <div class="cardCost">${cost}</div>
-        ${program}
-        <div class="cardStatus"></div>
-        <div class="cardTribes"></div>
-        <div class="cardImage"></div>
-        <div class="cardDesc"><div data-i18n="[html]card-${card.fixedId}">${description}</div></div>
-        <div class="cardFooter"></div>
-        <div class="cardRarity"></div>
-        </div>`;
-    }
+            if (frameSkinName === 'showdown') {
+                var pokedex = card.fixedId;
+                if (card.shiny) {
+                    pokedex = `shiny/${pokedex}`
+                }
+                image = `<div class="cardImageShowdown" style="background-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/pokemon/other/home/${pokedex}.png'); background-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/pokemon/other/showdown/${pokedex}.gif')"></div>
+                <progress class="cardHealthbar"></progress>`
+            } else {
+                image = `<div class="cardImage"></div>`
+            }
 
-    return htmlCard;
+
+            var disableBreaking = '';
+            const frames = ['pokecard-1996', 'slay-the-spire', 'balatro', 'showdown-']
+            if (frames.includes(frameSkinName)) {
+                disableBreaking = ' breaking-disabled'
+            }
+            if (card.typeSkin === 1 && breakingFullarts?.value()) {
+                disableBreaking = localStorage.getItem("breakingDisabled") ? ' breaking-skin breaking-disabled' : ' breaking-skin'
+            }
+
+            frameSkinName += '-frame';
+
+            const obscClass = obsc ? ' gsObscured' : ''
+
+            if ($htmlCard) {
+                $.fn.removeClassContaining = function(str) {
+                    var classes = $(this).attr('class');
+                    if (!classes || !str) return false;
+                    var classArray = [];
+                    classes = classes.split(' ');
+                    for (var i = 0, len = classes.length; i < len; i++) {
+                        if (!classes[i].includes(str)) {
+                            classArray.push(classes[i])
+                        };
+                    }
+                    $(this).attr('class', classArray.join(' '));
+                };
+                $htmlCard.removeClass('shiny gsObscured breaking-disabled')
+                $htmlCard.removeClassContaining('-frame')
+                $htmlCard.removeClassContaining('base')
+                $htmlCard.off('mousemove');
+                $htmlCard.off('mouseleave');
+                $htmlCard.attr('id', card.id)
+                $htmlCard.removeAttr('data-gs-random-delay');
+                $htmlCard.addClass(`${frameSkinName}${shiny}${disableBreaking}${obscClass} base${statBase?.value()}`)
+                $htmlCard.attr('data-rarity', card.rarity)
+                $htmlCard.attr('data-extension', card.extension)
+                $htmlCard.find('.cardObject').html(JSON.stringify(card).replaceAll('"', '&quot;'))
+                $htmlCard.find('.cardFauxCost').html(fauxCost)
+                $htmlCard.find('.cardFauxATK').html(fauxAttack)
+                $htmlCard.find('.cardFauxHP').html(fauxHp)
+                $htmlCard.find('.cardFauxStatus').html(fauxStatusId)
+                $htmlCard.find('.cardFauxTribes').html(fauxTribesId)
+                $htmlCard.find('.cardName').html(`<div data-i18n="[html]card-name-${card.fixedId}">${name}</div>`)
+                $htmlCard.find('.cardCost').html(cost)
+                $htmlCard.find('.cardProgram').remove()
+                $(program).appendTo($htmlCard);
+                const bgi = $htmlCard.find('.cardImage').attr('style');
+                $htmlCard.find('.cardImage').remove()
+                $htmlCard.find('.cardImageShowdown').remove()
+                $htmlCard.find('.cardHealthbar').remove()
+                $(image).appendTo($htmlCard);
+                $htmlCard.find('.cardImage').attr('style', bgi);
+                if (!['/CardSkinsShop', '/Quests'].includes(window.location.pathname)) {
+                    $htmlCard.find('.cardDesc').html(`<div data-i18n="[html]card-${card.fixedId}">${description}</div>`);
+                    $htmlCard.find('.cardImage').css('background', 'transparent url(\'images/cards/' + card.image + '.png\') no-repeat');
+                }
+                if (card.typeCard === 0) {
+                    $htmlCard.find('.cardATK').html(htmlAtk)
+                    $htmlCard.find('.cardHP').html(htmlHp)
+                }
+                $htmlCard.find('.cardRarity').css('background', 'transparent url(\'images/rarity/' + card.extension + '_' + card.rarity + '.png\') no-repeat');
+                var $cardNameDiv = $htmlCard.find('.cardName div');
+                var $cardDescDiv = $htmlCard.find('.cardDesc div');
+                $cardNameDiv.css('font-size', window.getResizedFontSize($cardNameDiv, 25));
+                $cardDescDiv.css('font-size', window.getResizedFontSize($cardDescDiv, 81));
+            } else {
+                var htmlCard =
+                `<div id="${card.id}" class="card monster ${frameSkinName}${shiny}${disableBreaking}${obscClass} base${statBase?.value()}" data-rarity="${card.rarity}" data-extension="${card.extension}">
+                <div class="cardObject">${JSON.stringify(card).replaceAll('"', '&quot;')}</div>
+                <div class="shinySlot"></div>
+                <div class="cardFrame"></div>
+                <div class="cardBackground"></div>
+                <div class="cardHeader"></div>
+                <div class="cardFauxElement cardFauxCost">${fauxCost}</div>
+                <div class="cardFauxElement cardFauxATK">${fauxAttack}</div>
+                <div class="cardFauxElement cardFauxHP">${fauxHp}</div>
+                <div class="cardFauxElement cardFauxStatus">${fauxStatusId}</div>
+                <div class="cardFauxElement cardFauxTribes">${fauxTribesId}</div>
+                <div class="cardName"><div data-i18n="[html]card-name-${card.fixedId}">${name}</div></div>
+                <div class="cardCost">${cost}</div>
+                ${program}
+                <div class="cardStatus"></div>
+                <div class="cardTribes"></div>
+                ${image}
+                <div class="cardSilence"></div>
+                <div class="cardAction"></div>
+                <div class="cardSilence"></div>
+                <div class="cardDesc"><div data-i18n="[html]card-${card.fixedId}">${description}</div></div>
+                <div class="cardFooter"></div>
+                <div class="cardATK">${htmlAtk}</div>
+                <div class="cardRarity"></div>
+                <div class="cardHP">${htmlHp}</div>
+                </div>`;
+
+                if (card.typeCard === 1) {
+
+                    var cardSoul = card.hasOwnProperty('soul') ? card.soul.name : '';
+                    htmlCard =
+                    `<div id="${card.id}" class="card spell ${frameSkinName}${shiny}${disableBreaking}${obscClass}" data-rarity="${card.rarity}" data-extension="${card.extension}">
+                    <div class="cardObject">${JSON.stringify(card).replaceAll('"', '&quot;')}</div>
+                    <div class="shinySlot"></div>
+                    <div class="cardFrame"></div>
+                    <div class="cardBackground"></div>
+                    <div class="cardHeader"></div>
+                    <div class="cardFauxElement cardFauxCost">${fauxCost}</div>
+                    <div class="cardFauxElement cardFauxStatus">${fauxStatusId}</div>
+                    <div class="cardFauxElement cardFauxTribes">${fauxTribesId}</div>
+                    <div class="cardName ${cardSoul}"><div data-i18n="[html]card-name-${card.fixedId}">${name}</div></div>
+                    <div class="cardCost">${cost}</div>
+                    ${program}
+                    <div class="cardStatus"></div>
+                    <div class="cardTribes"></div>
+                    <div class="cardImage"></div>
+                    <div class="cardDesc"><div data-i18n="[html]card-${card.fixedId}">${description}</div></div>
+                    <div class="cardFooter"></div>
+                    <div class="cardRarity"></div>
+                    </div>`;
+                }
+
+                return htmlCard;
+            }
         }
     } window.createCard = newCreateCard
 });
@@ -498,7 +557,7 @@ const filterPowersGalascript = [
     {
         name: 'new',
         icon: 'new',
-        condition: function(card) {return card.fixedId > 928},
+        condition: function(card) {return card.fixedId == 80},
     },
 ]
 
@@ -509,70 +568,66 @@ for(let i = 2, s = Math.sqrt(num); i <= s; i++) {
 return num > 1;
 }
 
-var oldError = false;
-
 const checkSetInfoPowers = setInterval(() => {
  if (typeof setInfoPowers === 'function'){
     clearInterval(checkSetInfoPowers);
     function newSetInfoPowers(monsterContainer, card) {
-    if (card.statuses === undefined) {
-        if (!oldError) {
-            console.error(`You are using the old card status format, somehow... Report this to Gala!`);
-            oldError = true;
-        }
-        return;
-    }
     monsterContainer.find('.cardStatus').empty();
     var powers = [];
-    var powersType = [];
     var powersStringKeys = [];
     var powersStringArgs = [];
     var powersStringNumbers = [];
+    var powersTypes = [];
     var pool, printPool, poolArgs;
     var fauxStatusId = monsterContainer.find('.cardFauxStatus').text()
+    var selfId = card.fixedId
     if (fauxStatusId) {
         let setCard = window.getCard(Number(fauxStatusId))
         card.target = setCard.target;
         card.statuses = setCard.statuses;
+        selfId = setCard.fixedId;
     }
-    function pushPower(sprite, key, args, number){
-        if (obscCardPowers?.value() === 'obfuscate' && obscActive()) {
+    function pushPower(sprite, key, args, number, type = "NEUTRAL"){
+        if (obscCardPowers?.value() === 'obfuscate' && obscActive(card)) {
             sprite = 'unknown'
             key = 'gs.status-unknown'
             args = []
             number = null
+            type = 'NEUTRAL'
         }
-        if (numStack?.value() && number) {
+        if (numStack?.value() && number > 1) {
             for (var i = 0; i < number; i++) {
                 powers.push(sprite);
                 powersStringKeys.push((key.startsWith('gs.') ? '' : 'gs.') + key + '-stacked');
                 powersStringArgs.push([]);
                 powersStringNumbers.push(null);
+                powersTypes.push(type);
             }
         } else {
             powers.push(sprite);
             powersStringKeys.push(key);
             powersStringArgs.push(args);
             powersStringNumbers.push(number);
+            powersTypes.push(type);
         }
     };
 
-    var baseCard = window.getCard(card.fixedId) || nullcard; // SHOULD fix the issue with getCard locking up in an old allCards cache ...
+    const baseCard = window.getCard(selfId) || nullcard; // SHOULD fix the issue with getCard locking up in an old allCards cache ...
 
     if (turnsPower?.value() && card.playedTurn > 0) {
-        pushPower('turn', 'gs.status-turn', [Math.floor(card.playedTurn / 2), window.turn - Math.floor(card.playedTurn / 2)], Math.floor(card.playedTurn / 2));
+        pushPower('turn', 'gs.status-turn', [Math.floor(card.playedTurn / 2), window.turn - Math.floor(card.playedTurn / 2)], Math.floor(card.playedTurn / 2), 'NEUTRAL');
     }
 
     if (!noCostBuffs?.value() && card.cost < card.originalCost) {
-        pushPower('bonusCost', 'status-cost-debuff', [card.originalCost], null);
+        pushPower('bonusCost', 'status-cost-debuff', [card.originalCost], null, 'POSITIVE');
     }
 
     if (!noCostBuffs?.value() && card.cost > card.originalCost) {
-        pushPower('malusCost', 'status-cost-buff', [card.originalCost], null);
+        pushPower('malusCost', 'status-cost-buff', [card.originalCost], null, 'NEGATIVE');
     }
 
     if (card.rarity === "DETERMINATION") {
-        pushPower('determination', 'status-determination', [], null);
+        pushPower('determination', 'status-determination', [], null, 'POSITIVE');
     }
 
     var cardTarget;
@@ -582,84 +637,124 @@ const checkSetInfoPowers = setInterval(() => {
             case 'MONSTER': cardTarget = 'any monster'; break;
             case 'ALLY_MONSTER': cardTarget = 'an ally monster'; break;
             case 'ENEMY_MONSTER': cardTarget = 'an enemy monster'; break;
+            case 'ALLY': cardTarget = 'an ally'; break;
+            case 'ENEMY': cardTarget = 'an enemy'; break;
             case 'ALL': cardTarget = 'anything'; break;
             default: cardTarget = card.target;
         }
-        pushPower('target', 'gs.status-target', [cardTarget], null);
+        pushPower('target', 'gs.status-target', [cardTarget], null, 'NEUTRAL');
     }
 
     if (shinyPower?.value() && card.shiny) {
-        pushPower('shiny', 'gs.status-shiny', [], null);
+        pushPower('shiny', 'gs.status-shiny', [], null, 'NEUTRAL');
     }
 
     if (legendPower?.value() && card.owner?.oldDivision === 'T') {
-        pushPower('legendmaker', 'gs.status-legend', [], null);
+        pushPower('legendmaker', 'gs.status-legend', [], null, 'NEUTRAL');
     }
 
     if (card.typeCard === 0) {
 
         if (totemPower?.value() && (baseCard.hp === 7 || baseCard.cost === 7)) {
-            pushPower('totem', 'gs.status-totem', [], null);
+            pushPower('totem', 'gs.status-totem', [], null, 'NEUTRAL');
         }
 
         if (!noStatBuffs?.value() && card.attack > card.originalAttack) {
-            pushPower('bonusAtk', 'status-atk-buff', [card.originalAttack], null);
+            pushPower('bonusAtk', 'status-atk-buff', [card.originalAttack], null, 'POSITIVE');
         }
 
         if (!noStatBuffs?.value() && card.attack < card.originalAttack) {
-            pushPower('malusAtk', 'status-atk-debuff', [card.originalAttack], null);
+            pushPower('malusAtk', 'status-atk-debuff', [card.originalAttack], null, 'NEGATIVE');
         }
 
         if (!noStatBuffs?.value() && card.maxHp > card.originalHp) {
-            pushPower('bonusHp', 'status-hp-buff', [card.originalHp], null);
+            pushPower('bonusHp', 'status-hp-buff', [card.originalHp], null, 'POSITIVE');
         }
 
         if (!noStatBuffs?.value() && card.maxHp < card.originalHp) {
-            pushPower('malusHp', 'status-hp-debuff', [card.originalHp], null);
+            pushPower('malusHp', 'status-hp-debuff', [card.originalHp], null, 'NEGATIVE');
         }
 
         if (baseStatChangePower?.value() && (baseCard.hp !== card.originalHp || baseCard.attack !== card.originalAttack || baseCard.cost !== card.originalCost)) {
-            var baseCardTranslated = $.i18n('{{CARD:' + card.fixedId + '|1}}');
-            pushPower('baseStatChange', 'status-base-stat-change', [baseCardTranslated, baseCard.cost, baseCard.attack, baseCard.hp, card.originalCost, card.originalAttack, card.originalHp], null);
+            var baseCardTranslated = $.i18n('{{CARD:' + selfId + '|1}}');
+            pushPower('baseStatChange', 'status-base-stat-change', [baseCardTranslated, baseCard.cost, baseCard.attack, baseCard.hp, card.originalCost, card.originalAttack, card.originalHp], null, 'NEUTRAL');
         }
 
         if (card.caughtMonster !== undefined) {
             var caughtCardTranslated = $.i18n('{{CARD:' + card.caughtMonster.fixedId + '|1}}');
-            pushPower('box', 'status-caught', [caughtCardTranslated, card.caughtMonster.owner.username], null);
+            pushPower('box', 'status-caught', [caughtCardTranslated, card.caughtMonster.owner.username], null, 'POSITIVE');
         }
 
         if (deadPower?.value() && card.hp < 1) {
-            pushPower('dead', 'gs.status-dead', [], null);
-        }
-
-        if (barrierPower?.value() && card.fixedId === 801) {
-            pushPower('smellsLikeLemons', 'gs.status-smells-like-lemons', [], null);
-            pushPower('immuneToMadjick', 'gs.status-immune-to-madjick', [], null);
-        }
-
-        if (undereventPower?.value() && card.fixedId === 874) {
-            pushPower('underevent2024', 'status-underevent-2024', [], null);
+            pushPower('dead', 'gs.status-dead', [], null, 'NEUTRAL');
         }
     }
 
+        if (barrierPower?.value() && selfId === 801) {
+            pushPower('smellsLikeLemons', 'gs.status-smells-like-lemons', [], null, 'NEUTRAL');
+            pushPower('immuneToMadjick', 'gs.status-immune-to-madjick', [], null, 'NEUTRAL');
+        }
+
+        if (formerGloryPowers?.value() && formerGloryTrashy?.value() && selfId === 632) {
+            pushPower('thorns', 'status-thorns', [2], 2, 'POSITIVE');
+            pushPower('ranged', 'gs.status-ranged', [], null, 'POSITIVE');
+        }
+
+        if (formerGloryPowers?.value() && formerGloryUndying?.value() && selfId === 106) {
+            pushPower('anotherChance', 'status-another-chance', [], null, 'POSITIVE');
+        }
+
+        if (undereventPower?.value() && selfId === 874) {
+            pushPower('underevent2024', 'status-underevent-2024', [], null, 'NEUTRAL');
+        }
+
         if (checkPower?.value()) {
-            pushPower('check', 'gs.status-check', [cardLog(card)], null);
+            pushPower('check', 'gs.status-check', [cardLog(card)], null, 'NEUTRAL');
         }
 
-        if (primePower?.value() && isPrime(card.fixedId)) {
-            pushPower('prime', 'gs.status-prime', [card.fixedId], null);
+        if (primePower?.value() && isPrime(selfId)) {
+            pushPower('prime', 'gs.status-prime', [selfId], null, 'NEUTRAL');
         }
 
-        if (newPower?.value() && card.fixedId > 928) {
-            pushPower('new', 'gs.status-new', [], null);
+        if (newPower?.value() && selfId == 80) {
+            pushPower('new', 'gs.status-new', [], null, 'NEUTRAL');
         }
 
-        if (kittyCatsEnabled?.value() && (catsArray.includes(card.id * -1) || catsArray.includes(card.id)) && !card.playedTurn && card.ownerId === window.userId) {
-            pushPower('kittyCat', 'gs.status-kitty-cat', [], null);
+        const actionSilenced = silencableActionPowers?.value() && findStatus(card, 'silenced')
+
+        if (kittyCatsEnabled?.value() && gameData.cats.includes(card.id) && !card.playedTurn && card.ownerId === window.userId && !actionSilenced) {
+            pushPower('kittyCat', 'gs.status-kitty-cat', [], null, 'NEGATIVE');
         }
 
-        if (mikeDropsEnabled?.value() && (mikesArray.includes(card.id * -1) || mikesArray.includes(card.id)) && !card.playedTurn && card.ownerId === window.userId) {
-            pushPower('mikeDrop', 'gs.status-mike-drop', [], null);
+        if (mikeDropsEnabled?.value() && gameData.mikes.includes(card.id) && !card.playedTurn && card.ownerId === window.userId && !actionSilenced) {
+            pushPower('mikeDrop', 'gs.status-mike-drop', [], null, 'NEGATIVE');
+        }
+
+        monsterContainer.removeClass('playLocked').removeClass('attackLocked');
+
+        if (equationsEnabled?.value() && !gameData.equationsWon.includes(card.id) && gameData.equations.includes(card.id) && !card.playedTurn && card.ownerId === window.userId && !actionSilenced) {
+            pushPower('equation', 'gs.status-equation', [JSON.stringify(card).replaceAll('"', '&quot;').replaceAll('\'', '')], null, 'NEGATIVE');
+            monsterContainer.addClass('playLocked');
+        }
+
+        if (bricksEnabled?.value() && gameData.bricks.includes(card.id) && !card.playedTurn && card.ownerId === window.userId && !actionSilenced) {
+            pushPower('brick', 'gs.status-brick', [], null, 'NEGATIVE');
+            monsterContainer.addClass('playLocked');
+        }
+
+        if (stuporEnabled?.value() && gameData.stupor.includes(card.id) && card.ownerId === window.userId && card.typeCard === 0 && !actionSilenced) {
+            pushPower('stupor', 'gs.status-stupor', [], null, 'NEGATIVE');
+            monsterContainer.addClass('attackLocked');
+        }
+
+        if (bitflippedEnabled?.value() && gameData.bitflipped.includes(card.id) && !bitflippedAmnesia?.value() && !actionSilenced) {
+            if (card.typeCard === 0 || (card.typeCard === 1 && bitflippedSpells?.value())) {
+                pushPower('bitflipped', 'gs.status-bitflipped', [], null, 'NEGATIVE');
+            }
+        }
+
+        if (sludgeEnabled?.value() && gameData.sludge.includes(card.id) && !actionSilenced) {
+            pushPower('sludge', 'gs.status-sludge', [], null, 'NEGATIVE');
         }
 
     var statuses = card.statuses;
@@ -667,10 +762,10 @@ const checkSetInfoPowers = setInterval(() => {
         for (var i = 0; i < statuses.length; i++) {
             var status = statuses[i];
             if (
-               !(status.name === 'program' && programPower?.value()) &&
-               !(status.name === 'silence' && !noSilence?.value())
+               !(status.name === 'program' && !programPower?.value()) &&
+               !(status.name === 'silenced' && noSilence?.value())
                ) {
-                pushPower(status.name, `status-${status.name}`, [status.counter], status.counter)
+                pushPower(status.name, `status-${status.name}`, [status.counter], status.counter, status.statusType)
             }
         }
     }
@@ -680,7 +775,7 @@ const checkSetInfoPowers = setInterval(() => {
         if (card.creatorInfo.typeCreator === 0) {creatorCardTranslated = $.i18n('{{CARD:' + card.creatorInfo.id + '|1}}');}
         else if (card.creatorInfo.typeCreator === 1) {creatorCardTranslated = $.i18n('{{ARTIFACT:' + card.creatorInfo.id + '}}');}
         else if (card.creatorInfo.typeCreator === 2) {creatorCardTranslated = $.i18n('{{SOUL:' + card.creatorInfo.name + '}}');}
-        pushPower('created', 'status-created', [creatorCardTranslated], null);
+        pushPower('created', 'status-created', [creatorCardTranslated], null, 'NEUTRAL');
     }
 
     for (let i = 0; i < powersStringArgs.length; i++) {
@@ -690,20 +785,133 @@ const checkSetInfoPowers = setInterval(() => {
             args[j] = window.base64EncodeUnicode(args[j]);
         }
     }
-    var spacing = !legacyPowers?.value() ? (powersStringKeys.length - 1) * powerSpacing?.value() > powerBounds?.value() ? powerBounds?.value() / (powersStringKeys.length - 1) : powerSpacing?.value() : powerSpacing?.value();
+
+    const balatro = powerSkins?.value() === 'Balatro' || (powerSkins?.value() === 'match frame' && card.frameSkinName === 'Balatro')
+    const showdown = powerSkins?.value() === 'Showdown' || (powerSkins?.value() === 'match frame' && card.frameSkinName === 'Showdown')
+    var offset = Number(0);
+    var numPowers = powers.length - 1
+    powers.forEach((power) => {
+        if (balatro) {
+            if (power === 'brick') { numPowers += 2.375 }
+            else if (power === 'dodge') { numPowers += 0.75 }
+            else if (power === 'loop' || power === 'kr' || power === 'wanted' || power === 'paralyzed' || power === 'determination' || power === 'kittyCat') { numPowers += 0.625 }
+            else if (power === 'legendmaker') { numPowers += 0.25 }
+            else { numPowers += 0.125 }
+        } else {
+            if (power === 'brick') { numPowers++ };
+        }
+    });
+    const overflowing = numPowers * powerSpacing?.value() > powerBounds?.value()
+    var spacing = !legacyPowers?.value() ? overflowing ? powerBounds?.value() / numPowers : powerSpacing?.value() : powerSpacing?.value();
     for (let i = 0; i < powersStringKeys.length; i++) {
 
         var $cardContainerImage = monsterContainer.find('.cardStatus');
-        var url =
-        powersStringKeys[i].startsWith("gs.") && $.i18n(powersStringKeys[i].replace("gs.", "").replace("-stacked", "")).includes("status-") ?
-            `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${powers[i]}.png`
-        :
-            `images/powers/${powers[i]}.png`;
+        if (!showdown) {
+            var url;
+            var git = powersStringKeys[i].startsWith("gs.") && $.i18n(powersStringKeys[i].replace("gs.", "").replace("-stacked", "")).includes("status-")
+            if (powers[i] === 'thorns') {git = true;}
+            if (powers[i] === 'anotherChance') {git = true;}
+            if (powers[i] === 'ranged') {git = false;}
+            switch (powerSkins?.value()) {
+                case 'off':
+                    url = git ? `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${powers[i]}.png` : `images/powers/${powers[i]}.png`;
+                    break;
+                case 'match frame':
+                    if (card.frameSkinName === 'Balatro') {
+                        url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/balatro-${powers[i]}.png`;
+                    } else {
+                        url = git ? `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${powers[i]}.png` : `images/powers/${powers[i]}.png`;
+                    }
+                    break;
+                case 'Ancient':
+                    if (['Atk', 'Cost', 'disarmed'].some(w => powers[i].includes(w))) {
+                        url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/ancient-${powers[i]}.png`
+                    } else {
+                        url = git ? `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${powers[i]}.png` : `images/powers/${powers[i]}.png`;
+                    }
+                    break;
+                case 'Neon':
+                    url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/neon-${powers[i]}.png`;
+                    break;
+                case 'Balatro':
+                    url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/balatro-${powers[i]}.png`;
+                    break;
+            }
+            if (balatro) {
+                function addOffset(num) {offset += overflowing ? (spacing - spacing / num) / 1.6 : num}
+                if (powers[i] === 'brick') {
+                    $cardContainerImage.append(`<img style="right: ${i * spacing + offset}px; ${card.frameSkinName === 'Balatro' ? 'transform: rotate(180deg);' : ''} max-height: unset; max-width: unset;" power="${powers[i]}" class="infoPowers helpPointer" src="${url}" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});">`);
+                    addOffset(38)
+                } else if (powers[i] === 'dodge') {
+                    $cardContainerImage.append(`<img style="right: ${i * spacing + offset}px; max-height: unset; max-width: unset;" power="${powers[i]}" class="infoPowers helpPointer" src="${url}" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});">`);
+                    addOffset(14)
+                } else if (powers[i] === 'loop' || powers[i] === 'kr' || powers[i] === 'wanted' || powers[i] === 'paralyzed' || powers[i] === 'determination' || powers[i] === 'kittyCat') {
+                    $cardContainerImage.append(`<img style="right: ${i * spacing + offset}px; max-height: unset; max-width: unset;" power="${powers[i]}" class="infoPowers helpPointer" src="${url}" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});">`);
+                    addOffset(10)
+                } else if (powers[i] === 'legendmaker') {
+                    $cardContainerImage.append(`<img style="right: ${i * spacing + offset}px; max-height: unset; max-width: unset;" power="${powers[i]}" class="infoPowers helpPointer" src="${url}" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});">`);
+                    addOffset(4)
+                } else {
+                    $cardContainerImage.append(`<img style="right: ${i * spacing + offset}px; max-height: unset; max-width: unset;" power="${powers[i]}" class="infoPowers helpPointer" src="${url}" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});">`);
+                    addOffset(2)
+                }
+            } else if (powers[i] === 'brick') {
+                $cardContainerImage.append(`<img style="right: ${i * spacing + offset}px; ${card.frameSkinName === 'Balatro' ? 'transform: rotate(180deg);' : ''} max-width: 34px; width: 34px;" power="${powers[i]}" class="infoPowers helpPointer" src="${url}" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});">`);
+                offset += Number(spacing);
+            } else {
+                $cardContainerImage.append(`<img style="right: ${i * spacing + offset}px;" power="${powers[i]}" class="infoPowers helpPointer" src="${url}" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});">`);
+            }
 
-        $cardContainerImage.append(`<img style="right: ${i * spacing}px;" power="${powers[i]}" class="infoPowers helpPointer" src="${url}" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});">`);
-
-        if (powersStringNumbers[i] !== null && powersStringNumbers[i] > 1) {
-            $cardContainerImage.append(`<span style="right: ${i * spacing}px;" class="infoPowersDetails helpPointer" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});">${powersStringNumbers[i]}</span>`);
+            if (powersStringNumbers[i] !== null && powersStringNumbers[i] > 1) {
+                $cardContainerImage.append(`<span style="right: ${i * spacing + offset}px;" class="infoPowersDetails helpPointer" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});">${powersStringNumbers[i]}</span>`);
+            }
+        } else {
+            var arg = powersStringArgs[i][0]
+            if (!arg) {arg = 'Pz8/'}
+            var powerType;
+            switch (powers[i]) {
+                case 'kr': powerType = 'psn'; break;
+                case 'paralyzed': powerType = 'frz'; break;
+                case 'disarmed': powerType = 'slp'; break;
+                case 'stupor': powerType = 'stu'; break;
+                case 'burn': powerType = 'brn'; break;
+                default: powerType = powersTypes[i].toLowerCase();
+            }
+            const showdownNames = {
+                bonusCost: `${card.cost - card.originalCost} ${$.i18n('stat-cost')}`,
+                bonusAtk: `+${card.attack - card.originalAttack} ${$.i18n('stat-atk')}`,
+                bonusHp: `+${card.maxHp - card.originalHp} ${$.i18n('stat-hp')}`,
+                malusCost: `+${card.cost - card.originalCost} ${$.i18n('stat-cost')}`,
+                malusAtk: `${card.attack - card.originalAttack} ${$.i18n('stat-atk')}`,
+                malusHp: `${card.maxHp - card.originalHp} ${$.i18n('stat-hp')}`,
+                check: `&nbsp;*&nbsp;`,
+                turn: `Played on turn ${atob(arg)}`,
+                prime: `Prime ID`,
+                totem: `Totem drop`,
+                anotherChance: `Another chance`,
+                box: `Caught ${atob(arg)}`,
+                created: `Generated`,
+                kr: `PSN`,
+                paralyzed: `FRZ`,
+                disarmed: `SLP`,
+                stupor: `SLP?`,
+                burn: `BRN`,
+                smellsLikeLemons: `Smells like lemons`,
+                immuneToMadjick: `Imune to Madjick`,
+                baseStatChange: `Altered base stats`,
+                kittyCat: `Kitty cat`,
+                mikeDrop: `Mike drop`,
+                determination: `Determined`,
+                loop: powersStringNumbers[i] ? `${$.i18n('kw-loop')} (${powersStringNumbers[i]})` : `+1 ${$.i18n('kw-loop')}`,
+                dodge: powersStringNumbers[i] ? `${$.i18n('kw-dodge')} (${powersStringNumbers[i]})` : `+1 ${$.i18n('kw-dodge')}`,
+                program: powersStringNumbers[i] ? `${$.i18n('kw-program')} (${powersStringNumbers[i]})` : `+1 ${$.i18n('kw-program')}`,
+                thorns: powersStringNumbers[i] ? `${$.i18n('kw-thorns')} (${powersStringNumbers[i]})` : `+1 ${$.i18n('kw-thorns')}`,
+                target: `Targets ${atob(arg)}`,
+                shock: `${$.i18n('kw-shock')} active`,
+                support: `${$.i18n('kw-support')} active`,
+                bullseye: `${$.i18n('kw-bullseye')} active`,
+            }
+            $cardContainerImage.append(`<span power="${powers[i]}" class="infoPowers helpPointer ${powerType} showdownStatus" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});">${showdownNames[powers[i]] ?? powers[i].charAt(0).toUpperCase() + powers[i].slice(1)}</span>`);
         }
     }
     var fauxTribesId = monsterContainer.find('.cardFauxTribes').text()
@@ -715,7 +923,7 @@ const checkSetInfoPowers = setInterval(() => {
     monsterContainer.find('.cardTribes').empty();
     function appendTribe(tribe, i) {
         var $cardContainerImage = monsterContainer.find('.cardTribes');
-        if (obscCardTribes?.value() === 'obfuscate' && obscActive()) {
+        if (obscCardTribes?.value() === 'obfuscate' && obscActive(card)) {
             $cardContainerImage.append(`<img style="right: ${i * 20}px;" class="tribe helpPointer" src="https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/unknown.png" oncontextmenu="displayStatusStringKey('tribe-unknown');;"/>`);
         } else {
             $cardContainerImage.append(`<img style="right: ${i * 20}px;" class="tribe helpPointer" src="images/tribes/${tribe}.png" oncontextmenu="showTribeCards('${tribe}');"/>`);
@@ -728,8 +936,10 @@ const checkSetInfoPowers = setInterval(() => {
             appendTribe(tribes[i], i)
         }
     }
+    monsterContainer.find(".cardObject").html(JSON.stringify(card).replaceAll('"', '&quot;'));
 }} window.setInfoPowers = newSetInfoPowers
 });
+
 
 if (typeof plugin.addFilter === 'function') {
     plugin.addFilter(
@@ -779,13 +989,15 @@ if (typeof plugin.addFilter === 'function') {
 
     plugin.addFilter(
         function gsAliasSearch(card, removed, results) {
-            var removedInSearch = results.search
-            if (removed && removedInSearch) {
-                var searchValue = $('#searchInput').val().toLowerCase();
-                var alias = ""
-                if (!$.i18n('gs.card-alias-' + card.fixedId).includes('card-alias')) {
-                    alias = $.i18n('gs.card-alias-' + card.fixedId).toLowerCase().replace(/(<.*?>)/g, '');
-                    removed = !alias.includes(searchValue)
+            if (cardAliases?.value()) {
+                var removedInSearch = results.search
+                if (removed && removedInSearch) {
+                    var searchValue = $('#searchInput').val().toLowerCase();
+                    var alias = ""
+                    if (!$.i18n('gs.card-alias-' + card.fixedId).includes('card-alias')) {
+                        alias = $.i18n('gs.card-alias-' + card.fixedId).toLowerCase().replace(/(<.*?>)/g, '');
+                        removed = !alias.includes(searchValue)
+                    }
                 }
             }
             return removed;
@@ -829,11 +1041,27 @@ if (typeof plugin.addFilter === 'function') {
 
 }
 
+function seededRand(s) {
+    var mask = 0xffffffff;
+    var m_w  = (123456789 + s) & mask;
+    var m_z  = (987654321 - s) & mask;
+    m_z = (36969 * (m_z & 65535) + (m_z >>> 16)) & mask;
+    m_w = (18000 * (m_w & 65535) + (m_w >>> 16)) & mask;
+
+    var result = ((m_z << 16) + (m_w & 65535)) >>> 0;
+    result /= 4294967296;
+    return result;
+}
+function seededRandInt(min, max, seed) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(seededRand(seed) * (max - min + 1)) + min;
+}
+
 const checkUpdateCardVisual = setInterval(() => {
     if (typeof updateCardVisual === 'function'){
         clearInterval(checkUpdateCardVisual);
         function newUpdateCardVisual($htmlCard, card) {
-        var cost = card.cost
         var statbase = 1;
         const baseClass = $htmlCard.attr("class").match(/base([0-9.]+)/);
         if (baseClass) {
@@ -849,12 +1077,7 @@ const checkUpdateCardVisual = setInterval(() => {
             }
         }
 
-        var fauxCost = $htmlCard.find('.cardFauxCost').text();
-        if (obscActive() && ['obfuscate', 'to set card', 'to random card'].includes(obscCardCost?.value())) {
-            cost = fauxCost - (card.originalCost - card.cost)
-            if (isNaN(cost)) {cost = fauxCost}
-        }
-
+        var cost = card.cost
         var attack = stat(card.attack);
         var baseAttack = stat(card.originalAttack);
         var hp = stat(card.hp);
@@ -864,8 +1087,39 @@ const checkUpdateCardVisual = setInterval(() => {
         var fauxHp = $htmlCard.find('.cardFauxHP').text();
         var fauxMaxHp = $htmlCard.find('.cardFauxHP').text();
 
+        const actionSilenced = silencableActionPowers?.value() && findStatus(card, 'silenced')
+        const bitflipped = bitflippedEnabled?.value() && gameData.bitflipped.includes(card.id) && !actionSilenced
+        var bit;
+        switch (seededRandInt(0, 1, window.gameId + card.id)) {
+            case 0: bit = 1; break;
+            case 1: bit = -1; break;
+        }
+        if (bitflipped) {
+            if (card.typeCard === 0) {
+                switch (seededRandInt(0, 2, window.gameId + card.id)) {
+                    case 0: attack += stat(bit); break;
+                    case 1: hp += stat(bit); maxHp += stat(bit); baseHp += stat(bit); break;
+                    case 2: cost += bit; break;
+                }
+            }
+            if (card.typeCard === 1 && bitflippedSpells?.value()) {
+                cost += bit;
+            }
+            if (bitflippedRealism?.value()) {
+                if (cost < 0) { cost *= -1 }
+                if (attack < 0) { attack *= -1 }
+                if (maxHp < stat(1)) { hp *= -1; maxHp *= -1; baseHp *= -1; }
+            }
+        }
 
-        if (obscActive() && ['obfuscate', 'to set card', 'to random card'].includes(obscCardStats?.value())) {
+
+        var fauxCost = $htmlCard.find('.cardFauxCost').text();
+        if (obscActive(card) && ['obfuscate', 'to set card', 'to random card'].includes(obscCardCost?.value())) {
+            cost = fauxCost - (card.originalCost - card.cost)
+            if (isNaN(cost)) {cost = fauxCost}
+        }
+
+        if (obscActive(card) && ['obfuscate', 'to set card', 'to random card'].includes(obscCardStats?.value())) {
             attack = fauxAttack - (card.originalAttack - card.attack)
             hp = fauxHp - (card.originalHp - card.hp)
             maxHp = fauxMaxHp
@@ -882,15 +1136,18 @@ const checkUpdateCardVisual = setInterval(() => {
         } else if (cost < card.originalCost) {
             $cardCost.addClass('cost-buff');
         }
-        if (card.typeCard === 1) {return;}
+        if (card.typeCard === 1) { return; }
 
         var $cardHp = $htmlCard.find('.cardHP');
         var $cardCurrentHp = $htmlCard.find('.currentHP');
         var $cardMaxHp = $htmlCard.find('.maxHP');
+        var $cardHealthbar = $htmlCard.find('.cardHealthbar');
         $cardHp.html($cardCurrentHp);
         $cardHp.append($cardMaxHp);
         $cardCurrentHp.html(hp);
         $cardMaxHp.html('');
+        $cardHealthbar.attr('value', hp);
+        $cardHealthbar.attr('max', maxHp);
         var hpSquish, maxHpSquish;
         if (maxHpIndicator?.value() !== 'off' && (maxHpIndicator?.value() === 'always show' || hp < maxHp)) {
             $cardMaxHp.html('/' + (maxHp));
@@ -965,7 +1222,7 @@ const checkUpdateCardVisual = setInterval(() => {
                 $cardATK.addClass('attack-debuff');
             }
         }
-        if (card.silence) {
+        if (findStatus(card, 'silenced')) {
             $htmlCard.find('.cardSilence').css('visibility', 'visible');
             if (card.frameSkinName === 'Its TV Time' || card.frameSkinName === 'Cold Place') {
                 $htmlCard.find('.cardImage').css('filter', 'grayscale(100%)');
@@ -974,6 +1231,7 @@ const checkUpdateCardVisual = setInterval(() => {
                 }
             }
         }
+        $htmlCard.find(".cardObject").html(JSON.stringify(card).replaceAll('"', '&quot;'));
 }} window.updateCardVisual = newUpdateCardVisual;
 });
 
@@ -1001,151 +1259,208 @@ function defaultTranslations(language) {
     });
 }
 window.defaultTranslations = defaultTranslations
-function initAliases() {
-  if (!$) return;
-  $.i18n().load({
-    "gs.card-alias-8": "mommy",
-    "gs.card-alias-30": "bp",
-    "gs.card-alias-32": "memhead",
-    "gs.card-alias-38": "rg1",
-    "gs.card-alias-39": "rg2",
-    "gs.card-alias-60": "paps",
-    "gs.card-alias-62": "asdree",
-    "gs.card-alias-64": "mttex mtt ex",
-    "gs.card-alias-66": "wtf",
-    "gs.card-alias-68": "achance",
-    "gs.card-alias-69": "sblazing sblaze",
-    "gs.card-alias-71": "fenergy",
-    "gs.card-alias-82": "merchire",
-    "gs.card-alias-88": "btreat bctreat",
-    "gs.card-alias-89": "pgas polgas pollgas pollugas",
-    "gs.card-alias-92": "fon",
-    "gs.card-alias-95": "tow",
-    "gs.card-alias-106": "undyne the undying",
-    "gs.card-alias-107": "watercooler buble boobie",
-    "gs.card-alias-110": "mttneo mtt neo",
-    "gs.card-alias-117": "oflowey",
-    "gs.card-alias-140": "polibear",
-    "gs.card-alias-145": "db1",
-    "gs.card-alias-146": "db2",
-    "gs.card-alias-150": "ncg",
-    "gs.card-alias-183": "pod",
-    "gs.card-alias-201": "dmtt",
-    "gs.card-alias-203": "aod",
-    "gs.card-alias-214": "casdyne",
-    "gs.card-alias-237": "phamster moni!!!",
-    "gs.card-alias-239": "snowsign ssign",
-    "gs.card-alias-254": "cpaps",
-    "gs.card-alias-258": "bquiz",
-    "gs.card-alias-262": "mmm",
-    "gs.card-alias-265": "mr. generosity mr generosity",
-    "gs.card-alias-267": "crystomb ctomb",
-    "gs.card-alias-288": "groom",
-    "gs.card-alias-296": "wormjar wormsjar jow",
-    "gs.card-alias-299": "polibear",
-    "gs.card-alias-315": "rg3",
-    "gs.card-alias-316": "rg4",
-    "gs.card-alias-318": "falvin",
-    "gs.card-alias-414": "pmascot",
-    "gs.card-alias-421": "astruck asstruck",
-    "gs.card-alias-437": "shyagent sagent ralsei neo",
-    "gs.card-alias-453": "cotg",
-    "gs.card-alias-455": "phouse",
-    "gs.card-alias-471": "cblaster",
-    "gs.card-alias-490": "pod",
-    "gs.card-alias-503": "libloox",
-    "gs.card-alias-504": "blancer",
-    "gs.card-alias-505": "skris",
-    "gs.card-alias-508": "hoodsei hsei",
-    "gs.card-alias-515": "hhathy",
-    "gs.card-alias-520": "absart abs art",
-    "gs.card-alias-531": "ttoriel",
-    "gs.card-alias-532": "etdb",
-    "gs.card-alias-533": "gertomb gtomb",
-    "gs.card-alias-549": "copdyne",
-    "gs.card-alias-552": "cow",
-    "gs.card-alias-567": "blowbick",
-    "gs.card-alias-573": "elimduck elim duck",
-    "gs.card-alias-579": "bqueen",
-    "gs.card-alias-581": "gmascot",
-    "gs.card-alias-642": "pblook poliblook",
-    "gs.card-alias-661": "cws cyber sign cybersign",
-    "gs.card-alias-673": "bplush",
-    "gs.card-alias-700": "vb",
-    "gs.card-alias-707": "captn rouxl",
-    "gs.card-alias-714": "cjester",
-    "gs.card-alias-716": "rpaps",
-    "gs.card-alias-717": "sneo",
-    "gs.card-alias-726": "pkris",
-    "gs.card-alias-734": "cwire",
-    "gs.card-alias-742": "cg1",
-    "gs.card-alias-743": "cg2",
-    "gs.card-alias-754": "fheads",
-    "gs.card-alias-756": "spamshop sshop",
-    "gs.card-alias-758": "bneo",
-    "gs.card-alias-760": "butsei",
-    "gs.card-alias-761": "bstatue",
-    "gs.card-alias-763": "cpanel",
-    "gs.card-alias-767": "bdancer baldancer",
-    "gs.card-alias-772": "jfs",
-    "gs.card-alias-773": "shytomb stomb",
-    "gs.card-alias-774": "dlancer dancer",
-    "gs.card-alias-775": "galadino",
-    "gs.card-alias-776": "tlights",
-    "gs.card-alias-782": "talphys",
-    "gs.card-alias-794": "gq",
-    "gs.card-alias-815": "dalvdrobe",
-    "gs.card-alias-828": "mommy",
-    "gs.card-alias-838": "zmartlet",
-    "gs.card-alias-848": "sansino csans",
-    "gs.card-alias-853": "chutomb ctomb",
-    "gs.card-alias-853": "duel",
-    "gs.card-alias-869": "galadino",
-    "gs.card-alias-878": "cero ketsukane",
-    "gs.card-alias-883": "plancer",
-    "gs.card-alias-884": "psusie",
-    "gs.card-alias-885": "zkris",
-    "gs.card-alias-888": "wcloak",
-    "gs.card-alias-893": "fraudyne",
-    "gs.card-alias-893": "tcatcher",
-    "gs.card-alias-897": "tspawn titanspawn",
-    "gs.card-alias-898": "tserpent",
-    "gs.card-alias-902": "sguy",
-    "gs.card-alias-903": "zsusie zusie",
-    "gs.card-alias-904": "zralsei ralzei zootsei",
-    "gs.card-alias-905": "lmower",
-    "gs.card-alias-906": "planino planina pelnina pelnino",
-    "gs.card-alias-907": "pelnina pelnino planino planina",
-    "gs.card-alias-908": "rralsei rocksei",
-    "gs.card-alias-909": "rkris",
-    "gs.card-alias-912": "jstein jstien jackins your taking too long scairy",
-    "gs.card-alias-913": "jstein jstien jackins your taking too long scairy",
-    "gs.card-alias-914": "ctower cup tower",
-    "gs.card-alias-915": "cposter",
-    "gs.card-alias-917": "rposter",
-    "gs.card-alias-919": "mposter",
-    "gs.card-alias-920": "galadino",
-    "gs.card-alias-922": "water cooler watercooler buble boobie",
-    "gs.card-alias-923": "pkris",
-    "gs.card-alias-926": "homophobia",
-    "gs.card-alias-927": "gacha machine gpmachine gmachine",
-    "gs.card-alias-929": "elnina elnino lanino lanina",
-    "gs.card-alias-931": "tfuzzy",
-    "gs.card-alias-932": "pvase",
-  }, 'en');
+function initGsTranslations() {
+    if (!$) return;
+        $.i18n().load({
+        "gs.card-alias-8": "mommy",
+        "gs.card-alias-30": "bp",
+        "gs.card-alias-32": "memhead",
+        "gs.card-alias-38": "rg1",
+        "gs.card-alias-39": "rg2",
+        "gs.card-alias-60": "paps",
+        "gs.card-alias-62": "asdree",
+        "gs.card-alias-64": "mttex mtt ex",
+        "gs.card-alias-66": "wtf",
+        "gs.card-alias-68": "achance",
+        "gs.card-alias-69": "sblazing sblaze",
+        "gs.card-alias-71": "fenergy",
+        "gs.card-alias-82": "merchire",
+        "gs.card-alias-88": "btreat bctreat",
+        "gs.card-alias-89": "pgas polgas pollgas pollugas",
+        "gs.card-alias-92": "fon",
+        "gs.card-alias-95": "tow",
+        "gs.card-alias-106": "undyne the undying",
+        "gs.card-alias-107": "watercooler buble boobie",
+        "gs.card-alias-110": "mttneo mtt neo",
+        "gs.card-alias-117": "oflowey",
+        "gs.card-alias-140": "polibear",
+        "gs.card-alias-145": "db1",
+        "gs.card-alias-146": "db2",
+        "gs.card-alias-150": "ncg",
+        "gs.card-alias-183": "pod",
+        "gs.card-alias-201": "dmtt",
+        "gs.card-alias-203": "aod",
+        "gs.card-alias-214": "casdyne",
+        "gs.card-alias-237": "phamster moni!!!",
+        "gs.card-alias-239": "snowsign ssign",
+        "gs.card-alias-254": "cpaps",
+        "gs.card-alias-258": "bquiz",
+        "gs.card-alias-262": "mmm",
+        "gs.card-alias-265": "mr. generosity mr generosity",
+        "gs.card-alias-267": "crystomb ctomb",
+        "gs.card-alias-288": "groom",
+        "gs.card-alias-296": "wormjar wormsjar jow",
+        "gs.card-alias-299": "polibear",
+        "gs.card-alias-315": "rg3",
+        "gs.card-alias-316": "rg4",
+        "gs.card-alias-318": "falvin",
+        "gs.card-alias-414": "pmascot",
+        "gs.card-alias-421": "astruck asstruck",
+        "gs.card-alias-437": "shyagent sagent ralsei neo",
+        "gs.card-alias-453": "cotg",
+        "gs.card-alias-455": "phouse",
+        "gs.card-alias-471": "cblaster",
+        "gs.card-alias-490": "pod",
+        "gs.card-alias-503": "libloox",
+        "gs.card-alias-504": "blancer",
+        "gs.card-alias-505": "skris",
+        "gs.card-alias-508": "hoodsei hsei",
+        "gs.card-alias-515": "hhathy",
+        "gs.card-alias-520": "absart abs art",
+        "gs.card-alias-531": "ttoriel",
+        "gs.card-alias-532": "etdb",
+        "gs.card-alias-533": "gertomb gtomb",
+        "gs.card-alias-549": "copdyne",
+        "gs.card-alias-552": "cow",
+        "gs.card-alias-567": "blowbick",
+        "gs.card-alias-573": "elimduck elim duck",
+        "gs.card-alias-579": "bqueen",
+        "gs.card-alias-581": "gmascot",
+        "gs.card-alias-642": "pblook poliblook",
+        "gs.card-alias-661": "cws cyber sign cybersign",
+        "gs.card-alias-673": "bplush",
+        "gs.card-alias-700": "vb",
+        "gs.card-alias-707": "captn rouxl",
+        "gs.card-alias-714": "cjester",
+        "gs.card-alias-716": "rpaps",
+        "gs.card-alias-717": "sneo",
+        "gs.card-alias-726": "pkris",
+        "gs.card-alias-734": "cwire",
+        "gs.card-alias-742": "cg1",
+        "gs.card-alias-743": "cg2",
+        "gs.card-alias-754": "fheads",
+        "gs.card-alias-756": "spamshop sshop",
+        "gs.card-alias-758": "bneo",
+        "gs.card-alias-760": "butsei",
+        "gs.card-alias-761": "bstatue",
+        "gs.card-alias-763": "cpanel",
+        "gs.card-alias-767": "bdancer baldancer",
+        "gs.card-alias-772": "jfs",
+        "gs.card-alias-773": "shytomb stomb",
+        "gs.card-alias-774": "dlancer dancer",
+        "gs.card-alias-775": "galadino",
+        "gs.card-alias-776": "tlights",
+        "gs.card-alias-782": "talphys",
+        "gs.card-alias-794": "gq",
+        "gs.card-alias-815": "dalvdrobe",
+        "gs.card-alias-828": "mommy",
+        "gs.card-alias-838": "zmartlet",
+        "gs.card-alias-848": "sansino csans",
+        "gs.card-alias-853": "chutomb ctomb",
+        "gs.card-alias-853": "duel",
+        "gs.card-alias-869": "galadino",
+        "gs.card-alias-878": "cero ketsukane",
+        "gs.card-alias-883": "plancer",
+        "gs.card-alias-884": "psusie",
+        "gs.card-alias-885": "zkris",
+        "gs.card-alias-888": "wcloak",
+        "gs.card-alias-893": "fraudyne",
+        "gs.card-alias-893": "tcatcher",
+        "gs.card-alias-897": "tspawn titanspawn",
+        "gs.card-alias-898": "tserpent",
+        "gs.card-alias-902": "sguy",
+        "gs.card-alias-903": "zsusie zusie",
+        "gs.card-alias-904": "zralsei ralzei zootsei",
+        "gs.card-alias-905": "lmower",
+        "gs.card-alias-906": "planino planina pelnina pelnino",
+        "gs.card-alias-907": "pelnina pelnino planino planina",
+        "gs.card-alias-908": "rralsei rocksei",
+        "gs.card-alias-909": "rkris",
+        "gs.card-alias-912": "jstein jstien jackins your taking too long scairy",
+        "gs.card-alias-913": "jstein jstien jackins your taking too long scairy",
+        "gs.card-alias-914": "ctower cup tower",
+        "gs.card-alias-915": "cposter",
+        "gs.card-alias-917": "rposter",
+        "gs.card-alias-919": "mposter",
+        "gs.card-alias-920": "galadino",
+        "gs.card-alias-922": "water cooler watercooler buble boobie",
+        "gs.card-alias-923": "pkris",
+        "gs.card-alias-926": "homophobia",
+        "gs.card-alias-927": "gacha machine gpmachine gmachine",
+        "gs.card-alias-929": "elnina elnino lanino lanina",
+        "gs.card-alias-931": "tfuzzy",
+        "gs.card-alias-932": "pvase",
+
+        "gs.status-unknown": "Hmmm... there's a power here, but you can't exactly make it out.",
+        "gs.status-unknown-stacked": "Hmmm...  there's a power here, but you can't exactly make it out.",
+        "gs.tribe-unknown": "Hmmm... this monster has a tribe, but which one?",
+        "gs.status-target": "This card has a target effect. It can target $1.",
+        "gs.status-turn": "This card was played on turn $1. It has lived for $2 {{PLURAL:$2|turn|turns}}.",
+        "gs.status-shiny": "This card is shiny.",
+        "gs.status-dead": "This monster dead as hell.",
+        "gs.status-legend": "This card's owner got {{DIVISION:T}} rank last season!",
+        "gs.status-immune-to-madjick": "This card is imune to {{CARD:16|1}}.",
+        "gs.status-smells-like-lemons": "This card smells like lemons.",
+        "gs.status-totem": "This card is compatible with {{CARD:545|1}}.",
+        "gs.status-prime": "This card's ID, $1, is a prime number! The more you know.",
+        "gs.status-new": "This card is new! Wowie. I bet it's really cool.",
+        "gs.status-check": "$1",
+        "gs.status-kitty-cat": "This card is secretly possessed by a kitty! It will do something random when played or summoned from your hand.",
+        "gs.status-mike-drop": "This card's a real showstopper! It ends your turn immediately when played or summoned from your hand.",
+        "gs.status-brick": "This card cannot be played, due to the really heavy brick on it.",
+        "gs.status-equation": "To be able to play this card, you must first solve a math equation.<br><button onclick=\"mathtime('$1')\">Start problem</button>",
+        "gs.status-stupor": "This monster can't attack. Or rather, you can't make it attack, because it's lazy...",
+        "gs.status-bitflipped": "A random stat on this card is off by one. Do you know which?",
+        "gs.status-sludge": "This card is covered in a thick layer of sludge. Gross.",
+        "gs.status-loop-stacked": "This card can trigger its {{KW:LOOP}} effect an additional time.",
+        "gs.status-program-stacked": "If you have an additional {{GOLD}}, spend it to trigger this effect.",
+        "gs.status-turn-stacked": "This card was played an additional turn.",
+        "gs.status-dodge-stacked": "This monster will negate an additional instance of {{DMG}} to itself.",
+        "gs.status-thorns-stacked": "This monster will deal an additional {{DMG}} to the attacker.",
+        "gs.status-ranged": "This monster is immune while attacking.",
+
+        "gs.game-enemy": "Enemy",
+        "gs.game-ally": "Your",
+
+        "gs.game-intros-1": "$1 challenges you to a Dual!",
+        "gs.game-intros-2": "Fighting $1!",
+        "gs.game-intros-3": "$1 enters through a graceful misty fog...",
+        "gs.game-intros-4": "$1 enters the scene!",
+        "gs.game-intros-5": "$1 approaches!",
+        "gs.game-intros-6": "$1 attacks!",
+        "gs.game-intros-7": "$1 sniped you.",
+        "gs.game-intros-8": "$1 wants to win! Are you just gonna let that happen?",
+        "gs.game-intros-9": "C-could it be? It's the one and only $1...",
+        "gs.game-intros-10": "...It's $1? Sorry, youre cooked.",
+        "gs.game-intros-11": "$1 gracefully flops onto the battlefield like a fish.",
+        "gs.game-intros-12": "A wild $1 appeared!",
+        "gs.game-intros-14": "$1 glares at you. You hear boss music.",
+        "gs.game-intros-15": "Well, you didn't expect $1 to be here.",
+        "gs.game-intros-16": "Well, there is a $1 here. They might be happy to see you. What do you think?",
+        "gs.game-intros-17": "> enters $5-less queue<br>> looks inside<br>> $5",
+        "gs.game-intros-18": "Okay, so, a $1 walks into a bar",
+        "gs.game-intros-19": "You are not fighting $1!",
+        "gs.game-intros-20": "ITS FUCKING $5 RUN",
+        "gs.game-intros-21": "My money's on $1. No pressure.",
+        "gs.game-intros-22": "EPIC RAP BATTLES OF HISTORY:<br>$1<br>VERSUS!<br>$2",
+        "gs.game-intros-23": "Fighting $2!<br>Wait, no...<br>...it's $1!",
+        "gs.game-intros-24": "$1 calls an ambulance in advance.",
+        "gs.game-intros-25": "$1, huh?",
+        "gs.game-intros-26": "$1 emerges from the abyss!",
+        "gs.game-intros-27": "Hey, it's $1!",
+        "gs.game-intros-crystal": "$7 Free elo.",
+        "gs.game-intros-dia": "$7 You're about to have a bad time.",
+        "gs.game-intros-frogman": "$7 Pet the frog :D",
+        "gs.game-intros-dware": "Beware the $1",
+        "gs.game-intros-jaimee": "$7 rat",
+        "gs.game-intros-gala": "$7 Wow, what a really cool and awesome opponent there!",
+        "gs.game-intros-speednick": "Draw out your sword, $2,<br>and paint $7 me a beautiful fight!",
+    }, $.i18n().locale);
 }
 
-function veryImportantActiveVerbFormOf(str) {
-    const lowerStr = str.toLowerCase();
-    const rouxl1 = /(s|sh|ch|x|z|o)$/.test(lowerStr);
-    const rouxl2 = /[^aeiou]y$/.test(lowerStr);
-    if (rouxl1) {
-        return `${str}es`;
-    } else if (rouxl2) {
-        return `${str.slice(0, -1)}ies`;
-    } else {
-        return `${str}s`;
-    }
+function initCustomTranslations() {
+    const translations = Object.fromEntries(customTranslations.value());
+    $.i18n().load(translations, $.i18n().locale);
 }
 
 function initMulliganInfo() {
@@ -1160,96 +1475,48 @@ function initMulliganInfo() {
             function soulIcon(replace) {return `<img src="/images/souls/${replace ? replace : enemySoul}.png">`};
             function soulColor(text, soul) {return `<span class="${soul ? soul : enemySoul}">${text}</span>`};
             function player(replace) {return `${soulIcon()} ${soulColor(replace ? replace : enemyUser)}`};
-            const introductions = [`${player()} challenges you to a Dual!`,
-                                  `Fighting ${player()}!`,
-                                  `${player()} enters through a graceful misty fog...`,
-                                  `${player()} enters the scene!`,
-                                  `${player()} approaches!`,
-                                  `${player()} attacks!`,
-                                  `${player()} sniped you.`,
-                                  `${player()} wants to win! Are you just gonna let that happen?`,
-                                  `C-could it be? It's the one and only ${player()}...`,
-                                  `...It's ${player()}? Sorry, you're cooked.`,
-                                  `${player()} gracefully flops onto the battlefield like a fish.`,
-                                  `A wild ${player()} appeared!`,
-                                  `${player()} glares at you. You hear boss music.`,
-                                  `Well, you didn't expect ${player()} to be here.`,
-                                  `Well, there is a ${player()} here. They might be happy to see you. What do you think?`,
-                                  `> enters ${player(enemyUser.toLowerCase())}-less queue<br>
-                                  > looks inside<br>
-                                  > ${player(enemyUser.toLowerCase())}`,
-                                  `Okay, so, a ${player()} walks into a bar`,
-                                  `You are not fighting ${player()}. Trust.`,
-                                  `ITS FUCKING ${player(enemyUser.toUpperCase())} RUN`,
-                                  `My money's on ${player()}. No pressure.`,
-                                  `${player()} ${veryImportantActiveVerbFormOf(enemyUser)} ${soulColor(`${enemyUser}ingly`)}.`,
-                                  `EPIC RAP BATTLES OF HISTORY<br>
-                                  ${player()}<br>
-                                  VERSUS!<br>
-                                  ${soulIcon(yourSoul)} ${soulColor(yourUser, yourSoul)}`,
-                                  `Fighting ${soulIcon(yourSoul)} ${soulColor(yourUser, yourSoul)}!<br>
-                                  Wait, no, no...<br>
-                                  ...it's ${player()}!`,
-                                   `This battle is     ${soulColor('Pissing')} me off<br><br>
-                                   I am the  original        ${soulColor(enemyUser)}`,];
+            function translatedIntro(key) {
+                return  $.i18n(key,
+                            player(), // $1: The enemy player
+                            `${soulIcon(yourSoul)} ${soulColor(yourUser, yourSoul)}`, // $2: You!
+                            soulColor(enemyUser), // $3: Enemy, no soul icon
+                            soulColor(yourUser, yourSoul), // $4: You, no soul icon
+                            player(enemyUser.toLowerCase()), // $5: The enemy player, lowercased
+                            player(enemyUser.toUpperCase()), // $6: The enemy player, uppercased
+                            soulIcon(), // $7 Enemy soul icon
+                            soulIcon(yourSoul) // $8 Your soul icon
+                        )
+            }
+            var introductions = [];
+            Object.entries($.i18n().messageStore.messages.en).forEach(([key, value])=> {
+                if (key.startsWith("gs.game-intros") && /\d/.test(key)) {
+                    introductions.push(translatedIntro(key))
+                }
+            });
             function funnyIntro() {
-                if (enemyUser === "Sktima" || enemyUser === "RefractedSktima" || enemyUser === "Diamaincrah") {enemyUser = "sans"}
                 switch (enemyUser) {
-                    case "Crystal":                   return `${soulIcon()} Free elo.`;
-                    case "sans":                      return `${soulIcon()} You're about to have a bad time.`;
-                    case "frogman":                   return `Pet the ${player('frog')} :D`;
-                    case "Dware":                     return `Beware the ${player()}`;
-                    case "The Rat":                   return `${player('rat')}`;
-                    case "galadino":                  return `${soulIcon()} Wow, what a really cool and awesome opponent there!`;
-                    case "StellarSting":              return `${soulIcon()} meme deck user pray they dont highroll`;
-                    case "speednick1972":             return `Draw out your sword, ${soulIcon(yourSoul)} ${soulColor(yourUser, yourSoul)},<br>and paint ${soulIcon()} me a beautiful fight!`;
+                    case "Crystal":                   return translatedIntro('gs.game-intros-crystal');
+                    case "Diamaincrah":               return translatedIntro('gs.game-intros-dia');
+                    case "frogman":                   return translatedIntro('gs.game-intros-frogman');
+                    case "Dware":                     return translatedIntro('gs.game-intros-dware');
+                    case "The Rat":                   return translatedIntro('gs.game-intros-jaimee');
+                    case "galadino":                  return translatedIntro('gs.game-intros-gala');
+                    case "speednick1972":             return translatedIntro('gs.game-intros-speednick');
                 }
                 var result = introductions[Math.floor(Math.random() * introductions.length)];
                 introductions.splice(introductions.indexOf(result), 1);
                 return result;
             }
             var info = `${funnyIntro()}<br><br>
-                        ${window.userTurn === window.userId ? 'You go first.' : 'You go second.'}`;
+                        ${window.userTurn !== window.userId ? 'You go first.' : 'You go second.'}`;
             $('.bootstrap-dialog-message:has(.mulligan) > p').html(info)
         }
     });
 }
 
-function initCustomPower() {
-    $.i18n().load({
-        "gs.status-unknown": "Hmmm... there's a power here, but you can't exactly make it out.",
-        "gs.status-unknown-stacked": "Hmmm...  there's a power here, but you can't exactly make it out.",
-        "gs.tribe-unknown": "Hmmm... this monster has a tribe, but which one?",
-        "gs.status-target": "This card has a target effect. It can target $1.",
-        "gs.status-turn": "This card was played on turn $1. It has lived for $2 {{PLURAL:$2|turn|turns}}.",
-        "gs.status-shiny": "This card is shiny.",
-        "gs.status-dead": "This monster dead as hell.",
-        "gs.status-legend": "This card's owner got {{DIVISION:T}} rank last season!",
-        "gs.status-immune-to-madjick": "This card is imune to {{CARD:16|1}}.",
-        "gs.status-smells-like-lemons": "This card smells like lemons.",
-        "gs.status-totem": "This card is compatible with {{CARD:545|1}}.",
-        "gs.status-prime": "This card's ID, $1, is a prime number! The more you know.",
-        "gs.status-new": "This card is new! Wowie. I bet it's really cool.",
-        "gs.status-kitty-cat": "This card is secretly possessed by a kitty and will do something random when played.",
-        "gs.status-mike-drop": "This card ends your turn immediately when played.",
-        "gs.status-check": "$1",
-        "gs.status-loop-stacked": "This card can trigger its {{KW:LOOP}} effect an additional time.",
-        "gs.status-program-stacked": "If you have an additional {{GOLD}}, spend it to trigger this effect.",
-        "gs.status-turn-stacked": "This card was played an additional turn.",
-        "gs.status-dodge-stacked": "This monster will negate an additional instance of {{DMG}} to itself.",
-    }, 'en');
-}
-
-
-function initCustomTranslations() {
-    const translations = Object.fromEntries(customTranslations.value());
-    const values = Object.values(translations)
-    $.i18n().load(translations, $.i18n().locale);
-}
-
 function staticStyles() {
     style('static', 'add',
-    `.cardFauxElement {visibility: hidden;}
+    `.cardFauxElement, .cardObject {display: none;}
     .cardImage > img {visibility: hidden;}
     .cardName div[style*="font-size: 7px;"] {white-space: nowrap;}
     #gsFlashlight {position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; pointer-events: none; z-index: 100; image-rendering: pixelated;}
@@ -1294,10 +1561,11 @@ function staticStyles() {
     .card.breaking-skin.breaking-disabled .cardDesc,.cardName,.cardATK,.cardHP,.cardCost,.cardRarity {background-color: rgba(0, 0, 0, 0);}
     .breaking-skin:not(.breaking-disabled):hover .cardDesc, .breaking-skin:not(.breaking-disabled):hover .cardName, .breaking-skin:not(.breaking-disabled):hover .cardATK, .breaking-skin:not(.breaking-disabled):hover .cardHP, .breaking-skin:not(.breaking-disabled):hover .cardCost, .breaking-skin:not(.breaking-disabled):hover .cardRarity {background-color: rgba(0, 0, 0, 0.7);}
     .setting-Galascript-button {max-width: 380px;}
-    .setting-Galascript-button h4 {font-size: 16px; font-weight: bold; width: 380px; text-align: center;}
-    .setting-Galascript-button h5 {font-size: 16px; font-weight: bold; width: 380px;}
-    .setting-Galascript-button .coolguy {float: right; color: thistle;}
-    #underscript\\.plugin\\.Galascript\\.kittyCatsChance, #underscript\\.plugin\\.Galascript\\.mikeDropsChance {width: 32px;}
+    #gsCredits h4 {font-size: 22px; font-weight: bold; text-align: center;}
+    #gsCredits h5 {font-size: 18px; font-weight: bold; }
+    #gsCredits h6 {font-weight: bold; text-align: center; color: grey}
+    #gsCredits .coolguy {float: right; color: thistle;}
+    *[id^="underscript\\.plugin\\.Galascript"][id$="Chance"] {width: 32px;}
     .setting-advancedMap_text_text:has(#underscript\\.plugin\\.Galascript\\.customTranslations) {width: 350px; border-bottom: none !important;}
     .setting-advancedMap_text_text:has(#underscript\\.plugin\\.Galascript\\.customTranslations) input {width: 40%; align-self: stretch; text-wrap: auto; text-align: center; background-repeat: no-repeat; background-size: cover; background-position: center;}
     .setting-advancedMap_text_text:has(#underscript\\.plugin\\.Galascript\\.customTranslations) textarea {min-height: 40px; height: 40px; width: 40%; resize: vertical; text-align: center; font-size: 12px; scrollbar-width: thin; scrollbar-color: white black}
@@ -1308,10 +1576,26 @@ function staticStyles() {
     input.gsTransHelperOption {margin: 0px 12px;}
     input.gsTransHelperOption:hover {padding: 0px 0px 0px 10px;}
     #gsPowerFilterRow img {width: 24px;}
+    .playLocked:not(.doingEffect):not(.affected):not(.target):not(.cardOwned):not(.cardNotOwned) > *:not(.cardStatus) {filter: grayscale(100%) brightness(50%) sepia(0%) hue-rotate(0deg) saturate(100%) contrast(1);}
+    .playLocked:not(.doingEffect):not(.affected):not(.target):not(.cardOwned):not(.cardNotOwned) > .cardStatus > *:not([power="brick"]):not([power="equation"]) {filter: grayscale(100%) brightness(50%) sepia(0%) hue-rotate(0deg) saturate(100%) contrast(1);}
+    .playLocked:not(.doingEffect):not(.affected):not(.target):not(.cardOwned):not(.cardNotOwned) .cardBackground {box-shadow: none;}
+    .cardStatus:has(.showdownStatus) { height: auto; width: 155px; top: 40px; left: 10px; line-height: 12px; display: flex; flex-direction: row-reverse; flex-wrap: wrap; justify-content: right; }
+    .showdownStatus { padding: 0px 1px; border-radius: 3px; text-shadow: none; font-size: 7pt; border: 1px solid #FF4400; max-height: none; max-width: none; position: relative; margin: 0 1px;}
+    .brn, .psn, .par, .slp, .frz, .stu { padding: 1px 2px; border: 0;}
+    .negative { border-color: #FF4400; background: #FFE5E0; color: #FF4400;}
+    .positive { border-color: #33AA00; background: #E5FFE0; color: #33AA00;}
+    .neutral { border-color: #555555; background: #F0F0F0; color: #555555;}
+    .brn { background: #EE5533; color: #FFF;}
+    .psn { background: #A4009A; color: #FFF;}
+    .par { background: #9AA400; color: #FFF;}
+    .slp { background: #AA77AA; color: #FFF;}
+    .frz { background: #009AA4; color: #FFF;}
+    .stu { background: #FFF; color: #AA77AA;}
+    .gsFileButton {background-color: black; margin-bottom: 10px;}
     `)
 }
 
-const observer = new MutationObserver((mutations, obs) => {
+const leGrandeObserver = new MutationObserver((mutations, obs) => {
     document.querySelectorAll('[id^="underscript.plugin.Galascript.bgMixtape."]:not([id$="value"])').forEach(el => { // dynamic backgrounds for playlist setting
         function updateBackground (value) {
             el.style.setProperty('background-image', `url('/images/backgrounds/${value}.png')`);
@@ -1331,8 +1615,13 @@ const observer = new MutationObserver((mutations, obs) => {
     });
     document.querySelectorAll('[id^="underscript.plugin.Galascript.emoteKeybinds."][id$="value"]').forEach(el => { // dynamic backgrounds for emote map
         function updateBackground (value) {
-            const emoteImg = window.chatEmotes.find(emote => emote.id === Number(value)).image
-            el.style.setProperty('background-image', `url('/images/emotes/${emoteImg}.png')`);
+            var emoteSrc;
+            if (value == 0) {
+                emoteSrc = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/equationFail.png'
+            } else {
+                emoteSrc = `/images/emotes/${window.chatEmotes.find(emote => emote.id === Number(value)).image}.png`
+            }
+            el.style.setProperty('background-image', `url('${emoteSrc}')`);
             el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.4)', 'important');
             el.style.setProperty('background-repeat', 'no-repeat');
             el.style.setProperty('background-position', '85%');
@@ -1350,7 +1639,6 @@ const observer = new MutationObserver((mutations, obs) => {
             updateBackground(el.value);
         }
     });
-
     document.querySelectorAll('[id^="underscript.plugin.Galascript.customTranslations."]:not([id$="value"])').forEach(el => { // dynamic backgrounds for custom translation setting
         function updateBackground (value) {
             el.style.setProperty('background', 'no-repeat');
@@ -1368,7 +1656,7 @@ const observer = new MutationObserver((mutations, obs) => {
                 el.style.setProperty('background-position', 'center');
 
             } else if (value.startsWith("status-") || value.startsWith("gs.status-")) {
-                const git = value.startsWith("gs.") && $.i18n(value.replace("gs.", "").replace("-stacked", "")).includes("status-")
+                var git = value.startsWith("gs.") && $.i18n(value.replace("gs.", "").replace("-stacked", "")).includes("status-")
                 const stacked = value.includes("-stacked")
                 const camelCaseBitch = value.replace(/-([a-z])/g, function(match, char) {
                     return '-' + char.toUpperCase();
@@ -1387,19 +1675,79 @@ const observer = new MutationObserver((mutations, obs) => {
                 }
                 switch (statusImg) {
                     case "caught": statusImg = "box"; break;
-                    case "thorns": statusImg = "silenced"; break;
-                    case "anotherChance": statusImg = "silenced"; break;
+                    case "thorns": git = true; break;
+                    case "anotherChance": git = true; break;
+                    case "ranged": git = false; break;
                 }
-                const url = git ? `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${statusImg}.png` : `/images/powers/${statusImg}.png`
+                var url;
+                switch (powerSkins?.value()) {
+                    case 'match frame':
+                        if (frameSpoof?.value() === 'Balatro') {
+                            url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/balatro-${statusImg}.png`;
+                        } else {
+                            url = git ? `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${statusImg}.png` : `images/powers/${statusImg}.png`;
+                        }
+                        break;
+                    case 'Ancient':
+                        url =
+                        ['bonus', 'malus', 'disarmed'].includes(statusImg) ?
+                            `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/ancient-${statusImg}.png`
+                        :
+                        git ?
+                            `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${statusImg}.png`
+                        :
+                            `images/powers/${statusImg}.png`;
+                        break;
+                    case 'Neon':
+                        url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/neon-${statusImg}.png`;
+                        break;
+                    case 'Balatro':
+                        url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/balatro-${statusImg}.png`;
+                        break;
+                    default:
+                        url = git ? `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${statusImg}.png` : `images/powers/${statusImg}.png`;
+                }
                 el.style.setProperty('image-rendering', 'pixelated');
                 el.style.setProperty('background-image', `url('${url}')`);
                 el.style.setProperty('background-size', '42%');
+                if (statusImg.includes("brick")) {
+                    el.style.setProperty('background-size', '84%')
+                }
                 el.style.setProperty('background-position', '50% 50%');
                 if (stacked) {
                     el.style.setProperty('background-repeat', 'repeat-x')
                 }
+
+            } else if (value.startsWith("tribe-")) {
+                const tribe = value.replace("tribe-", "").toUpperCase()
+                el.style.setProperty('image-rendering', 'pixelated');
+                el.style.setProperty('background-image', `url('/images/tribes/${tribe}.png')`);
+                el.style.setProperty('background-size', '52%');
+                el.style.setProperty('background-position', '50% 50%');
+            } else if (value.startsWith("rarity-")) {
+                var rarity = value.replace("rarity-", "");
+                var rarityImg;
+                switch (raritySkins?.value()) {
+                    case 'off': rarityImg = `images/rarity/BASE_${rarity.toUpperCase()}.png`; break;
+                    case 'match frame': rarityImg = `images/rarity/BASE_${rarity.toUpperCase()}.png`; break;
+                    case 'Hollow Knight': rarityImg = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/hk-${rarity}.png`; break;
+                    case 'FNAFB': rarityImg = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-ut-${rarity}.png`; break;
+                    case 'Celeste': rarityImg = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-ut-${rarity}.png`; break;
+                    case 'Balatro': rarityImg = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/balatro-${rarity}.png`; break;
+                    case 'OvenBreak': rarityImg = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/ovenbreak-${rarity}.png`; break;
+                    case 'OvenBreak (Alt)': rarityImg = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/ovenbreak-alt-${rarity}.png`; break;
+                }
+                el.style.setProperty('image-rendering', 'pixelated');
+                el.style.setProperty('background-image', `url('${rarityImg}')`);
+                el.style.setProperty('background-size', '52%');
+                el.style.setProperty('background-position', '50% 50%');
             } else if (value.startsWith("kw-")) {
                 el.style.setProperty('background-image', `url('/images/cards/Blank.png')`)
+            } else if (value.startsWith("gs.")) {
+                el.style.setProperty('image-rendering', 'pixelated');
+                el.style.setProperty('background-image', `url('https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/iconVirgil.png')`)
+                el.style.setProperty('background-size', '52%');
+                el.style.setProperty('background-position', '50% 50%');
             } else if (value.length) {
                 el.style.setProperty('background-image', `url('https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/missing.png')`)
                 el.style.setProperty('image-rendering', 'pixelated');
@@ -1421,7 +1769,16 @@ const observer = new MutationObserver((mutations, obs) => {
             updateBackground(el.value);
         }
     });
-
+    document.querySelectorAll('.card.playLocked').forEach(el => { // restricting what you can play for action powers
+        if (el.classList.contains('canPlay')) {
+            el.classList.remove('canPlay');
+        }
+    });
+    document.querySelectorAll('td .card.attackLocked').forEach(el => { // make it so ally monsters cannot attack
+        if (el.classList.contains('canPlay')) {
+            el.classList.remove('canPlay');
+        }
+    });
     document.querySelectorAll('[id="underscript.plugin.Galascript.frameSpoof"]').forEach(el => { // dynamic backgrounds for frame skins option
         function updateBackground (value) {
             var underscored = value.toString().replace(/\s+/g, '_');
@@ -1467,6 +1824,9 @@ const observer = new MutationObserver((mutations, obs) => {
                 case "Hollow Knight": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/hk-determination.png'; break;
                 case "FNAFB": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-ut-determination.png'; break;
                 case "Celeste": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-ut-determination.png'; break;
+                case "Balatro": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/balatro-determination.png'; break;
+                case "OvenBreak": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/ovenbreak-determination.png'; break;
+                case "OvenBreak (Alt)": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/ovenbreak-alt-determination.png'; break;
             }
             el.style.setProperty('background-image', `url('${url}')`);
             el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.4)', 'important');
@@ -1486,7 +1846,46 @@ const observer = new MutationObserver((mutations, obs) => {
             updateBackground(el.value);
         }
     });
-    document.querySelectorAll('.card.balatro-frame').forEach(el => { // random anim delay for balatro swaying anim
+    document.querySelectorAll('[id="underscript.plugin.Galascript.powerSkins"]').forEach(el => { // dynamic backgrounds for rarity skins option
+        function updateBackground (value) {
+            var url;
+            el.removeAttribute('style');
+            for (const child of el.children) {
+                child.style.setProperty('color', 'white');
+            }
+            if (value !== 'Showdown') {
+                switch (value) {
+                    case "off": url = 'images/powers/bonusAtk.png'; break;
+                    case "match frame": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/power-match.gif'; break;
+                    case "Ancient": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/ancient-bonusAtk.png'; break;
+                    case "Neon": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/neon-bonusAtk.png'; break;
+                    case "Balatro": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/balatro-bonusAtk.png'; break;
+                }
+                el.style.setProperty('background-image', `url('${url}')`);
+                el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.4)', 'important');
+                el.style.setProperty('background-repeat', 'no-repeat');
+                el.style.setProperty('background-position', '85%');
+                el.style.setProperty('background-size', '32px');
+                el.style.setProperty('background-blend-mode', 'darken');
+            } else {
+                el.style.setProperty('border', '1px solid #33AA00');
+                el.style.setProperty('color', '#33AA00');
+                el.style.setProperty('border-radius', '6px');
+                el.style.setProperty('background', '#E5FFE0', 'important');
+            }
+        };
+        el.oninput = e => {
+            updateBackground(e.target.value);
+        }
+        el.onfocus = e => {
+            updateBackground(e.target.value);
+        }
+        if (!el.dataset.gsSettingBgLoaded) {
+            el.dataset.gsSettingBgLoaded = 'true';
+            updateBackground(el.value);
+        }
+    });
+    document.querySelectorAll('.card.balatro-frame').forEach(el => { // balatro frame hover animation
         function transforms(x, y, el) {
             const rect = el.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
@@ -1506,30 +1905,49 @@ const observer = new MutationObserver((mutations, obs) => {
             const el = e.currentTarget;
             const transform = transforms(e.clientX, e.clientY, el);
             el.style.transform = transform;
-            el.style.animation = 'none';
         }
 
-        function cardLeave(e) {
-            const el = e.currentTarget
-            el.style.transform = '';
-            el.style.animation = 'sway 6s ease-in-out infinite';
-        }
-
-        if (!el.dataset.gsBalatroAnims) {
-            el.dataset.gsBalatroAnims = 'true';
+        if (!el.dataset.gsRandomDelay) {
             const delay = Math.random() * 6;
-            el.style.animationDelay = `-${delay}s`;
-            el.onmousemove = e => {
-                cardHover(e);
-            }
-            el.onmouseout = e => {
-                cardLeave(e);
+            el.dataset.gsRandomDelay = delay * -1;
+            $(el).on('mousemove', function(e) {
+                el.style.transform = '';
+                if (!e.currentTarget.matches('.cardSkin:hover:not(.owned)')) {
+                    cardHover(e);
+                }
+            })
+            $(el).on('mouseleave', function(e) {
+                el.style.transform = '';
+            })
+        }
+    });
+    document.querySelectorAll('.tabContent legend').forEach(el => { // balatro frame animations
+        if (!el.classList.contains('gsCollapse')) {
+            el.classList.add('gsCollapse');
+            el.onclick = e => {
             }
         }
     });
 });
 
-observer.observe(document.body, { childList: true, subtree: true });
+leGrandeObserver.observe(document.body, { childList: true, subtree: true });
+
+
+
+function obscActive(card) {
+    if (sludgeEnabled?.value()) {
+        if (gameData.sludge.includes(card?.id)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    switch (obscApply?.value()) {
+        case 'nowhere': return 0;
+        case 'ingame only': return window.gameId ? 1 : 0;
+        case 'everywhere!!!': return 1;
+    }
+}
 
 function shinyDisplayToggle(val) {
     val = val === "cover" ? 1 : 0
@@ -1547,9 +1965,8 @@ function statsOnTopToggle(val) {
 function hide(element, visibility) {
     style(`${element}Visibility`, 'replace', `.${element} {visibility: ${visibility ? "hidden" : "visible"}}`)
 }
-function obscure(element, type) {
+function obscure(element, type, firstLoad) {
     style(`${element}Obscurity`, 'remove')
-    if (!obscActive()) { refreshCards(); return; }
     standardFrames.forEach(f => {
         const fclass = f.toString().replace(/\s+/g, '-').toLowerCase();
         const fimage = f.toString().replace(/\s+/g, '_');
@@ -1563,27 +1980,29 @@ function obscure(element, type) {
     });
     switch (type) {
         case 'blur':
-            style(`${element}Obscurity`, 'replace', `.${element} {filter: blur(${obscBlurStrength.value()}px)}`)
+            style(`${element}Obscurity`, 'replace', `.${element}.gsObscured {filter: blur(${obscBlurStrength.value()}px)}`)
             break;
         case 'hide':
-            style(`${element}Obscurity`, 'replace', `.${element} {visibility: hidden}`)
+            style(`${element}Obscurity`, 'replace', `.${element}.gsObscured {visibility: hidden}`)
             break;
         case 'hide, use spell frame':
-            style(`${element}Obscurity`, 'replace', `.${element} {visibility: hidden}`)
+            style(`${element}Obscurity`, 'replace', `.${element}.gsObscured {visibility: hidden}`)
             standardFrames.forEach(f => {
                 const fclass = f.toString().replace(/\s+/g, '-').toLowerCase();
                 const fimage = f.toString().replace(/\s+/g, '_');
-                style(`${fclass}UseSpellGraphic`, 'add', `.${fclass}-frame.monster .cardFrame {background-image: url("/images/frameSkins/${fimage}/frame_spell.png");}`)
+                style(`${fclass}UseSpellGraphic`, 'add', `.${fclass}-frame.monster.gsObscured .cardFrame {background-image: url("/images/frameSkins/${fimage}/frame_spell.png");}`)
             });
             customFrames.forEach(f => {
                 f = f.toString().replace(/\s+/g, '-').toLowerCase();
                 if (f !== 'pokecard-1996') {
-                    style(`${f}UseSpellGraphic`, 'add', `.${f}-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/${f}-frame-spell.png");}`)
+                    style(`${f}UseSpellGraphic`, 'add', `.${f}-frame.monster.gsObscured .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/${f}-frame-spell.png");}`)
                 }
             });
             break;
     }
-    refreshCards();
+    if (!firstLoad) {
+        refreshCards();
+    }
 }
 function imgPixelToggle(val) {
     style('imgPixel', val ? 'add' : 'remove', '* {image-rendering: pixelated;}')
@@ -1594,16 +2013,19 @@ function siteFilter(l, i, z, a) { // lizard
 function statsWhiteToggle(val) {
     style('statsWhite', val ? 'add' : 'remove', '.cardATK, .cardHP {color: white;}')
 }
+function monochromeCopiesToggle(val) {
+    style('monochromeCopies', val ? 'add' : 'remove', '.card:has([power="created"]) .cardImage {filter: grayscale(1);}')
+}
 function frameStyles() {
     style('static', 'add', `
     .cardSilence {background: transparent url("images/cardAssets/silence.png") no-repeat; visibility: hidden;}
     @keyframes float { 0% { transform: translatey(-4px); } 50% { transform: translatey(2px); } 100% { transform: translatey(-4px); } }
     @keyframes sway {
-        0%   { transform: rotateX(0deg) rotateY(0deg) translateZ(0px); }
-        25%  { transform: rotateX(3deg) rotateY(-2deg) translateZ(2px); }
-        50%  { transform: rotateX(-3deg) rotateY(1deg) translateZ(-1px); }
-        75%  { transform: rotateX(1deg) rotateY(-1deg) translateZ(3px); }
-        100% { transform: rotateX(0deg) rotateY(0deg) translateZ(0px); }
+        0%   { transform: rotateX(0deg) rotateY(0deg) rotateZ(-1deg) translateZ(0px); }
+        25%  { transform: rotateX(3deg) rotateY(-2deg) rotateZ(0deg) translateZ(2px); }
+        50%  { transform: rotateX(-3deg) rotateY(1deg) rotateZ(1deg) translateZ(-1px); }
+        75%  { transform: rotateX(1deg) rotateY(-1deg) rotateZ(0deg) translateZ(3px); }
+        100% { transform: rotateX(0deg) rotateY(0deg) rotateZ(-1deg) translateZ(0px); }
     }
 
     .spamton-frame .shinySlot {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/spamton-frame-shiny.png"); opacity: 0.4; mix-blend-mode: color-burn;}
@@ -1746,7 +2168,8 @@ function frameStyles() {
     .slay-the-spire-frame .cardBackground {visibility: hidden}
 
     *:has(> .balatro-frame) {perspective: 800px;}
-    .balatro-frame { animation: sway 6s ease-in-out infinite; height: 236px !important; text-shadow: 0 0 black !important; }
+    .balatro-frame { height: 236px !important; text-shadow: 0 0 black !important; }
+    .balatro-frame:not(:hover) { animation: 6s ease-in-out attr(data-gs-random-delay s) infinite normal both running sway; }
     .balatro-frame:hover { z-index: 10; }
     .balatro-frame .shinySlot {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/balatro-frame-shiny.png"); opacity: 0.3; mix-blend-mode: hard-light;}
     .balatro-frame .shinySlot.animated {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/balatro-frame-shiny-animated.gif"); opacity: 0.3; mix-blend-mode: hard-light;}
@@ -1756,10 +2179,8 @@ function frameStyles() {
     .balatro-frame .cardFrame {background-size: 100%; image-rendering: pixelated;}
     .balatro-frame.monster .cardName, .balatro-frame .cardDesc {visibility: hidden}
     .balatro-frame.spell .cardName {top: 204px; text-align: center !important; left: 28px; transform: scaleX(0.99) scaleY(1.2); width: 120px; text-transform: uppercase; color: #4F6367 !important;}
-    .balatro-frame.monster .cardCost, .balatro-frame .cardATK, .balatro-frame .cardHP {visibility: hidden}
     .balatro-frame.spell .cardCost {top: 5px; text-align: center !important; left: 28px; transform: scaleX(1.1) scaleY(0.6); width: 120px; text-transform: uppercase; color: #4F6367 !important;}
     .balatro-frame .cardBackground {visibility: hidden}
-    .balatro-frame .cardRarity {visibility: hidden}
     .balatro-frame .cardImage {background-color: black !important; background-position: center !important;}
     .balatro-frame .cardStatus {left: 35px; top: 15px; transform: rotate(-90deg) scale(2); image-rendering: pixelated;}
     .balatro-frame.spell .cardStatus {left: 40px}
@@ -1770,17 +2191,23 @@ function frameStyles() {
     .balatro-frame.spell.standard-skin .cardImage {top: 5px; left: 20px; width: 136px; height: 225px; background-size: cover !important; image-rendering: pixelated; background-color: #DAB772 !important; background-blend-mode: luminosity;}
     .balatro-frame.breaking-skin .cardImage, .balatro-frame.full-skin .cardImage {top: 5px; left: 5px; width: 165px; height: 225px; background-size: 132% !important; background-position-y: 50% !important; z-index: 0 !important}
     .balatro-frame.spell.breaking-skin .cardImage, .balatro-frame.spell.full-skin .cardImage {left: 20px; width: 140px; background-size: 140% !important; background-position-y: 70% !important; background-color: #DAB772 !important; background-blend-mode: luminosity;}
-    .balatro-frame .cardRarity {visibility: hidden}
+    .balatro-frame.spell .cardRarity {visibility: hidden;}
+    .balatro-frame.monster .cardRarity {top: 30px; left: 140px;}
+    .balatro-frame.monster .cardCost {top: 10px; left: 132px;}
+    .balatro-frame.monster[data-rarity="TOKEN"] .cardCost {color: #6abe30}
+    .balatro-frame.monster[data-rarity="BASE"] .cardCost {color: #4b5e62}
+    .balatro-frame.monster[data-rarity="COMMON"] .cardCost {color: #bfc7d5}
+    .balatro-frame.monster[data-rarity="RARE"] .cardCost {color: #0099f8}
+    .balatro-frame.monster[data-rarity="EPIC"] .cardCost {color: #cd6cd9}
+    .balatro-frame.monster[data-rarity="LEGENDARY"] .cardCost {color: #fca100}
+    .balatro-frame.monster[data-rarity="DETERMINATION"] .cardCost {color: #f5392d}
+    .balatro-frame .cardATK, .balatro-frame .cardHP {top: 202px; border-radius: 4px; width: 30px;}
+    .balatro-frame .cardATK {left: 53px; background-color: #fd5f55;}
+    .balatro-frame .cardHP {left: 93px; background-color: #009cfd;}
+    .balatro-frame .currentATK {color: white}
+    .balatro-frame .currentHP {color: white}
     .balatro-frame .cardQuantity, .balatro-frame .cardUCPCost {top: 230px;}
-
-    .vmas-frame .shinySlot {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/vmas-frame-shiny.png"); opacity: 0.3; mix-blend-mode: hard-light;}
-    .vmas-frame .shinySlot.animated {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/vmas-frame-shiny-animated.gif"); opacity: 0.3; mix-blend-mode: hard-light;}
-    .vmas-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/vmas-frame-spell.png");}
-    .vmas-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/vmas-frame-monster.png");}
-    .vmas-frame .cardName, .vmas-frame .cardCost {top: 9px;}
-    .vmas-frame .cardDesc, .vmas-frame .cardSilence {top: 129px;}
-    .vmas-frame .cardATK, .vmas-frame .cardHP, .vmas-frame .cardRarity {top: 214px;}
-    .vmas-frame .cardQuantity, .vmas-frame .cardUCPCost {top: 240px;}
+    .balatro-frame .cardSilence {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/balatro-frame-silenced.png"); background-repeat: no-repeat; background-position: center; background-size: contain; width: 176px; height: 236px; top: -0.5px; left: 0px; z-index: 7; opacity: 0.5; image-rendering: pixelated;}
 
     .grimm-troupe-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
     .grimm-troupe-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
@@ -1889,6 +2316,48 @@ function frameStyles() {
     .furry-sans-frame .cardDesc, .furry-sans-frame .cardSilence {top: 129px;}
     .furry-sans-frame .cardATK, .furry-sans-frame .cardHP, .furry-sans-frame .cardRarity {top: 213px;}
     .furry-sans-frame .cardQuantity, .furry-sans-frame .cardUCPCost {top: 240px;}
+
+    .ovenbreak-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
+    .ovenbreak-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .ovenbreak-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/ovenbreak-frame-spell.png");}
+    .ovenbreak-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/ovenbreak-frame-monster.png");}
+    .ovenbreak-frame .cardName, .ovenbreak-frame .cardCost {top: 9px;}
+    .ovenbreak-frame .cardDesc, .ovenbreak-frame .cardSilence {top: 129px;}
+    .ovenbreak-frame .cardATK, .ovenbreak-frame .cardHP, .ovenbreak-frame .cardRarity {top: 213px;}
+    .ovenbreak-frame .cardQuantity, .ovenbreak-frame .cardUCPCost {top: 240px;}
+
+    .respective-frame[data-extension="BASE"] .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
+    .respective-frame[data-extension="BASE"] .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .respective-frame[data-extension="DELTARUNE"] .shinySlot {background-image: url("/images/frameSkins/Deltarune/frame_shiny.png");}
+    .respective-frame[data-extension="DELTARUNE"] .shinySlot.animated {background-image: url("/images/frameSkins/Deltarune/frame_shiny_animated.png");}
+    .respective-frame[data-extension="UTY"] .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
+    .respective-frame[data-extension="UTY"] .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .respective-frame.spell[data-extension="BASE"] .cardFrame {background-image: url("/images/frameSkins/Undertale/frame_spell.png");}
+    .respective-frame.monster[data-extension="BASE"] .cardFrame {background-image: url("/images/frameSkins/Undertale/frame_monster.png");}
+    .respective-frame.spell[data-extension="DELTARUNE"] .cardFrame {background-image: url("/images/frameSkins/Deltarune/frame_spell.png");}
+    .respective-frame.monster[data-extension="DELTARUNE"] .cardFrame {background-image: url("/images/frameSkins/Deltarune/frame_monster.png");}
+    .respective-frame.spell[data-extension="UTY"] .cardFrame {background-image: url("/images/frameSkins/Undertale/frame_spell.png");}
+    .respective-frame.monster[data-extension="UTY"] .cardFrame {background-image: url("/images/frameSkins/Undertale/frame_monster.png");}
+    .respective-frame .cardName, .respective-frame .cardCost {top: 9px;}
+    .respective-frame .cardDesc, .respective-frame .cardSilence {top: 129px;}
+    .respective-frame .cardATK, .respective-frame .cardHP, .respective-frame .cardRarity {top: 213px;}
+    .respective-frame .cardQuantity, .respective-frame .cardUCPCost {top: 240px;}
+
+    .showdown-frame {font-family: Verdana, sans-serif;}
+    .showdown-frame .shinySlot {background-image: url("");}
+    .showdown-frame .shinySlot.animated {background-image: url("");}
+    .showdown-frame.spell .cardFrame {background-image: url("");}
+    .showdown-frame.monster .cardFrame {background-image: url("");}
+    .showdown-frame .cardName {top: 9px; width: 180px; left: 0px; font-weight: bold; text-align: center !important; color: #222222; text-shadow: #FFFFFF 1px 1px 0, #FFFFFF 1px -1px 0, #FFFFFF -1px 1px 0, #FFFFFF -1px -1px 0;}
+    .showdown-frame .cardHealthbar {position: relative; top: 29px; width: 180px; border: 1px solid #777777; border-radius: 4px;}
+    .showdown-frame .cardBackground, .showdown-frame .cardHeader, .showdown-frame .cardFooter {background: none;}
+    .showdown-frame .cardImageShowdown {height: 170px; top: 30px; width: 300px; margin: 0; padding: 0; position: absolute; left: -60px; z-index: 1; background-repeat: no-repeat; background-position: bottom; pointer-events: none;}
+    .showdown-frame .cardStatus:has(.showdownStatus) {top: 44px; display: flex; justify-content: left;}
+    .showdown-frame .cardStatus:not(:has(.showdownStatus)) {top: 44px; transform: rotate(180deg); left: 12px;}
+    .showdown-frame .cardStatus:not(:has(.showdownStatus)) > * {transform: rotate(180deg);}
+    .showdown-frame .cardCost, .showdown-frame .cardDesc, .showdown-frame .cardSilence {display: none;}
+    .showdown-frame .cardATK, .showdown-frame .cardHP, .showdown-frame .cardRarity {top: 213px;}
+    .showdown-frame .cardQuantity, .showdown-frame .cardUCPCost {top: 240px;}
     `)
 }
 
@@ -1910,6 +2379,8 @@ function rarityStyles(type) {
                 .mirror-temple-frame[data-rarity="${r}"][data-extension="BASE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-ut-${r.toLowerCase()}.png) no-repeat transparent !important;}
                 .mirror-temple-frame[data-rarity="${r}"][data-extension="DELTARUNE"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-dr-${r.toLowerCase()}.png) no-repeat transparent !important; transform: scale(2) translateY(-1px); image-rendering: pixelated;}
                 .mirror-temple-frame[data-rarity="${r}"][data-extension="UTY"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-ut-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                .balatro-frame[data-rarity="${r}"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/balatro-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                .ovenbreak-frame[data-rarity="${r}"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/ovenbreak-${r.toLowerCase()}.png) no-repeat transparent !important;}
                 `);
                 break;
             case "Hollow Knight":
@@ -1929,27 +2400,178 @@ function rarityStyles(type) {
                 .card[data-rarity="${r}"][data-extension="UTY"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-ut-${r.toLowerCase()}.png) no-repeat transparent !important;}
                 `);
                 break;
+            case "Balatro":
+                style('rarityStyle', 'add', `
+                .card[data-rarity="${r}"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/balatro-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                `);
+                break;
+            case "OvenBreak":
+                style('rarityStyle', 'add', `
+                .card[data-rarity="${r}"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/ovenbreak-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                `);
+                break;
+            case "OvenBreak (Alt)":
+                style('rarityStyle', 'add', `
+                .card[data-rarity="${r}"] .cardRarity {background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/ovenbreak-alt-${r.toLowerCase()}.png) no-repeat transparent !important;}
+                `);
+                break;
         }
     });
 }
 
-function tablessToggle(val) {
-    style('tabless', val ? 'add' : 'remove', `
-    .cardsList .card, .cardSkinList .card {height: 246px;}
-    .cardsList .card:has(.cardQuantity) .cardRarity, .cardSkinList .card:has(.cardQuantity) .cardRarity {opacity: 0.4;}
-    .cardsList .card:has(.cardUCPCost) .cardRarity, .cardSkinList .card:has(.cardUCPCost) .cardRarity {opacity: 0.4;}
-    .card .cardQuantity, .card .cardUCPCost {top: 210px; z-index: 8; border: none; background-color: unset}
-    .slay-the-spire-frame .cardQuantity, .slay-the-spire-frame .cardUCPCost {top: 222px;}
-    .pokecard-1996-frame .cardQuantity, .pokecard-1996-frame .cardUCPCost {top: 212px;}
-    .halloween2020-frame .cardQuantity, .halloween2020-frame .cardUCPCost {top: 216px;}
-    .card .cardUCPCost:has(*) {visibility: hidden}
-    .card .cardUCPCost > * {visibility: visible; position: absolute; left: 35px; width: 55px;}
-    `)
+function styleTabless(val) {
+    const rarities = ['TOKEN', 'BASE', 'COMMON', 'RARE', 'EPIC', 'LEGENDARY', 'DETERMINATION'];
+    const rarityColor = ['#00c800', 'gray', '#fff', '#00b8ff', '#d535d9', 'gold', 'red'];
+    style('tabs', 'remove')
+    switch (val) {
+        case "overlay":
+            style('tabs', 'add', `
+            .cardsList .card, .cardSkinList .card {height: 246px;}
+            .cardsList .card:has(.cardQuantity):not(.balatro-frame) .cardRarity, .cardSkinList .card:has(.cardQuantity):not(.balatro-frame) .cardRarity {opacity: 0.5;}
+            .cardsList .card:has(.cardUCPCost):not(.balatro-frame) .cardRarity, .cardSkinList .card:has(.cardUCPCost):not(.balatro-frame) .cardRarity {opacity: 0.5;}
+            .card .cardQuantity, .card .cardUCPCost {top: 210px; z-index: 8; border: none; background-color: unset}
+            .slay-the-spire-frame .cardQuantity, .slay-the-spire-frame .cardUCPCost {top: 222px;}
+            .pokecard-1996-frame .cardQuantity, .pokecard-1996-frame .cardUCPCost {top: 212px;}
+            .halloween2020-frame .cardQuantity, .halloween2020-frame .cardUCPCost {top: 216px;}
+            .balatro-frame .cardQuantity, .balatro-frame .cardUCPCost {top: 170px; left: 47px; border: none; background-color: #4f6367; border-radius: 4px 4px 0px 0px; width: 82px; z-index: 4}
+            .balatro-frame.spell .cardQuantity, .balatro-frame.spell .cardUCPCost {color: #ffe5b4; top: 175px;}
+            .card:not(.balatro-frame) .cardUCPCost:has(*) {visibility: hidden}
+            .card:not(.balatro-frame) .cardUCPCost > * {visibility: visible; position: absolute; left: 35px; width: 55px;}
+            .balatro-frame .cardUCPCost:has(*) {font-size: 15px; align-content: center;}
+            `)
+            break;
+        case "overlay w/ color":
+            style('tabs', 'add', `
+            .cardsList .card, .cardSkinList .card {height: 246px;}
+            .cardsList .card:has(.cardQuantity):not(.balatro-frame) .cardRarity, .cardSkinList .card:has(.cardQuantity):not(.balatro-frame) .cardRarity {opacity: 0.2;}
+            .cardsList .card:has(.cardUCPCost):not(.balatro-frame) .cardRarity, .cardSkinList .card:has(.cardUCPCost):not(.balatro-frame) .cardRarity {opacity: 0.2;}
+            .card .cardQuantity, .card .cardUCPCost {top: 210px; z-index: 8; border: none; background-color: unset}
+            .slay-the-spire-frame .cardQuantity, .slay-the-spire-frame .cardUCPCost {top: 222px;}
+            .pokecard-1996-frame .cardQuantity, .pokecard-1996-frame .cardUCPCost {top: 212px;}
+            .halloween2020-frame .cardQuantity, .halloween2020-frame .cardUCPCost {top: 216px;}
+            .card .cardUCPCost:has(*) {visibility: hidden}
+            .card .cardUCPCost > * {visibility: visible; position: absolute; left: 35px; width: 55px;}
+            `)
+            rarities.forEach(r => {
+                style('tabs', 'add', `
+                .card:not(.balatro-frame)[data-rarity="${r}"] .cardQuantity, .card:not(.balatro-frame)[data-rarity="${r}"] .cardUCPCost {color: ${rarityColor[rarities.indexOf(r)]}}
+                `)
+            })
+            break;
+    }
 }
 
+function cardHighlightStyles(val) {
+    style('highlights', 'remove')
+    switch (val) {
+        case "bright":
+            style('highlights', 'add', `
+            .target .cardFrame {filter: grayscale(100%) brightness(50%) sepia(100%) hue-rotate(10deg) saturate(900%) contrast(1.5);}
+            .fight .cardFrame {filter: grayscale(100%) brightness(30%) sepia(100%) hue-rotate(310deg) saturate(900%) contrast(1.5);}
+            .canPlay .cardFrame, .craftable .cardFrame, .friendship-not-claimed .cardFrame {filter: grayscale(100%) brightness(45%) sepia(100%) hue-rotate(80deg) saturate(900%) contrast(1.5);}
+            .canPlay.trigger-helper .cardFrame {filter: grayscale(100%) brightness(75%) sepia(100%) hue-rotate(10deg) saturate(900%) contrast(1);}
+            .affected .cardFrame {filter: grayscale(100%) brightness(50%) sepia(100%) hue-rotate(10deg) saturate(900%) contrast(1.5);}
+            .doingEffect .cardFrame {filter: grayscale(100%) brightness(50%) sepia(100%) hue-rotate(170deg) saturate(900%) contrast(1.5);}
+            .cardOwned .cardFrame {filter: grayscale(100%) brightness(50%) sepia(100%) hue-rotate(170deg) saturate(900%) contrast(1.5);}
+            .cardNotOwned .cardFrame {filter: grayscale(100%) brightness(30%) sepia(100%) hue-rotate(310deg) saturate(900%) contrast(1.5)}
+            .cardHover .cardFrame {filter: grayscale(100%) brightness(50%) sepia(100%) hue-rotate(130deg) saturate(900%) contrast(1.75);}
+            `)
+            break;
+        case "ultrabright":
+            style('highlights', 'add', `
+            .target .cardFrame {filter: grayscale(100%) brightness(50%) sepia(100%) hue-rotate(10deg) saturate(9000%) contrast(1.5);}
+            .fight .cardFrame {filter: grayscale(100%) brightness(30%) sepia(100%) hue-rotate(310deg) saturate(9000%) contrast(1.5);}
+            .canPlay .cardFrame, .craftable .cardFrame, .friendship-not-claimed .cardFrame {filter: grayscale(100%) brightness(45%) sepia(100%) hue-rotate(80deg) saturate(9000%) contrast(1.5);}
+            .canPlay.trigger-helper .cardFrame {filter: grayscale(100%) brightness(75%) sepia(100%) hue-rotate(10deg) saturate(9000%) contrast(1);}
+            .affected .cardFrame {filter: grayscale(100%) brightness(50%) sepia(100%) hue-rotate(10deg) saturate(9000%) contrast(1.5);}
+            .doingEffect .cardFrame {filter: grayscale(100%) brightness(50%) sepia(100%) hue-rotate(170deg) saturate(9000%) contrast(1.5);}
+            .cardOwned .cardFrame {filter: grayscale(100%) brightness(50%) sepia(100%) hue-rotate(170deg) saturate(9000%) contrast(1.5);}
+            .cardNotOwned .cardFrame {filter: grayscale(100%) brightness(30%) sepia(100%) hue-rotate(310deg) saturate(9000%) contrast(1.5)}
+            .cardHover .cardFrame {filter: grayscale(100%) brightness(50%) sepia(100%) hue-rotate(130deg) saturate(9000%) contrast(1.75);}
+            `)
+            break;
+        case "animated":
+            style('highlights', 'add', `
+            @keyframes action {
+                0% { transform: rotate(0deg) }
+                1% { transform: rotate(-7deg) translateY(0px) }
+                25% { transform: rotate(6deg) }
+                50% { transform: rotate(-5deg) }
+                75% { transform: rotate(4deg) }
+                100% { transform: rotate(0deg) }
+            }
+            @keyframes actionAtk {
+                0% { transform: rotate(0deg) translateY(-20px); }
+                1% { transform: rotate(-7deg) translateY(-20px); }
+                25% { transform: rotate(6deg) translateY(-20px); }
+                50% { transform: rotate(-5deg) translateY(-20px); }
+                75% { transform: rotate(4deg) translateY(-20px); }
+                100% { transform: rotate(0deg) scale(1) translateY(0px); }
+            }
+            @keyframes active {
+                0% { transform: translateY(0px); }
+                100% { transform: translateY(-20px); }
+            }
+            @keyframes activeHand {
+                0% { transform: translateY(0px); }
+                100% { transform: translateY(-5px); }
+            }
+            @keyframes notActiveHand {
+                0% { transform: translateY(0px);}
+                100% { transform: translateY(5px);}
+            }
+            .cardFrame {filter: none !important}
+            .cardBackground {box-shadow: none !important}
+
+            .balatro-frame:not(:hover) { animation: unset; }
+            .card.target, .card.canPlay, .card.craftable, .cardSkin:hover:not(.owned) {animation: active 0.3s ease-out forwards; z-index: 3}
+            #handCards .card.target, #handCards .card.canPlay:not(.trigger-helper) {animation: activeHand 0.3s ease-out forwards; z-index: 10;}
+            #handCards:has(.card.target) .card:not(.target), #handCards:has(.card.canPlay) .card:not(.canPlay) {animation: notActiveHand 0.3s ease-out forwards; z-index: 10;}
+            #handCards .card {transition: opacity 0.3s}
+            #handCards .card:not(.canPlay) {opacity: 0.8 !important}
+            .card.canPlay.trigger-helper, .card.friendship-not-claimed {animation: active 0.5s infinite cubic-bezier(0.22, 0.61, 0.36, 1) alternate;}
+            .card.affected, .card.doingEffect {animation: action 0.4s ease-out;}
+            .card.fight {animation: actionAtk 0.4s ease-out;}
+            .mulligan .card.fight {animation: active 0.3s ease-out forwards;}
+            .cardOwned .cardName::after, .cardNotOwned .cardName::after {font-size: 7px; position: relative; top: -37px;}
+            .cardOwned .cardName::after {content: "${$.i18n('gs.game-ally')}"}
+            .cardNotOwned .cardName::after {content: "${$.i18n('gs.game-enemy')}"}
+            .cardOwned .cardName, .cardNotOwned .cardName {transform: translateY(4px)}
+            .card.inactive {animation: active 0.3s ease-out backwards;}
+
+            .balatro-frame:not(:hover):not(.target):not(.fight):not(.canPlay):not(.affected):not(.doingEffect):not(.craftable):not(.friendship-not-claimed):not(.playLocked):not(.cardSkin:hover:not(.owned)) { animation: 6s ease-in-out attr(data-gs-random-delay s) infinite normal both running sway; }
+            `)
+            break;
+        case "none":
+            style('highlights', 'add', `
+            .cardFrame {filter: none !important}
+            .cardBackground {box-shadow: none !important}
+            `)
+            break;
+    }
+}
+
+function settingOverriddenStyles() {
+    style('settingOverrides', 'remove')
+    if (sludgeEnabled?.value()) {
+        style('settingOverrides', 'add', `
+            #underscript\\.plugin\\.Galascript\\.obscApply {opacity: 0.5}
+            *[for='underscript\\.plugin\\.Galascript\\.obscApply'] {opacity: 0.5}
+        `)
+    }
+    if (powerSkins?.value() === 'Showdown') {
+        style('settingOverrides', 'add', `
+            #underscript\\.plugin\\.Galascript\\.powerSpacing {opacity: 0.5}
+            *[for='underscript\\.plugin\\.Galascript\\.powerSpacing'] {opacity: 0.5}
+            #underscript\\.plugin\\.Galascript\\.powerBounds {opacity: 0.5}
+            *[for='underscript\\.plugin\\.Galascript\\.powerBounds'] {opacity: 0.5}
+            #underscript\\.plugin\\.Galascript\\.legacyPowers {opacity: 0.5}
+            *[for='underscript\\.plugin\\.Galascript\\.legacyPowers'] {opacity: 0.5}
+        `)
+    }
+}
 function cardModifier(val) {
     style('cardModifier', 'remove')
-    if (!obscActive()) { refreshCards(); return; }
     const rarities = ['TOKEN', 'COMMON', 'RARE', 'EPIC', 'LEGENDARY', 'DETERMINATION'];
     style('static', 'add', `
     @keyframes spin {
@@ -1964,12 +2586,12 @@ function cardModifier(val) {
     var modifier = ``;
     switch (val) {
         case "none": modifier = ``; break;
-        case "thin": modifier = `.card {transform: scaleX(0.5)}`; break;
-        case "wide": modifier = `.card {transform: scaleX(1.5)}`; break;
-        case "wee": modifier = `.card {transform: scale(0.5)}`; break;
-        case "large": modifier = `.card {transform: scale(1.5)}`; break;
-        case "offset": modifier = `.card {transform: translate(-100px)}`; break;
-        case "upsidedown": modifier = `.card {transform: rotate(180deg)}`; break;
+        case "thin": modifier = `.card.gsObscured {transform: scaleX(0.5)}`; break;
+        case "wide": modifier = `.card.gsObscured {transform: scaleX(1.5)}`; break;
+        case "wee": modifier = `.card.gsObscured {transform: scale(0.5)}`; break;
+        case "large": modifier = `.card.gsObscured {transform: scale(1.5)}`; break;
+        case "offset": modifier = `.card.gsObscured {transform: translate(-100px)}`; break;
+        case "upsidedown": modifier = `.card.gsObscured {transform: rotate(180deg)}`; break;
         case "flipped":
             rarities.forEach(r => {
                 function link(ext) {
@@ -1979,21 +2601,21 @@ function cardModifier(val) {
                         return `images/cardBacks/${ext}Card${r}.png`;
                     }
                 }
-                modifier += `.card[data-rarity="${r}"][data-extension="BASE"] .cardFrame {background-image: url(${link('BASE')})}
+                modifier += `.card[data-rarity="${r}"][data-extension="BASE"].gsObscured .cardFrame {background-image: url(${link('BASE')})}
                 `;
-                modifier += `.card[data-rarity="${r}"][data-extension="DELTARUNE"] .cardFrame {background-image: url(${link('DELTARUNE')})}
+                modifier += `.card[data-rarity="${r}"][data-extension="DELTARUNE"].gsObscured .cardFrame {background-image: url(${link('DELTARUNE')})}
                 `;
-                modifier += `.card[data-rarity="${r}"][data-extension="UTY"] .cardFrame {background-image: url(${link('UTY')})}
+                modifier += `.card[data-rarity="${r}"][data-extension="UTY"].gsObscured .cardFrame {background-image: url(${link('UTY')})}
                 `;
             });
-            modifier += `.card *:not(.cardFrame) {visibility: hidden;}
+            modifier += `.card.gsObscured *:not(.cardFrame) {visibility: hidden;}
             `;
             if (obscCardRarity?.value() === 'blur') {
-                modifier += `.card .cardFrame {filter: blur(${obscBlurStrength.value()}px)}`
+                modifier += `.card.gsObscured .cardFrame {filter: blur(${obscBlurStrength.value()}px)}`
             }
             break;
-        case "spin": modifier = `.card {animation: spin 4s infinite linear;}`; break;
-        case "treadmill": modifier = `.card {animation: treadmill 15s infinite linear;} .card:hover {animation-play-state: paused;}`; break;
+        case "spin": modifier = `.card.gsObscured {animation: spin 4s infinite linear;}`; break;
+        case "treadmill": modifier = `.card.gsObscured {animation: treadmill 15s infinite linear;} .card:hover {animation-play-state: paused;}`; break;
     }
     style('cardModifier', 'add', modifier)
 }
@@ -2068,7 +2690,6 @@ function defaultSouls() {
 }
 
 function setBg(bg, detachMusic) {
-    console.log(`Set bg to ${bg}. Detach: ${detachMusic}`)
     window.music.pause();
     $('body').css('background', '#000 url(\'images/backgrounds/' + bg + '.png\') no-repeat');
     $('body').css('background-size', 'cover');
@@ -2113,12 +2734,56 @@ class plaintextSetting extends underscript.utils.SettingType {
     constructor() {
         super('plaintext');
     }
-    element(value) {
-        return document.createElement('span');
+    value(val) {
+    if (typeof val === 'boolean') return val;
+        return val === '1' || val === 'true';
+    }
+    default() {
+        return false;
+    }
+    labelFirst() {
+        return null;
+    }
+    element(value, update, {
+        name,
+        data = {},
+        dataColor = data?.color ?? 'white',
+        dataDismissable = data?.dismissable ?? true,
+    }) {
+        return $(`<span>`)
+            .html(name)
+            .attr("gsPlaintextDismissed", value)
+            .css({
+                color: dataColor,
+                cursor: dataDismissable ? 'pointer' : 'default'
+            })
+            .mouseenter((e) => {
+                if (dataDismissable) {
+                    $(e.currentTarget).append('<span class="gsPlaintextDismiss"> [Dismiss]</span>')
+                }
+            })
+            .mouseleave((e) => {
+                $('.gsPlaintextDismiss').remove()
+            })
+            .on('click', (e) => {
+                if (dataDismissable) {
+                    $(e.currentTarget).attr("gsPlaintextDismissed");
+                    update(1);
+                }
+            })
+        ;
+    }
+    styles() {
+        return [
+            'span { max-width: 360px }',
+            '.gsPlaintextDismiss { font-style: italic; color: salmon; }',
+            '[gsPlaintextDismissed] { display: none; }',
+        ];
     }
 }
 
 const plaintext = new plaintextSetting();
+plugin.settings().addType(plaintext);
 
 class buttonSetting extends underscript.utils.SettingType {
     constructor() {
@@ -2126,11 +2791,12 @@ class buttonSetting extends underscript.utils.SettingType {
     }
 
     element(value, update, {
+        name,
         data = {},
     }) {
         return $(`<input type="button">`)
             .on('click', (e) => data.onclick())
-            .val(data.text)
+            .val(name)
     }
 
     labelFirst() {
@@ -2139,46 +2805,97 @@ class buttonSetting extends underscript.utils.SettingType {
 
     styles() {
         return [
-            'input[type=button] { background: black; color: white; }',
+            'input[type=button] { background: black; color: white; margin: 4px; }',
         ];
     }
 }
+
 const button = new buttonSetting();
 plugin.settings().addType(button);
 
 class powerCheckboxSetting extends underscript.utils.SettingType {
-  constructor() {
-    super('powerCheckbox');
-  }
-  value(val) {
+    constructor() {
+        super('powerCheckbox');
+    }
+    value(val) {
     if (typeof val === 'boolean') return val;
-    return val === '1' || val === 'true';
-  }
-  default() {
-    return false;
-  }
-  labelFirst() {
-    return false;
-  }
-  element(value, update, {
-    remove = false,
-    data = {},
-  }) {
-    return $(`<input type="checkbox" class="powerCheckbox" style="position: relative; background: none; background-image: url(${data.src}); background-size: cover; border: none; width: 20px; height: 20px;">`)
-      .prop('checked', value)
-      .on('change.script', (e) => update(getValue(e.target, remove)))
-  }
-  styles() {
-    return [
-      ".powerCheckbox { opacity: 0.3; }",
-      ".powerCheckbox:checked { opacity: 1 }",
-      ".powerCheckbox:focus { outline: none; box-shadow: none; }",
-      ];
+        return val === '1' || val === 'true';
+    }
+    default() {
+        return false;
+    }
+    labelFirst() {
+        return false;
+    }
+    element(value, update, {
+        remove = false,
+        data = {},
+    }) {
+    return $(`<input type="checkbox" class="powerCheckbox" style="position: relative; background: none; background-image: url(${data.src}); background-size: cover; background-position: right; border: none; width: 20px; height: 20px;">`)
+        .prop('checked', value)
+        .on('change.script', (e) => update(getValue(e.target, remove)))
+    }
+    styles() {
+        return [
+            ".powerCheckbox { opacity: 0.2; }",
+            ".powerCheckbox:checked { opacity: 1 }",
+            ".powerCheckbox:focus { outline: none; box-shadow: none; }",
+        ];
     }
 }
 
 const powerCheckbox = new powerCheckboxSetting();
 plugin.settings().addType(powerCheckbox);
+
+class advPowerCheckboxSetting extends underscript.utils.SettingType {
+    constructor() {
+        super('advPowerCheckbox');
+    }
+    value(val) {
+    if (typeof val === 'boolean') return val;
+        return val === '1' || val === 'true';
+    }
+    default() {
+        return false;
+    }
+    labelFirst() {
+        return false;
+    }
+    element(value, update, {
+        remove = false,
+        data = {},
+        styleName = data.src.match(`/([^/]*?)(\.[^\./]*)?$`)[1],
+        childSettings = data.childSettings ?? [],
+    }) {
+    style(`${styleName}ChildrenVisibility`, 'remove');
+    if (!value) {
+        childSettings.forEach((setting) => style(`${styleName}ChildrenVisibility`, 'add', `.flex-start:has(#underscript\\.plugin\\.Galascript\\.${setting}) {display: none}`));
+    } else {
+        childSettings.forEach((setting) => style(`${styleName}ChildrenVisibility`, 'add', `.flex-start:has(#underscript\\.plugin\\.Galascript\\.${setting}) {background-color: rgba(216, 191, 216, 0.15)}`));
+    }
+    return $(`<input type="checkbox" class="advancedPowerCheckbox" style="position: relative; background: none; background-image: url(${data.src}); background-position: right; background-size: cover; border: none; width: 20px; height: 20px;">`)
+        .prop('checked', value)
+        .on('change.script', (e) => {
+            style(`${styleName}ChildrenVisibility`, 'remove')
+            if (!getValue(e.target)) {
+                childSettings.forEach((setting) => style(`${styleName}ChildrenVisibility`, 'add', `.flex-start:has(#underscript\\.plugin\\.Galascript\\.${setting}) {display: none}`));
+            } else {
+                childSettings.forEach((setting) => style(`${styleName}ChildrenVisibility`, 'add', `.flex-start:has(#underscript\\.plugin\\.Galascript\\.${setting}) {background-color: rgba(216, 191, 216, 0.15)}`));
+            }
+            update(getValue(e.target, remove));
+        })
+    }
+    styles() {
+        return [
+            ".advancedPowerCheckbox { opacity: 0.2; }",
+            ".advancedPowerCheckbox:checked { opacity: 1 }",
+            ".advancedPowerCheckbox:focus { outline: none; box-shadow: none; }",
+        ];
+    }
+}
+
+const advPowerCheckbox = new advPowerCheckboxSetting();
+plugin.settings().addType(advPowerCheckbox);
 
 class keybindSetting extends underscript.utils.SettingType {
     constructor() {
@@ -2280,14 +2997,28 @@ class textareaSetting extends underscript.utils.SettingType {
 
 const textarea = new textareaSetting();
 
-function refreshCards() { if (typeof window.showPage === 'function' && window.pages.length) window.showPage(window.currentPage); }
+function refreshCards(collection) {
+    if (collection) {
+        window.applyFilters();
+        window.showPage(window.currentPage);
+        return;
+    }
+    $('.card').each(function() {
+        const $el = $(this);
+        const card = JSON.parse($el.find('.cardObject').html());
+        window.createCard(card, $el)
+        window.setInfoPowers($el, card)
+        window.updateCardVisual($el, card)
+    });
+}
 
 const cardAliases = plugin.settings().add({
     key: 'cardAliases',
     name: 'Card alias lookup',
-    note: 'Cards can be searched in your collection by well-known aliases and shorthands<br>For example, searching "casdyne" will have Casual Undyne as a result<br><br><span style="color:thistle;">Change applies on reload</span>',
+    note: 'Cards can be searched in your collection by well-known aliases and shorthands<br>For example, searching "casdyne" will have Casual Undyne as a result',
     category: 'QoL',
     default: true,
+    onChange: (val) => refreshCards(true)
 });
 
 const mulliganInfo = plugin.settings().add({
@@ -2301,7 +3032,7 @@ const mulliganInfo = plugin.settings().add({
 const programIndicators = plugin.settings().add({
     key: 'programIndicators',
     name: 'Program indicator',
-    note: 'Program cards, when hovered, display their cost as their cost + the Program\'s cost<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: 'Program cards, when hovered, display their cost as their cost + the Program\'s cost',
     category: 'QoL',
     default: false,
     onChange: (val) => refreshCards()
@@ -2316,6 +3047,14 @@ const statsOnTop = plugin.settings().add({
     onChange: (val) => statsOnTopToggle(val)
 });
 
+const logChat = plugin.settings().add({
+    key: 'logChat',
+    name: 'Log chat messages',
+    note: 'Chat messages and emotes from you or the opponent will be logged in the Underscript chat log',
+    category: 'QoL',
+    default: false,
+});
+
 const statFilters = plugin.settings().add({
     key: 'statFilters',
     name: 'Stat filters',
@@ -2327,8 +3066,8 @@ const statFilters = plugin.settings().add({
 
 const powerFilters = plugin.settings().add({
     key: 'powerFilters',
-    name: 'Status filters',
-    note: 'Adds filters for certain statuses in your collection',
+    name: 'Power filters',
+    note: 'Adds filters for certain powers in your collection',
     category: 'QoL',
     type: "select", options: ["off", "standard", "standard + galascript"],
     default: 'off',
@@ -2338,7 +3077,7 @@ const powerFilters = plugin.settings().add({
 const maxHpIndicator = plugin.settings().add({
     key: 'maxHpIndicator',
     name: 'Max HP indicator',
-    note: 'Adds an indicator that shows the monster\'s HP out of its max. (ex. 5/6)<br><span style="color:thistle;">hide when full</span>: Doesn\'t display if the monster\'s HP is full.<br><span style="color:thistle;">always show</span>: Still displays if the monster\'s HP is full.',
+    note: 'Adds an indicator that shows the monster\'s HP out of its max (ex. 5/6)<br><span style="color:thistle;">hide when full</span>: Doesn\'t display if the monster\'s HP is full.<br><span style="color:thistle;">always show</span>: Still displays if the monster\'s HP is full.',
     category: 'QoL',
     type: "select", options: ["off", "hide when full", "always show"],
     default: 'hide when full',
@@ -2348,7 +3087,7 @@ const maxHpIndicator = plugin.settings().add({
 const cardSkinNames = plugin.settings().add({
     key: 'cardSkinNames',
     name: 'Card skin names',
-    note: 'Card names will match applied skins<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: 'Card names will match applied skins',
     category: 'Cardpaint',
     default: false,
     onChange: (val) => refreshCards()
@@ -2357,7 +3096,7 @@ const cardSkinNames = plugin.settings().add({
 const loopNames = plugin.settings().add({
     key: 'loopNames',
     name: 'Loop names',
-    note: 'When a card has 1 or more Loop, its name will be changed to its plural form<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: 'When a card has 1 or more Loop, its name will be changed to its plural form',
     category: 'Cardpaint',
     default: false,
     onChange: (val) => refreshCards()
@@ -2366,16 +3105,7 @@ const loopNames = plugin.settings().add({
 const breakingFullarts = plugin.settings().add({
     key: 'breakingFullarts',
     name: 'Breaking fullarts',
-    note: 'Makes the "Full art" skin type instead<br>behave like a Breaking skin<br><br><span style="color:thistle;">Change applies on card update</span>',
-    category: 'Cardpaint',
-    default: false,
-    onChange: (val) => refreshCards()
-});
-
-const respectiveFrames = plugin.settings().add({
-    key: 'respectiveFrames',
-    name: 'Respective frames',
-    note: 'UT and UTY cards use the Undertale frame, and DR cards use the Deltarune frame<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: 'Makes the "Full art" skin type instead<br>behave like a Breaking skin',
     category: 'Cardpaint',
     default: false,
     onChange: (val) => refreshCards()
@@ -2384,7 +3114,7 @@ const respectiveFrames = plugin.settings().add({
 const frameSpoof = plugin.settings().add({
     key: 'frameSpoof',
     name: 'Card frame',
-    note: 'Changes cards to use any frame, including some custom ones!<br><br>Some frames change the below settings when applied.<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: 'Changes cards to use any frame, including some custom ones!<br><br>Some frames change the below settings when applied.',
     category: 'Cardpaint',
     type: "select", options: allFrames.toSpliced(0, 0, "off"),
     default: "off",
@@ -2394,7 +3124,7 @@ const frameSpoof = plugin.settings().add({
                 statBase.set('1');
                 powerSpacing.set(20);
                 powerBounds.set(135);
-                numStack.set(false);
+                numStack.set(0);
                 break;
             case 'Slay the Spire':
                 powerBounds.set(135);
@@ -2408,7 +3138,7 @@ const frameSpoof = plugin.settings().add({
                 statBase.set('10');
                 powerSpacing.set(135);
                 powerBounds.set(58);
-                numStack.set(true);
+                numStack.set(1);
                 break;
             case 'Slay the Spire':
                 powerBounds.set(102);
@@ -2423,21 +3153,32 @@ const frameSpoof = plugin.settings().add({
 
 const frameSpoofBehavior = plugin.settings().add({
     key: 'frameSpoofBehavior',
-    name: 'Ingame display behavior',
-    note: 'Decides when the chosen frame should display itself<br><br><span style="color:thistle;">Change applies on card update</span>',
+    name: 'Display behavior',
+    note: 'Where the set frame will be applied<br><i>Cards outside of games are considered \'allies\'<br>\'Force everywhere\' forces the custom frame to be shown even in<br>places it wouldn\'t, like the cosmetics shop and card hovers</i>',
     category: 'Cardpaint',
-    type: "select", options: ["allies only", "allies + enemies", "force everywhere"],
+    type: "select", options: ["allies only", "enemies only", "allies + enemies", "force everywhere"],
     default: "allies + enemies",
+    onChange: (val) => refreshCards()
 });
 
 const raritySkins = plugin.settings().add({
     key: 'raritySkins',
     name: 'Rarity skin',
-    note: 'Use a selection of custom rarity icons<br>"match frame" uses the custom rarity icon associated with the frame, if any',
+    note: 'Use a set of custom rarity icons<br>"match frame" uses the custom rarity icon associated with the frame, if any',
     category: 'Cardpaint',
-    type: "select", options: ["off", "match frame", "Hollow Knight", "FNAFB", "Celeste"],
+    type: "select", options: ["off", "match frame", "Hollow Knight", "FNAFB", "Celeste", "Balatro", "OvenBreak", "OvenBreak (Alt)"],
     default: "match frame",
-    onChange: (val) => rarityStyles(val)
+    onChange: (val) => { rarityStyles(val); $('*').removeAttr("data-gs-setting-bg-loaded") }
+});
+
+const powerSkins = plugin.settings().add({
+    key: 'powerSkins',
+    name: 'Power skin',
+    note: 'Use a set of custom status icons<br>"match frame" uses the custom icon set associated with the frame, if any',
+    category: 'Cardpaint',
+    type: "select", options: ["off", "match frame", "Ancient", "Neon", "Balatro", "Showdown"],
+    default: "match frame",
+    onChange: (val) => { refreshCards(); $('*').removeAttr("data-gs-setting-bg-loaded"); settingOverriddenStyles(); if(powerFilters?.value()) {destroyPowerFilters(); createPowerFilters()}  }
 });
 
 const shinyDisplay = plugin.settings().add({
@@ -2453,9 +3194,9 @@ const shinyDisplay = plugin.settings().add({
 const statBase = plugin.settings().add({
     key: 'statBase',
     name: 'Stat base',
-    note: 'Displays ATK and HP stats in different base number multiples<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: 'Displays ATK and HP stats in different base number multiples',
     category: 'Cardpaint',
-    type: "select", options: ["0.01", "0.1", "1", "10", "100", "1000", "10000"],
+    type: "select", options: ["0.01", "0.1", "0", "1", "2", "5", "10", "100", "1000", "10000"],
     default: "1",
     onChange: (val) => refreshCards()
 });
@@ -2463,7 +3204,7 @@ const statBase = plugin.settings().add({
 const powerSpacing = plugin.settings().add({
     key: 'powerSpacing',
     name: 'Power spacing',
-    note: 'Changes how close together or far powers are spaced from eachother<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: () => powerSkins?.value() === 'Showdown' ? 'You have the <i>Showdown</i> power skin enabled, which<br>isn\'t compatiable with this setting' : 'Changes how close together or far powers are spaced from eachother',
     category: 'Cardpaint',
     type: "slider",
     min: 0,
@@ -2477,7 +3218,7 @@ const powerSpacing = plugin.settings().add({
 const powerBounds = plugin.settings().add({
     key: 'powerBounds',
     name: 'Power bounds',
-    note: 'Changes how far powers can go up to<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: () => powerSkins?.value() === 'Showdown' ? 'You have the <i>Showdown</i> power skin enabled, which<br>isn\'t compatiable with this setting' :  'Changes how far powers can go up to',
     category: 'Cardpaint',
     type: "text",
     default: 135,
@@ -2488,7 +3229,7 @@ const powerBounds = plugin.settings().add({
 const legacyPowers = plugin.settings().add({
     key: 'legacyPowers',
     name: 'No power fitting',
-    note: 'Do you prefer the powers hanging off the card, you sick freak?<br>Here you go :3<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: () => powerSkins?.value() === 'Showdown' ? 'You have the <i>Showdown</i> power skin enabled, which<br>isn\'t compatiable with this setting' :  'Do you prefer the powers hanging off the card, you sick freak?<br>Here you go :3',
     category: 'Cardpaint',
     default: false,
     onChange: (val) => refreshCards()
@@ -2497,7 +3238,7 @@ const legacyPowers = plugin.settings().add({
 const numStack = plugin.settings().add({
     key: 'numStack',
     name: 'Powers iterate',
-    note: 'Instead of numbers, powers iterate themselves<br><span style="color:thistle;">ex:</span> 3 Loop would appear as 3 seperate Loop icons,<br>not one Loop icon with a 3 on it.<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: 'Instead of numbers, powers iterate themselves<br><span style="color:thistle;">ex:</span> 3 Loop would appear as 3 seperate Loop icons,<br>not one Loop icon with a 3 on it',
     category: 'Cardpaint',
     default: false,
     onChange: (val) => refreshCards()
@@ -2506,17 +3247,29 @@ const numStack = plugin.settings().add({
 const tabless = plugin.settings().add({
     key: 'tabless',
     name: 'Tabless',
-    note: 'Compacts the weird tab things for Quantity and UCP Cost<br>into the rarity box',
+    note: 'Compacts Quantity / UCP Cost values into the Rarity area<br><span style="color:thistle;">overlay</span> is the default behavior<br><span style="color:thistle;">overlay w/ color</span> makes the text the color of the rarity',
     category: 'Cardpaint',
-    default: true,
-    onChange: (val) => tablessToggle(val)
+    type: "select", options: ["off", "overlay", "overlay w/ color"],
+    default: "overlay",
+    onChange: (val) => styleTabless(val)
+});
+
+const cardHighlights = plugin.settings().add({
+    key: 'cardHighlights',
+    name: 'Card highlights',
+    note: 'Changes how glowing card highlights are displayed',
+    category: 'Cardpaint',
+    type: "select", options: ["default", "bright", "ultrabright", "animated", "none"],
+    default: "default",
+    onChange: (val) => cardHighlightStyles(val)
 });
 
 const keybindsInfo = plugin.settings().add({
     key: 'keybindsInfo',
-    name: '<span style="color:thistle;">Keys cannot be bound to multiple actions.<br>If they are, the highest setting takes priority.<br><br>Press Escape while binding to unbind.</span>',
+    name: 'Keys cannot be bound to multiple actions. If they are, the highest setting takes priority. Additionally, you can press Escape while binding to unbind.',
     category: 'Keybinds',
     type: plaintext,
+    data: { color: 'thistle' }
 });
 
 const bgKeybind = plugin.settings().add({
@@ -2567,7 +3320,7 @@ const switchPerspectivesKeybind = plugin.settings().add({
 const chatroomZeroKeybind = plugin.settings().add({
     key: 'chatroomZeroKeybind',
     name: 'Open OOB chatroom',
-    note: 'Sets the key used to open chatroom 0 -- an ominous unused chat<br>Somewhat useful for writing notes!<br><br><span style="color:salmon;">Chats in this room are still logged by Undercards Chat Log, so<br>don\'t try anything stupid (:</span>',
+    note: 'Sets the key used to open chatroom 0 -- an ominous unused chat<br>Somewhat useful for writing notes!',
     category: 'Keybinds',
     type: keybind,
     default: '["unbound", "unbound"]',
@@ -2585,15 +3338,16 @@ const emoteKeybinds = plugin.settings().add({
         value: 'select',
     },
     data: () => ({
-        value: window.chatEmotes?.map(emote => [emote.name, emote.id])
+        value: window.chatEmotes.length ? window.chatEmotes.map(emote => [emote.name, emote.id]) : [["Emotes not loaded!", 0]]
     }),
 });
 
 const filtersInfo = plugin.settings().add({
     key: 'filtersInfo',
-    name: '<span style="color:thistle;">Don\'t get lost! By default, pressing Delete<br>will turn off all filters.</span>',
+    name: 'Don\'t get lost! By default, pressing Delete will turn off all filters.',
     category: 'Filters',
     type: plaintext,
+    data: { color: 'thistle' }
 });
 
 const crispiness = plugin.settings().add({
@@ -2636,6 +3390,15 @@ const greyscale = plugin.settings().add({
     default: 0.1,
     reset: true,
     onChange: (val) => siteFilter(crispiness?.value(), blurriness?.value(), val, invert?.value())
+});
+
+const copiesAreMonochrome = plugin.settings().add({
+    key: 'copiesAreMonochrome',
+    name: 'Copies are monochrome',
+    note: 'Generated cards\' images will be greyscaled',
+    category: 'Filters',
+    default: false,
+    onChange: (val) => monochromeCopiesToggle(val)
 });
 
 const invert = plugin.settings().add({
@@ -2768,7 +3531,7 @@ const patienceColor = plugin.settings().add({
 const shuffleSoulColors = plugin.settings().add({
     key: 'shuffleSoulColors',
     name: 'Shuffle',
-    note: 'Shuffles all the soul colors!?<br><br><span style="color:thistle;">Closes this menu</span>',
+    note: 'Shuffles all the soul colors',
     category: 'To your liking',
     type: button,
     data: {
@@ -2780,7 +3543,7 @@ const shuffleSoulColors = plugin.settings().add({
 const resetSoulColors = plugin.settings().add({
     key: 'resetSoulColors',
     name: 'Reset',
-    note: 'Resets all the soul colors to their default values<br><br><span style="color:thistle;">Closes this menu</span>',
+    note: 'Resets all the soul colors to their default values',
     category: 'To your liking',
     type: button,
     data: {
@@ -2830,6 +3593,7 @@ const obscurityInfo = plugin.settings().add({
          <span style="color:thistle;">hide</span>: Hidden`,
     category: 'Cardsludge',
     type: plaintext,
+    data: { color: 'thistle' }
 });
 
 const obscCardName = plugin.settings().add({
@@ -2889,7 +3653,7 @@ const obscCardDesc = plugin.settings().add({
 const obscCardStats = plugin.settings().add({
     key: 'obscCardStats',
     name: 'Obscure stats',
-    note: '("Stats" is both ATK and HP.)',
+    note: '("Stats" is both ATK and HP)',
     category: 'Cardsludge',
     type: "select", options: ["off", "obfuscate", "blur", "to set card", "to random card", "hide", "hide, use spell frame"],
     default: "off",
@@ -3017,7 +3781,7 @@ const visualModifier = plugin.settings().add({
 const noGenerated = plugin.settings().add({
     key: 'noGenerated',
     name: 'No Generated',
-    note: 'Hides generated power<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: 'Hides Generated status',
     category: 'Cardsludge',
     data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/createdUnknown.png' },
     type: powerCheckbox,
@@ -3028,7 +3792,7 @@ const noGenerated = plugin.settings().add({
 const noSilence = plugin.settings().add({
     key: 'noSilence',
     name: 'No silence',
-    note: 'Hides silence power and background<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: 'Hides Silence status and background effect',
     category: 'Cardsludge',
     data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/silencedUnknown.png' },
     type: powerCheckbox,
@@ -3039,7 +3803,7 @@ const noSilence = plugin.settings().add({
 const noCostBuffs = plugin.settings().add({
     key: 'noCostBuffs',
     name: 'No cost buffs',
-    note: 'Hides cost buff and debuff power<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: 'Hides cost buff and debuff statuses',
     category: 'Cardsludge',
     data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/costUnknown.png' },
     type: powerCheckbox,
@@ -3050,7 +3814,7 @@ const noCostBuffs = plugin.settings().add({
 const noStatBuffs = plugin.settings().add({
     key: 'noStatBuffs',
     name: 'No ATK / HP buffs',
-    note: 'Hides ATK / HP buff and debuff powers<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: 'Hides ATK / HP buff and debuff statuses',
     category: 'Cardsludge',
     data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/statsUnknown.gif' },
     type: powerCheckbox,
@@ -3061,7 +3825,7 @@ const noStatBuffs = plugin.settings().add({
 const obscApply = plugin.settings().add({
     key: 'obscApply',
     name: 'Apply sludge',
-    note: 'Changes where exactly Cardsludge settings will be applied, in case you want to<br>let the chaos loose, or bottle it up, never to be seen again...<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: () => sludgeEnabled?.value() ? 'You have the <i>Sludge</i> action power enabled, which<br>overrides this setting' : 'Changes where exactly Cardsludge settings will be applied, in case you want to<br>let the chaos loose, or bottle it up, never to be seen again...',
     category: 'Cardsludge',
     type: "select", options: ['nowhere', 'ingame only', 'everywhere!!!'],
     default: "ingame only",
@@ -3073,20 +3837,10 @@ const obscApply = plugin.settings().add({
     }
 });
 
-function obscActive() {
-    switch (obscApply?.value()) {
-        case 'nowhere': return 0;
-        case 'ingame only': return window.gameId ? 1 : 0;
-        case 'everywhere!!!': return 1;
-    }
-}
-
-window.obscActive = obscActive;
-
 const baseStatChangePower = plugin.settings().add({
     key: 'baseStatChangePower',
     name: 'Base stat change',
-    note: 'Brings back the base stat change power!<br>...Should be slightly more stable. Reset your allCards cache frequently, folks!',
+    note: 'Brings back the base stat change power<br>...Should be stable this time. I think.',
     category: 'Too many powers!!!',
     data: { src: 'images/powers/baseStatChange.png' },
     type: powerCheckbox,
@@ -3097,7 +3851,7 @@ const baseStatChangePower = plugin.settings().add({
 const undereventPower = plugin.settings().add({
     key: 'undereventPower',
     name: 'Underevent 2024',
-    note: 'Displays on El Undercardio!',
+    note: 'Displays on El Undercardio',
     category: 'Too many powers!!!',
     data: { src: 'images/powers/underevent2024.png' },
     type: powerCheckbox,
@@ -3215,10 +3969,50 @@ const primePower = plugin.settings().add({
     onChange: (val) => refreshCards()
 });
 
+const formerGloryPowers = plugin.settings().add({
+    key: 'formerGloryPowers',
+    name: 'Former glory',
+    note: 'Gives back lost powers to cards that still mechanically have them',
+    category: 'Too many powers!!!',
+    data: {
+        src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/formerGlory.png',
+        childSettings: ["formerGloryTrashy", "formerGloryUndying"]
+    },
+    type: advPowerCheckbox,
+    default: false,
+    onChange: (val) => refreshCards()
+});
+
+const formerGloryTrashy = plugin.settings().add({
+    key: 'formerGloryTrashy',
+    name: 'Trashy',
+    note: 'Gives Trashy Thorns and Ranged',
+    category: 'Too many powers!!!',
+    data: {
+        src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/trashy.gif'
+    },
+    type: powerCheckbox,
+    default: true,
+    onChange: (val) => refreshCards()
+});
+
+const formerGloryUndying = plugin.settings().add({
+    key: 'formerGloryUndying',
+    name: 'Undyne the Undying',
+    note: 'Gives Undyne the Undying Another Chance',
+    category: 'Too many powers!!!',
+    data: {
+        src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/anotherChance.png'
+    },
+    type: powerCheckbox,
+    default: false,
+    onChange: (val) => refreshCards()
+});
+
 const checkPower = plugin.settings().add({
     key: 'checkPower',
     name: 'Check',
-    note: 'Always displays, giving all of a card\'s currently stored information<br>For use in debugging :P<br><br><span style="color:thistle;">Change applies on card update</span>',
+    note: 'Always displays, giving all of a card\'s currently stored information<br>For use in debugging :P',
     category: 'Too many powers!!!',
     data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/check.png' },
     type: powerCheckbox,
@@ -3228,65 +4022,306 @@ const checkPower = plugin.settings().add({
 
 const actionPowersInfo = plugin.settings().add({
     key: 'actionPowersInfo',
-    name: '<span style="color: thistle;">Below are <i>action powers</i>. They appear on<br>a set % of cards and can affect the way you<br>play the game.</span>',
+    name: 'Below are <i>action powers</i>. They appear on<br>a set % of cards and can affect the way you<br>play the game.',
     category: 'Too many powers!!!',
     type: plaintext,
+    data: { color: 'thistle' }
 });
 
 const kittyCatsEnabled = plugin.settings().add({
     key: 'kittyCatsEnabled',
-    name: 'Kitty cats',
-    note: 'Ingame, a random amount of cards have a <i>Kitty cat</i>.<br>When played, a <i>Kitty cat</i> card will do something random! :3',
+    name: 'Kitty cat',
+    note: 'Ingame, a % of cards have a <i>Kitty cat</i>.<br>When played, a <i>Kitty cat</i> card will do something random! :3',
     category: 'Too many powers!!!',
-    data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/kittyCat.png' },
-    type: powerCheckbox,
+    data: {
+        src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/kittyCat.png',
+        childSettings: ["kittyCatsChance", "kittyCatsEndTurns", "kittyCatsDoNothing"]
+    },
+    type: advPowerCheckbox,
     default: false,
-    onChange: (val) => { rollEventArrays(); refreshCards(); }
+    onChange: (val) => { refreshCards(); }
 });
 
 const kittyCatsChance = plugin.settings().add({
     key: 'kittyCatsChance',
     name: 'Kitty cats %',
-    note: 'The % chance that a card will have a <i>Kitty cat</i><br>(assuming <i>Kitty cats</i> are enabled)',
+    note: 'The % chance that a card will have a <i>Kitty cat</i>',
     category: 'Too many powers!!!',
     type: "text",
     default: 5,
-    onChange: (val) => { rollEventArrays(); refreshCards(); }
+    onChange: (val) => { rollEventArrays(true); }
+});
+
+const kittyCatsEndTurns = plugin.settings().add({
+    key: 'kittyCatsEndTurns',
+    name: 'Kitty cats can end turns',
+    note: 'Enables the possible <i>Kitty cat</i> effect of ending your turn',
+    category: 'Too many powers!!!',
+    default: false,
+});
+
+const kittyCatsDoNothing = plugin.settings().add({
+    key: 'kittyCatsDoNothing',
+    name: 'Kitty cats can do nothing',
+    note: 'Enables the possible <i>Kitty cat</i> effect of doing nothing',
+    category: 'Too many powers!!!',
+    default: true,
 });
 
 const mikeDropsEnabled = plugin.settings().add({
     key: 'mikeDropsEnabled',
-    name: 'Mike drops',
-    note: 'Ingame, a random amount of cards have a <i>Mike drop</i>.<br>When played, a <i>Mike drop</i> card will end your turn!',
+    name: 'Mike drop',
+    note: 'Ingame, a % of cards have a <i>Mike drop</i><br>When played, a <i>Mike drop</i> card will end your turn!',
     category: 'Too many powers!!!',
-    data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/mikeDrop.png' },
-    type: powerCheckbox,
+    data: {
+        src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/mikeDrop.png',
+        childSettings: ["mikeDropsChance"]
+    },
+    type: advPowerCheckbox,
     default: false,
-    onChange: (val) => { rollEventArrays(); refreshCards(); }
+    onChange: (val) => { refreshCards(); }
 });
 
 const mikeDropsChance = plugin.settings().add({
     key: 'mikeDropsChance',
     name: 'Mike drops %',
-    note: 'The % chance that a card will have a <i>Mike drop</i><br>(assuming <i>Mike drops</i> are enabled)',
+    note: 'The % chance that a card will have a <i>Mike drop</i>',
     category: 'Too many powers!!!',
     type: "text",
     default: 5,
-    onChange: (val) => { rollEventArrays(); refreshCards(); }
+    onChange: (val) => { rollEventArrays(true); }
+});
+
+const equationsEnabled = plugin.settings().add({
+    key: 'equationsEnabled',
+    name: 'Equation',
+    note: 'Ingame, a % of cards have an <i>Equation</i><br><i>Equation</i> cards cannot be played from hand until you inspect the power and successfully solve the equation',
+    category: 'Too many powers!!!',
+    data: {
+        src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/equation.png',
+        childSettings: ["equationsChance", "equationsAddSubtract", "equationsMultiplyDivide", "equationsMaxOperand", "equationsNegatives", "equationsNonIntegerAnswers", "equationsPenalty"]
+    },
+    type: advPowerCheckbox,
+    default: false,
+    onChange: (val) => { refreshCards(); }
+});
+
+const equationsChance = plugin.settings().add({
+    key: 'equationsChance',
+    name: 'Equations %',
+    note: 'The % chance that a card will have an <i>Equation</i>',
+    category: 'Too many powers!!!',
+    type: "text",
+    default: 5,
+    onChange: (val) => { rollEventArrays(true); }
+});
+
+const equationsAddSubtract = plugin.settings().add({
+    key: 'equationsAddSubtract',
+    name: '+ -',
+    note: 'Addition and subtraction problems will show up',
+    category: 'Too many powers!!!',
+    default: true,
+});
+
+const equationsMultiplyDivide = plugin.settings().add({
+    key: 'equationsMultiplyDivide',
+    name: '× ÷',
+    note: 'Multiplication and division problems will show up',
+    category: 'Too many powers!!!',
+    default: true,
+});
+
+const equationsMaxOperand = plugin.settings().add({
+    key: 'equationsMaxOperand',
+    name: 'Maximum operand',
+    note: 'The maximum operand able to be used',
+    category: 'Too many powers!!!',
+    type: 'text',
+    default: '12'
+});
+
+const equationsNegatives = plugin.settings().add({
+    key: 'equationsNegatives',
+    name: 'Negative operands',
+    note: 'Operands can be negative',
+    category: 'Too many powers!!!',
+    default: false
+});
+
+const equationsNonIntegerAnswers = plugin.settings().add({
+    key: 'equationsNonIntegerAnswers',
+    name: 'Non-integer answers',
+    note: 'Answers can be decimals',
+    category: 'Too many powers!!!',
+    default: true,
+});
+
+const equationsPenalty = plugin.settings().add({
+    key: 'equationsPenalty',
+    name: 'Equation fail penalty',
+    note: 'Defines what happens when you fail an Equation',
+    category: 'Too many powers!!!',
+    type: "select", options: ['none', 'end turn', 'surrender'],
+    default: 'none',
+});
+
+const bricksEnabled = plugin.settings().add({
+    key: 'bricksEnabled',
+    name: 'Brick',
+    note: 'Ingame, a % of cards have a <i>Brick</i><br><i>Brick</i> cards cannot be played',
+    category: 'Too many powers!!!',
+    data: {
+        src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/brick.png',
+        childSettings: ["bricksChance"]
+    },
+    type: advPowerCheckbox,
+    default: false,
+    onChange: (val) => { refreshCards(); }
+});
+
+const bricksChance = plugin.settings().add({
+    key: 'bricksChance',
+    name: 'Bricks %',
+    note: 'The % chance that a card will be a <i>Brick</i>',
+    category: 'Too many powers!!!',
+    type: "text",
+    default: 5,
+    onChange: (val) => { rollEventArrays(true); }
+});
+
+const stuporEnabled = plugin.settings().add({
+    key: 'stuporEnabled',
+    name: 'Stupor',
+    note: 'Ingame, a % of monsters have <i>Stupor</i><br><i>Stupored</i> monsters cannot attack',
+    category: 'Too many powers!!!',
+    data: {
+        src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/stupor.png',
+        childSettings: ["stuporChance"]
+    },
+    type: advPowerCheckbox,
+    default: false,
+    onChange: (val) => { refreshCards(); }
+});
+
+const stuporChance = plugin.settings().add({
+    key: 'stuporChance',
+    name: 'Stupor %',
+    note: () => ingame ? 'You can\'t change this setting while in a game!' : 'The % chance that a card will have <i>Stupor</i>',
+    category: 'Too many powers!!!',
+    type: "text",
+    default: 5,
+    onChange: (val) => { rollEventArrays(true); }
+});
+
+const bitflippedEnabled = plugin.settings().add({
+    key: 'bitflippedEnabled',
+    name: 'Bitflipped',
+    note: 'Ingame, a % of cards are <i>Bitflipped</i><br><i>Bitflipped</i> cards have a random stat visually off by 1',
+    category: 'Too many powers!!!',
+    data: {
+        src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/bitflipped.png',
+        childSettings: ["bitflippedChance", "bitflippedAmnesia", "bitflippedRealism", "bitflippedSpells"]
+    },
+    type: advPowerCheckbox,
+    default: false,
+    onChange: (val) => { refreshCards(); }
+});
+
+const bitflippedChance = plugin.settings().add({
+    key: 'bitflippedChance',
+    name: 'Bitflipped %',
+    note: 'The % chance that a card will be <i>Bitflipped</i>',
+    category: 'Too many powers!!!',
+    type: "text",
+    default: 5,
+    onChange: (val) => { rollEventArrays(true); }
+});
+
+const bitflippedAmnesia = plugin.settings().add({
+    key: 'bitflippedAmnesia',
+    name: 'Amnesia',
+    note: 'The <i>Bitflipped</i> power/icon does not show up',
+    category: 'Too many powers!!!',
+    data: { src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/bitflippedUnknown.png' },
+    type: powerCheckbox,
+    default: false,
+    onChange: (val) => { refreshCards(); }
+});
+
+const bitflippedRealism = plugin.settings().add({
+    key: 'bitflippedRealism',
+    name: 'Be a little realistic, now',
+    note: 'Stats can\'t bitflip into the negatives, and HP can\'t bitflip to 0',
+    category: 'Too many powers!!!',
+    default: true,
+    onChange: (val) => { refreshCards(); }
+});
+
+const bitflippedSpells = plugin.settings().add({
+    key: 'bitflippedSpells',
+    name: 'Spells can be Bitflipped',
+    category: 'Too many powers!!!',
+    default: false,
+    onChange: (val) => { refreshCards(); }
+});
+
+const sludgeEnabled = plugin.settings().add({
+    key: 'sludgeEnabled',
+    name: 'Sludge',
+    note: 'Ingame, a % of cards have <i>Sludge</i><br><i>Sludge</i> cards will use your <i>Cardsludge</i> settings, and non-<i>Sludge</i> cards will appear normally',
+    category: 'Too many powers!!!',
+    data: {
+        src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/sludge.png',
+        childSettings: ["sludgeChance"]
+    },
+    type: advPowerCheckbox,
+    default: false,
+    onChange: (val) => { refreshCards(); settingOverriddenStyles(); }
+});
+
+const sludgeChance = plugin.settings().add({
+    key: 'sludgeChance',
+    name: 'Sludge %',
+    note: 'The % chance that a card will have <i>Sludge</i>',
+    category: 'Too many powers!!!',
+    type: "text",
+    default: 5,
+    onChange: (val) => { rollEventArrays(true); }
 });
 
 const actionNotifications = plugin.settings().add({
     key: 'actionNotifications',
     name: 'Action power notifications',
-    note: 'Gives Underscript notifications for when an <i>action power</i> triggers',
+    note: 'Gives Underscript notifications for when an <i>Action power</i> triggers',
     category: 'Too many powers!!!',
-    type: "select", options: ['on', 'off']
+    type: "select", options: ['on', 'off'],
+    default: 'on',
+});
+
+const healableActionPowers = plugin.settings().add({
+    key: 'healableActionPowers',
+    name: 'Action powers can be healed off',
+    note: 'Cards such as Heal and Cafe Table can cleanse a card of all <i>Action powers</i>',
+    category: 'Too many powers!!!',
+    default: true,
+});
+
+const silencableActionPowers = plugin.settings().add({
+    key: 'silencableActionPowers',
+    name: 'Action powers can be silenced off',
+    note: 'Silencing a card also rids it of all <i>Action powers</i>',
+    category: 'Too many powers!!!',
+    default: true,
 });
 
 const versionInfo = plugin.settings().add({
     key: 'versionInfo',
     name: `Version ${pluginVersion}`,
     type: plaintext,
+    data: {
+        dismissable: false,
+    },
     category: 'Galascript',
 });
 
@@ -3296,8 +4331,23 @@ const readPatchNotes = plugin.settings().add({
     category: 'Galascript',
     type: button,
     data: {
-        text: 'Patch notes',
-        onclick() {$("#underscript\\.plugin\\.Galascript\\.readPatchNotes").replaceWith(convertMarkdown.makeHtml(patchNotes));}
+        onclick() {
+            window.BootstrapDialog.show({
+                title: `Galascript v${gsVersion?.value()} Patch Notes`,
+                size: window.BootstrapDialog.SIZE_NORMAL,
+                id: 'gsPatchNotes',
+                message: function() {
+                    return convertMarkdown.makeHtml(patchNotes);
+                },
+                buttons: [{
+                    label: $.i18n('dialog-close'),
+                    cssClass: 'btn-primary',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                }]
+            });
+        }
     }
 });
 
@@ -3307,8 +4357,196 @@ const readCredits = plugin.settings().add({
     category: 'Galascript',
     type: button,
     data: {
-        text: 'Credits',
-        onclick() {$("#underscript\\.plugin\\.Galascript\\.readCredits").replaceWith(credits);}
+        onclick() {
+            window.BootstrapDialog.show({
+                title: 'Galascript credits',
+                size: window.BootstrapDialog.SIZE_NORMAL,
+                id: 'gsCredits',
+                message: function() {
+                    return credits;
+                },
+                buttons: [{
+                    label: $.i18n('dialog-close'),
+                    cssClass: 'btn-primary',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                }]
+            });
+        }
+    }
+});
+
+const exportSettings = plugin.settings().add({
+    key: 'exportSettings',
+    name: 'Export settings',
+    category: 'Galascript',
+    type: button,
+    data: {
+        onclick() {
+            window.saveGsTranslations = function() {
+                var settingObject = {customTranslations: localStorage.getItem('underscript.plugin.Galascript.customTranslations')}
+                saveFile('translations.gs', JSON.stringify(settingObject));
+                $('#gsExportDialog').modal('hide');
+            }
+            window.saveGsAll = function() {
+                var settingObject = {}
+                Object.keys(localStorage).forEach(function(key) {
+                    if (key.startsWith('underscript.plugin.Galascript.') && !key.includes('version') && !key.includes('info')) {
+                        settingObject[key.slice(30)] = localStorage.getItem(key)
+                    }
+                });
+                saveFile('settings.gs', JSON.stringify(settingObject));
+                $('#gsExportDialog').modal('hide');
+            }
+            window.BootstrapDialog.show({
+                title: 'Export Galascript settings',
+                size: window.BootstrapDialog.SIZE_NORMAL,
+                id: 'gsExportDialog',
+                message: function() {
+                    return `<p>Export your Galascript settings to send to other users or to save for later! Choose from one of the below presets to export.</p>
+                    <button class="gsFileButton" onclick="saveGsTranslations()">Custom translations</button>
+                    <button class="gsFileButton" onclick="saveGsAll()">All settings</button>
+                    `
+                },
+                buttons: [{
+                    label: $.i18n('dialog-cancel'),
+                    cssClass: 'btn-primary',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                }]
+            });
+        }
+    }
+});
+
+const importSettings = plugin.settings().add({
+    key: 'importSettings',
+    name: 'Import settings',
+    category: 'Galascript',
+    type: button,
+    data: {
+        onclick() {
+            window.importGsSettings = function() {
+                const file = document.getElementById('gsImport').files[0]
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const fileName = file.name;
+                    const fileContent = e.target.result;
+                    const settings = JSON.parse(fileContent);
+                    function just(setting) {return Object.keys(settings).length === 1 && Object.hasOwn(settings, setting)}
+                    var options = []
+                    options.push({
+                            label: 'Yes, import!',
+                            cssClass: 'btn-danger',
+                            action: function (dialog) {
+                                dialog.close();
+                                Object.keys(localStorage).forEach(function(key) {
+                                    if (key.startsWith('underscript.plugin.Galascript.') && !key.includes('version') && !key.includes('info')) {
+                                        localStorage.removeItem(key)
+                                    }
+                                });
+                                Object.keys(settings).forEach(key => {
+                                    localStorage.setItem(`underscript.plugin.Galascript.${key}`, settings[key]);
+                                });
+                                $('.underscript-dialog').modal('hide');
+                                plugin.toast({
+                                    title: 'Import complete!',
+                                    text: `Your settings have been replaced by those of <i>${fileName}</i>.`,
+                                    timeout: 5000,
+                                });
+                                refreshCards();
+                            }})
+                    if (just('customTranslations')) {
+                        options.push({
+                                label: 'Combine with current',
+                                cssClass: 'btn-warning',
+                                action: function (dialog) {
+                                    dialog.close();
+                                    const newTrans = JSON.parse(localStorage.getItem('underscript.plugin.Galascript.customTranslations')).concat(JSON.parse(settings.customTranslations))
+                                    localStorage.setItem('underscript.plugin.Galascript.customTranslations', JSON.stringify(newTrans));
+                                    $('.underscript-dialog').modal('hide');
+                                plugin.toast({
+                                    title: 'Import complete!',
+                                    text: `<i>${fileName}</i> has been merged with your translations.`,
+                                    timeout: 5000,
+                                })
+                                refreshCards();
+                                }})
+                    }
+                    options.push({
+                            label: $.i18n('dialog-cancel'),
+                            cssClass: 'btn-primary',
+                            action: function (dialog) {
+                                dialog.close();
+                            }
+                        })
+                    window.BootstrapDialog.show({
+                        title: 'Are you sure?',
+                        size: window.BootstrapDialog.SIZE_NORMAL,
+                        id: 'gsImportConfirm',
+                        message: function() {
+                            var message = `<p>Are you sure you want to import <i>${fileName}</i>?`;
+                            if (just('customTranslations')) {
+                                message += `<br><br>Just the <i>Custom translations</i> setting will be overriden. If you'd like to keep its contents, Export them first, or press "Combine with current" to combine the two.`
+                            } else if (Object.keys(settings).length > 20) {
+                                message += `<br><br>ALL settings will be overridden! If you'd like to keep them, go back and Export them.`
+                            } else {
+                                message += `<br><br>The following settings will be overridden:`
+                                Object.keys(settings).forEach(key => {
+                                    message += `<br>${key}`
+                                });
+                            }
+                            message += `</p>`
+                            return message;
+                        },
+                        buttons: options,
+                    });
+                };
+
+                reader.onerror = function(e) {
+                    console.error("Error reading file:", e.target.error);
+                };
+
+                reader.readAsText(file);
+                $('#gsImportDialog').modal('hide');
+            }
+            window.BootstrapDialog.show({
+                title: 'Import Galascript settings',
+                size: window.BootstrapDialog.SIZE_NORMAL,
+                id: 'gsImportDialog',
+                message: function() {
+                    return `<p>Import Galascript settings from a .gs file! You'll first be asked if you're sure about replacing your settings.</p>
+                    <input type="file" id="gsImport" accept=".gs" onchange="importGsSettings()">
+                    `
+                },
+                buttons: [{
+                    label: $.i18n('dialog-cancel'),
+                    cssClass: 'btn-primary',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                }]
+            });
+        }
+    }
+});
+
+const restoreTips = plugin.settings().add({
+    key: 'restoreTips',
+    name: 'Restore tips',
+    category: 'Galascript',
+    type: button,
+    data: {
+        onclick() {
+            keybindsInfo.set(0)
+            filtersInfo.set(0)
+            obscurityInfo.set(0)
+            actionPowersInfo.set(0)
+            versionInfo.set(0)
+        }
     }
 });
 
@@ -3320,11 +4558,68 @@ const gsVersion = plugin.settings().add({
     hidden: true,
 });
 
-window.gsShowPatchNotes = function() {
+window.gsUpdateToast = function() {
     plugin.toast({
-        title: `Galascript: Update ${pluginVersion}`,
-        text: convertMarkdown.makeHtml(patchNotes),
+        title: `Galascript v${pluginVersion}`,
+        text: `Successfully installed Galascript v${pluginVersion}!`,
+        buttons: [{
+            text: 'Read patch notes',
+            onclick: () => {
+                 window.BootstrapDialog.show({
+                    title: `Galascript v${gsVersion?.value()} Patch Notes`,
+                    size: window.BootstrapDialog.SIZE_NORMAL,
+                    id: 'gsPatchNotes',
+                    message: function() {
+                        return convertMarkdown.makeHtml(patchNotes);
+                    },
+                    buttons: [{
+                        label: $.i18n('dialog-close'),
+                        cssClass: 'btn-primary',
+                        action: function (dialog) {
+                            dialog.close();
+                        }
+                    }]
+                });
+            }
+        },{
+            text: 'Dismiss',
+            onclick: () => {
+            }
+        }],
+        css: {
+            textAlign: 'center',
+            title: {
+                fontSize: '18px',
+            },
+            button: {
+                background: 'rgb(0, 0, 0, 0.2)',
+                border: '1px solid white',
+                borderRadius: '0px',
+                textShadow: 'none',
+                fontSize: '14px',
+                margin: '3px',
+                width: '200px',
+                height: '40px',
+            }
+        }
     });
+}
+
+async function saveFile(filename, content) {
+    try {
+        const handle = await window.showSaveFilePicker({
+            suggestedName: filename,
+            types: [{
+                description: 'Galascript settings files',
+                accept: { 'text/plain': ['.gs'] },
+            }],
+        });
+        const writable = await handle.createWritable();
+        await writable.write(content);
+        await writable.close();
+    } catch (err) {
+        console.error('Error saving file:', err);
+    }
 }
 
 function processBinds(e) {
@@ -3389,43 +4684,178 @@ function processBinds(e) {
 document.addEventListener("keyup", e => processBinds(e));
 document.addEventListener("mouseup", e => processBinds(e));
 
-var awaitingMike = false;
-var awaitingKitty = false;
-var lastCard;
+var gameData = {
+    cats: [],
+    mikes: [],
+    equations: [],
+    bricks: [],
+    stupor: [],
+    bitflipped: [],
+    sludge: [],
+    allowedCats: [],
+    allowedMikes: [],
+    equationsWon: [],
+    timestamp: Date.now()
+};
+function rollEventArrays(override) { // override is a bool to start from new
+    Object.keys(localStorage).forEach(function(key) {
+        if (key.startsWith('galascript.match')) {
+            const value = JSON.parse(localStorage.getItem(key));
+            const outdated = (value.timestamp < Date.now() - 2700000) || !Object.hasOwn(value, 'timestamp') // 2700000ms is 45min, the max match time
+            if (outdated) {
+                localStorage.removeItem(key);
+            }
+        }
+    });
+    if (!ingame || window.spectate) {
+        return;
+    }
+    const saved = JSON.parse(localStorage.getItem(`galascript.match${window.gameId}.actionPowers`)) ?? false;
+    if (saved && !override) {
+        gameData = saved;
+        refreshCards();
+        return;
+    }
+
+    const seed = window.gameId ?? 1
+    function rollChance(i) {
+        var m = 2**35 - 31
+        var a = 185852
+        var s = ((seed ^ i) * 2654435761) >>> 0;
+        var roll = (s * a % m) / m
+        return Math.floor(roll * 100) + 1;
+    }
+    const kittyCatsChancer = Math.min(Math.max(kittyCatsChance.value(), 0), 100);
+    const mikeDropsChancer = Math.min(Math.max(mikeDropsChance.value(), 0), 100);
+    const equationsChancer = Math.min(Math.max(equationsChance.value(), 0), 100);
+    const bricksChancer = Math.min(Math.max(bricksChance.value(), 0), 100);
+    const stuporChancer = Math.min(Math.max(stuporChance.value(), 0), 100);
+    const bitflippedChancer = Math.min(Math.max(bitflippedChance.value(), 0), 100);
+    const sludgeChancer = Math.min(Math.max(sludgeChance.value(), 0), 100);
+    for (let i = 10000; i <= 12000; i++) {       // <- if you somehow generate more than 2000 monster ids in a game then good for you, you broke it :D
+        if (kittyCatsChancer >= rollChance(i)) { // previous was 10000, which is even more impossible, and i decided to actually observe this time around, so... yeah, 2000 is good
+            gameData.cats.push(i);               // the optimization is needed when im setting big ass arrays--whom the tail ends of will likely never be used--to localstorage
+        }
+        if (mikeDropsChancer >= rollChance(i + 1)) {
+            gameData.mikes.push(i);
+        }
+        if (equationsChancer >= rollChance(i + 2)) {
+            gameData.equations.push(i);
+        }
+        if (bricksChancer >= rollChance(i + 3)) {
+            gameData.bricks.push(i);
+        }
+        if (stuporChancer >= rollChance(i + 4)) {
+            gameData.stupor.push(i);
+        }
+        if (bitflippedChancer >= rollChance(i + 5)) {
+            gameData.bitflipped.push(i);
+        }
+        if (sludgeChancer >= rollChance(i + 6)) {
+            gameData.sludge.push(i);
+        }
+    }
+    try {
+        localStorage.setItem(`galascript.match${window.gameId}.actionPowers`, JSON.stringify(gameData));
+    } catch (e) {
+        if (e.code === 22 || e.code === 1014 || e.name === 'QuotaExceededError') {
+            alert('localStorage is full, so Galascript\'s persistent match data can\'t save! Either I did a shit job at limiting the space used, or you just have a lot going on in there.');
+        }
+    }
+    refreshCards();
+}
+
+function updGameData(name, operation, val) {
+    switch (operation) {
+        case 'set': Object.defineProperty(gameData, name, {value: val}); break;
+        case 'push': gameData[name].push(val); break;
+        case 'remove': gameData[name] = gameData[name].filter(item => item !== val); break;
+    }
+    try {
+        localStorage.setItem(`galascript.match${window.gameId}.actionPowers`, JSON.stringify(gameData));
+    } catch (e) {
+        if (e.code === 22 || e.code === 1014 || e.name === 'QuotaExceededError') {
+            alert('localStorage is full, so Galascript\'s persistent match data can\'t save! Either I did a shit job at limiting the space used, or you just have a lot going on in there.');
+        }
+    }
+}
+var awaitingMike, awaitingKitty, lastCard, lastBoard;
 plugin.events.on('GameEvent', (data) => {
     var cardPlayed = (data.action === 'getMonsterPlayed' || data.action === 'getSpellPlayed');
     if (cardPlayed) {
         var card = JSON.parse(data.card);
-        lastCard = card;
+        var cid = card.id
+        if (!awaitingMike && !awaitingKitty) {
+            lastCard = card;
+        }
     }
     if (data.action === 'getPlayableCards') {
         var cardIds = JSON.parse(data.playableCards)
         cardIds.forEach((cid) => {
-            if (mikesArray.includes(cid)) {
-                mikesArray[mikesArray.indexOf(cid)] *= -1
+            if (gameData.mikes.includes(cid) && !gameData.allowedMikes.includes(cid)) {
+                updGameData('allowedMikes', 'push', cid)
             }
-            if (catsArray.includes(cid)) {
-                catsArray[catsArray.indexOf(cid)] *= -1
+            if (gameData.cats.includes(cid) && !gameData.allowedCats.includes(cid)) {
+                updGameData('allowedCats', 'push', cid)
             }
         });
+        refreshCards();
     }
-    if (cardPlayed && mikesArray.includes(card.id * -1 || card.id) && (card.ownerId === window.selfId) && mikeDropsEnabled?.value()) {
+    if (cardPlayed && gameData.allowedMikes.includes(cid) && (card.ownerId === window.selfId) && mikeDropsEnabled?.value()) {
         awaitingMike = true;
-        mikesArray[mikesArray.indexOf(card.id)] *= -1;
+        updGameData('mikes', 'remove', cid);
+        updGameData('allowedMikes', 'remove', cid);
     }
-    if (cardPlayed && catsArray.includes(card.id * -1) && (card.ownerId === window.selfId) && kittyCatsEnabled?.value()) {
-        awaitingKitty = true;
-        catsArray[catsArray.indexOf(card.id)] *= -1;
+    if (cardPlayed && gameData.allowedCats.includes(cid) && (card.ownerId === window.selfId) && kittyCatsEnabled?.value()) {
+        awaitingKitty = true
+        updGameData('cats', 'remove', cid);
+        updGameData('allowedCats', 'remove', cid);
     }
     if (data.action === 'getPlayableCards') {
         if (awaitingMike) {
             window.socketGame.send(JSON.stringify({action: "endTurn"}));
-            actionNotification('mikeDrop', 'mike', 'A played <i>Mike drop</i> card ended your turn prematurely.')
+            actionNotification('mikeDrop', 'mike', `${lastCard.name}'s <i>Mike drop</i> ended your turn prematurely.`)
             awaitingMike = false;
         }
         if (awaitingKitty) {
             kittytime(lastCard);
             awaitingKitty = false;
+        }
+    }
+    if (data.action === "getDoingEffect" && healableActionPowers?.value()) {
+        const healCards = ['Heal', 'Asriel', 'Cafe Table']
+        if (healCards.includes(JSON.parse(data.card).name)) {
+            JSON.parse(data.affecteds).forEach((cid) => {
+                updGameData('mikes', 'remove', cid);
+                updGameData('cats', 'remove', cid);
+                updGameData('allowedMikes', 'remove', cid);
+                updGameData('allowedCats', 'remove', cid);
+                updGameData('bricks', 'remove', cid);
+                updGameData('equations', 'remove', cid);
+                updGameData('stupor', 'remove', cid);
+                updGameData('bitflipped', 'remove', cid);
+                updGameData('sludge', 'remove', cid);
+            });
+        }
+    }
+    if (logChat?.value()) {
+        if (data.action === "getEmote") {
+            if (data.idUser === window.userId) {
+                $('#log').prepend(`<div><span class="${window.yourSoul.name}" style="text-decoration: underline;"><img src="images/souls/${window.yourSoul.name}.png">${$('#yourUsername').text()}</span>: <img src="images/emotes/${data.emoteImage}.png"></div>`)
+            } else {
+                $('#log').prepend(`<div><span class="${window.enemySoul.name}" style="text-decoration: underline;"><img src="images/souls/${window.enemySoul.name}.png">${$('#enemyUsername').text()}</span>: <img src="images/emotes/${data.emoteImage}.png"></div>`)
+            }
+        }
+    }
+});
+plugin.events.on('ChatMessage', (data) => {
+    if (logChat?.value() && ingame && $('#log').length && data.action === 'getMessage') {
+        const user = JSON.parse(data.chatMessage).user.id
+        const message = JSON.parse(data.chatMessage).message
+        if (user === window.userId) {
+            $('#log').prepend(`<div><span class="${window.yourSoul.name}" style="text-decoration: underline;"><img src="images/souls/${window.yourSoul.name}.png">${$('#yourUsername').text()}</span>: <span style="color: thistle">${message}</span></div>`)
+        } else if (user === window.opponentId) {
+            $('#log').prepend(`<div><span class="${window.enemySoul.name}" style="text-decoration: underline;"><img src="images/souls/${window.enemySoul.name}.png">${$('#enemyUsername').text()}</span>: <span style="color: thistle">${message}</span></div>`)
         }
     }
 });
@@ -3434,10 +4864,14 @@ function actionNotification(icon, type, text) {
     if (actionNotifications?.value() === 'off') { return; }
     const kitty = [ `Mrrp`, `Mrow`, `Meow`, `Nyaw`, `Mrrrrow`, `Prrrrrr`, `Mrorw`, `Mroooooow`, `Mew`, `Waoow` ]
     const mike = [ `Truth nuke`, `Final act`, `That's all, folks`, `Yep, I went there`, `I'll see ya next time`, `Thank you all for coming`, `*cue applause*`, `Like and subscribe for part 2` ]
+    const equationWin = [ `Mathematical`, `Aced it`, `A+`, `You're winner`, `Ready for colleg`, `Gold star`, `Calculated`]
+    const equationFail = [ `Flunked`, `Dropout`, `F-`, `Didn't study`, `Dog ate it, probably`, `Slept through class`, `Yikes`]
     var title = `<img src="https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${icon}.png"> `;
     switch (type) {
         case 'kitty': title += kitty[Math.floor(Math.random() * kitty.length)]; break;
         case 'mike': title += mike[Math.floor(Math.random() * mike.length)]; break;
+        case 'equation win': title += equationWin[Math.floor(Math.random() * equationWin.length)]; break;
+        case 'equation fail': title += equationFail[Math.floor(Math.random() * equationFail.length)]; break;
     }
     plugin.toast({
         title: title,
@@ -3446,37 +4880,34 @@ function actionNotification(icon, type, text) {
     })
 }
 
-var reroll;
 var evilKittyLanguage;
 function kittytime(card) {
-    reroll = false;
     const kittymind = [
         `${evilForeignKitty()}`,                                    // 0 loads default translations for random language out of most supported languages, doesnt actually change the setting
         `This kitty is asleep...`,                                  // 1 nothing; a break
         `Kitty got out all the chats to play!`,                     // 2 opens first 17 chat ids randomly across the screen
-        `Kitty found the emote control panel!`,                     // 3 searches for emotes, if none, reroll, if found, use a random one
+        `Kitty found the emote control panel!`,                     // 3 use random emote
         `A kitty fell off the counter ;(`,                          // 4 triggers big damage animation and sound
         `This kitty wants you to meet her family!`,                 // 5 opens tribe menu for tribe
         `A kitty bapped the light switch.`,                         // 6 toggles on/off dark mode
         `A kitty messed with the color pallete.`,                   // 7 shuffles soul colors
+        `A kitty ended your turn!`,                                 // 8 mike drop effect
     ]
     var kittypoll = Math.floor(Math.random() * kittymind.length);
     switch (kittypoll) {
         case 0: defaultTranslations(evilKittyLanguage); break;
-        case 1: break;
+        case 1: if (kittyCatsDoNothing?.value()) { break; } kittytime(card); return;
         case 2: chattyKitty(); break;
         case 3: emotingKitty(); break;
         case 4: window.shakeScreen(); break;
         case 5: familyKitty(card); break;
         case 6: if ($("#gsFlashlight").length) { removeFlashlight(); } else { createFlashlight(); }; break;
         case 7: shuffleSouls(1); break;
+        case 8: if (kittyCatsEndTurns?.value()) { window.socketGame.send(JSON.stringify({action: "endTurn"})); break; } kittytime(card); return;
         default: actionNotification('kittyCat', 'kitty', "Uh oh! Kitty broke the space-time continuum and returned an error. Please report this to Gala!"); return;
     }
-    if (reroll) {kittytime(card); return;}
     actionNotification('kittyCat', 'kitty', kittymind[kittypoll])
 }
-
-window.kittytime = kittytime
 
 function evilForeignKitty() {
     const langs = ['en', 'es', 'ru', 'it', 'de', 'cn'];
@@ -3500,16 +4931,12 @@ function openRoomRandom(id) {
     $chat.css('left', window.randInt(0, 1000));
 }
 
-window.chattyKitty = chattyKitty
-
 function emotingKitty() {
     const emotes = window.chatEmotes.map(emote => emote.id) ?? [];
     const emotepoll = Math.floor(Math.random() * emotes.length);
     const id = emotes[emotepoll].toString();
     if (id) {
         window.socketGame.send(JSON.stringify({action: "emote", id: id}));
-    } else {
-        reroll = true;
     }
 }
 
@@ -3517,7 +4944,76 @@ function familyKitty(card) {
     const cardMainTribe = card.tribes[0] || null;
     const tribes = ['SNAILS', 'TEMMIE', 'ARACHNID', 'DOG']
     const tribepoll = Math.floor(Math.random() * tribes.length);
-    window.showTribeCards(cardMainTribe || tribes[tribepoll])
+    window.showTribeCards(cardMainTribe ?? tribes[tribepoll])
+}
+
+function mathtime(card) {
+    $('*').modal('hide');
+    if (typeof card === 'string') {
+        card = JSON.parse(card)
+    }
+    const $htmlCard = getElementByCard(card);
+    function operand(seed) {
+        const lowerLimit = equationsNegatives.value() ? equationsMaxOperand.value() * -1 : 0
+        const upperLimit = equationsMaxOperand.value() ?? 1
+        return seededRandInt(lowerLimit, upperLimit, seed)
+    }
+    var operands, answer, sign
+    function makeEquation(seed) {
+        operands = [operand(seed), operand(seed)]
+        if (equationsAddSubtract.value() && !equationsMultiplyDivide.value()) {
+            if (seededRandInt(0, 1, seed)) {
+                answer = operands[0] - operands[1];
+                sign = '-';
+            } else {
+                answer = operands[0] + operands[1];
+                sign = '+';
+            }
+        }
+        if (!equationsAddSubtract.value() && equationsMultiplyDivide.value()) {
+            if (seededRandInt(0, 1, seed)) {
+                answer = operands[0] * operands[1];
+                sign = '×';
+            } else {
+                answer = operands[0] / operands[1];
+                sign = '÷';
+            }
+        }
+        if (equationsAddSubtract.value() && equationsMultiplyDivide.value()) {
+            switch (seededRandInt(0, 3, seed)) {
+                case 0: answer = operands[0] + operands[1]; sign = '+'; break;
+                case 1: answer = operands[0] - operands[1]; sign = '-'; break;
+                case 2: answer = operands[0] * operands[1]; sign = '×'; break;
+                case 3: answer = operands[0] / operands[1]; sign = '÷'; break;
+            }
+        }
+        if (!equationsNegatives.value() && answer < 0) {makeEquation(seed + 1)}
+        if (!equationsNonIntegerAnswers.value() && !Number.isInteger(answer)) {makeEquation(seed + 1)}
+        if (answer === undefined) {makeEquation(seed + 1)}
+    }
+    makeEquation(window.gameId + card.id)
+    bootstrapPrompt(`${card.name}'s Math Time`, `What is ${operands[0]} ${sign} ${operands[1]}?`, ` `, function(input) {
+        if (input == answer) {
+            actionNotification('equation', 'equation win', `${card.name} can now be played!`)
+            updGameData('equationsWon', 'push', card.id)
+            window.setInfoPowers($htmlCard, card)
+        } else {
+            switch (equationsPenalty.value()) {
+                case 'none': actionNotification('equationFail', 'equation fail', `You failed to free ${card.name} from its mathematical aura...`); break;
+                case 'end turn': actionNotification('equationFail', 'equation fail', `Turn ended due to failing ${card.name}'s math quiz!`); break;
+                case 'surrender': actionNotification('equationFail', 'equation fail', `Lost due to failing ${card.name}'s math quiz!`); break;
+            }
+        }
+    });
+}
+
+window.mathtime = mathtime;
+
+function getElementByCard(card) {
+    return $(`#${card.id}`);
+}
+function getCardFromElement($element) {
+    return $element.find('.cardObject');
 }
 
 const flashlight = document.createElement("div");
@@ -3541,15 +5037,16 @@ plugin.events.on(':preload', () => {
     rarityStyles(raritySkins?.value());
     cardModifier(visualModifier?.value());
     siteFilter(crispiness?.value(), blurriness?.value(), greyscale?.value(), invert?.value());
+    monochromeCopiesToggle(copiesAreMonochrome?.value())
     updateFlashlightRadius(flashlightRadiusInput?.value());
     updateFlashlightImg(flashlightStyle?.value());
     imgPixelToggle(pixelImageRendering?.value());
-    for (var i in obscSettings) { obscSettings[i].elements.forEach(k => obscure(k, obscSettings[i].value)) };
+    for (var i in obscSettings) { obscSettings[i].elements.forEach(k => obscure(k, obscSettings[i].value, true)) };
     if (noSilence?.value()) {hide('cardSilence', true)};
     if (lightsOff?.value()) {createFlashlight()};
     shinyDisplayToggle(shinyDisplay?.value());
     statsOnTopToggle(statsOnTop?.value());
-    tablessToggle(tabless?.value());
+    styleTabless(tabless?.value());
     if (mulliganInfo?.value()) {initMulliganInfo()}
     updateSoulColor('DETERMINATION', dtColor?.value());
     updateSoulColor('INTEGRITY', integColor?.value());
@@ -3558,19 +5055,17 @@ plugin.events.on(':preload', () => {
     updateSoulColor('PERSEVERANCE', pvColor?.value());
     updateSoulColor('BRAVERY', braveryColor?.value());
     updateSoulColor('PATIENCE', patienceColor?.value());
+    settingOverriddenStyles();
     if (gsVersion.value() != pluginVersion) {
         gsVersion.set(pluginVersion);
-        plugin.toast({
-            title: `Galascript: Update ${pluginVersion}`,
-            text: convertMarkdown.makeHtml(patchNotesShort),
-        });
+        window.gsUpdateToast();
     }
 });
 
 plugin.events.on('translation:loaded', () => {
-    if (cardAliases?.value()) {initAliases();};
-    initCustomPower();
+    initGsTranslations();
     initCustomTranslations();
+    cardHighlightStyles(cardHighlights?.value());
     loadLibraries();
 });
 
@@ -3586,15 +5081,12 @@ function setProfileSkin(profileSkin) {
     }
 }
 
-var catsArray = [];
-var mikesArray = [];
 var bgm;
 plugin.events.on('GameStart', () => {
     plugin.events.on('connect', (data) => {
         const profileSkin = JSON.parse(data.yourProfileSkin)
         const savedBg = sessionStorage.getItem(`underscript.bgm.${window.gameId}`);
         const underscriptPersistBg = plugin.settings().value('underscript.persist.bgm');
-        console.log(profileSkin, savedBg, underscriptPersistBg)
         function loadBg() {
             if (savedBg && underscriptPersistBg) {
                 setBg(savedBg);
@@ -3612,31 +5104,6 @@ plugin.events.on('GameStart', () => {
         rollEventArrays();
     });
 });
-
-function rollEventArrays() {
-    const seed = window.gameId
-    function rollChance(i) {
-        var m = 2**35 - 31
-        var a = 185852
-        var s = ((seed ^ i) * 2654435761) >>> 0;
-        var roll = (s * a % m) / m
-        return Math.floor(roll * 100) + 1;
-    }
-    const kittyCatsChancer = Math.min(Math.max(kittyCatsChance.value(), 0), 100);
-    const mikeDropsChancer = Math.min(Math.max(mikeDropsChance.value(), 0), 100);
-    for (let i = 10000; i <= 20000; i++) {
-        if (kittyCatsChancer >= rollChance(i)) {
-            catsArray.push(i)
-        }
-    }
-    for (let i = 10000; i <= 20000; i++) {
-        if (mikeDropsChancer >= rollChance(i * 6)) {
-            mikesArray.push(i)
-        }
-    }
-    window.catsArray = catsArray
-    window.mikesArray = mikesArray
-}
 
 plugin.events.on(':load', () => {
     if (statFilters?.value()) {createStatFilters()}
@@ -3823,8 +5290,15 @@ function createPowerFilters() {
                 class: 'powerInput',
                 onchange: 'applyFilters(); showPage(0);'
             }))
+            var link = '';
+            switch (powerSkins.value()) {
+                case 'Ancient': link = power.name === 'disarmed' ? `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/ancient-${power.icon}.png` : `images/powers/${power.icon}.png`; break;
+                case 'Neon': link = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/neon-${power.icon}.png`; break;
+                case 'Balatro': link = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/balatro-${power.icon}.png`; break;
+                default: link = `images/powers/${power.icon}.png`
+            }
             $powerFilter.append($('<img>', {
-                src: `images/powers/${power.icon}.png`
+                src: link,
             }))
             powers[`${power.name}Input`] = $powerFilter
         })
@@ -3838,8 +5312,14 @@ function createPowerFilters() {
                 class: 'powerInput',
                 onchange: 'applyFilters(); showPage(0);'
             }))
+            var link = '';
+            switch (powerSkins.value()) {
+                case 'Neon': link = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/neon-${power.icon}.png`; break;
+                case 'Balatro': link = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/balatro-${power.icon}.png`; break;
+                default: link = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${power.icon}.png`
+            }
             $powerFilter.append($('<img>', {
-                src: `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${power.icon}.png`
+                src: link,
             }))
             powers[`${power.name}Input`] = $powerFilter
         })
@@ -3882,6 +5362,7 @@ var allStatus = [];
 var allSouls = [];
 var allRarities = [];
 var allDivisions = [];
+var allGsTrans = [];
 
 function loadLibraries() {
     if (!allArtifacts.length) {
@@ -3950,6 +5431,13 @@ function loadLibraries() {
             }
         });
     }
+    if (!allGsTrans.length) {
+        Object.entries($.i18n().messageStore.messages.en).forEach(([key, value])=> {
+            if (key.startsWith("gs.") && !key.includes("alias") && !key.includes("status")) {
+                if (!allGsTrans.includes(key)) {allGsTrans.push(key)}
+            }
+        });
+    }
 }
 
 function bootstrapPrompt(title, text, other, func) {
@@ -3965,8 +5453,8 @@ function bootstrapPrompt(title, text, other, func) {
                             type: 'text',
                             id: 'gsBootstrapPrompt',
                             class: 'form-control',
-                            placeholder: other
-                        })
+                            placeholder: other,
+                        }).autocomplete({ disabled: true })
                     );
             } else if (typeof other === 'object') {
                 const $el = $('<div>')
@@ -4044,12 +5532,6 @@ function createTransHelper() {
         $('<input>', {
             class: 'gsTransHelperOption',
             type: 'button',
-            id: 'gsBtnCardAlias',
-            value: 'Card alias (Galascript)'
-        }),
-        $('<input>', {
-            class: 'gsTransHelperOption',
-            type: 'button',
             id: 'gsBtnKeywordName',
             value: 'Keyword name'
         }),
@@ -4068,6 +5550,18 @@ function createTransHelper() {
         $('<input>', {
             class: 'gsTransHelperOption',
             type: 'button',
+            id: 'gsBtnRarityName',
+            value: 'Rarity name'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnTribeName',
+            value: 'Tribe name'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
             id: 'gsBtnArtifactName',
             value: 'Artifact name'
         }),
@@ -4076,7 +5570,23 @@ function createTransHelper() {
             type: 'button',
             id: 'gsBtnArtifactDesc',
             value: 'Artifact description'
-        })
+        }),
+        $('<p>', {
+            class: 'gsTransHelperOption',
+            id: 'category2'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnCardAlias',
+            value: 'Card alias'
+        }),
+        $('<input>', {
+            class: 'gsTransHelperOption',
+            type: 'button',
+            id: 'gsBtnGalascript',
+            value: 'Misc. Galascript strings'
+        }),
     ]
 
     const transHelperValueContent = [
@@ -4204,6 +5714,7 @@ function createTransHelper() {
             transHelperKeyContent.forEach(opt => $transHelper.append(opt));
 
             $('#category1').text('New...');
+            $('#category2').text('Galascript');
 
             $('#gsBtnCardName').on('click', function() {
                 bootstrapPrompt("New card name", "Select the card.", window.allCards.map(card => card.name).sort(), function (input) {
@@ -4218,14 +5729,6 @@ function createTransHelper() {
                     var id = window.getCardWithName(input)?.id ?? 0
                     selectedEl.value = `card-${id}`
                     siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][`card-${id}`]
-                    siblingEl.focus();
-                })
-            });
-            $('#gsBtnCardAlias').on('click', function() {
-                bootstrapPrompt("New card alias", "Select the card. Card aliases are used for the \"Card Alias Lookup\" setting.", window.allCards.map(card => card.name).sort(), function (input) {
-                    var id = window.getCardWithName(input)?.id ?? 0
-                    selectedEl.value = `gs.card-alias-${id}`
-                    siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][`gs.card-alias-${id}`] ?? ""
                     siblingEl.focus();
                 })
             });
@@ -4261,6 +5764,22 @@ function createTransHelper() {
                     siblingEl.focus();
                 })
             });
+            $('#gsBtnRarityName').on('click', function() {
+                bootstrapPrompt("New rarity name", "Select the rarity.", ['BASE', 'TOKEN', 'COMMON', 'RARE', 'EPIC', 'LEGENDARY', 'DETERMINATION'], function (input) {
+                    var rarity = `rarity-${input.toLowerCase()}`
+                    selectedEl.value = rarity
+                    siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][rarity]
+                    siblingEl.focus();
+                })
+            });
+            $('#gsBtnTribeName').on('click', function() {
+                bootstrapPrompt("New tribe name", "Select the tribe.", allTribes.sort(), function (input) {
+                    var tribe = `tribe-${input.toLowerCase()}`
+                    selectedEl.value = tribe
+                    siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][tribe]
+                    siblingEl.focus();
+                })
+            });
             $('#gsBtnArtifactName').on('click', function() {
                 bootstrapPrompt("New artifact name", "Select the artifact.", allArtifacts.map(art => art.name).sort(), function (input) {
                     const idArtifact = allArtifacts.find(art => art.name === input)?.id ?? 0
@@ -4274,6 +5793,21 @@ function createTransHelper() {
                     const idArtifact = allArtifacts.find(art => art.name === input)?.id ?? 0
                     selectedEl.value = `artifact-${idArtifact}`
                     siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][`artifact-${idArtifact}`]
+                    siblingEl.focus();
+                })
+            });
+            $('#gsBtnCardAlias').on('click', function() {
+                bootstrapPrompt("New card alias", "Select the card. Card aliases are used for the \"Card Alias Lookup\" setting.", window.allCards.map(card => card.name).sort(), function (input) {
+                    var id = window.getCardWithName(input)?.id ?? 0
+                    selectedEl.value = `gs.card-alias-${id}`
+                    siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][`gs.card-alias-${id}`] ?? ""
+                    siblingEl.focus();
+                })
+            });
+            $('#gsBtnGalascript').on('click', function() {
+                bootstrapPrompt("New Galascript string", "Select any translation custom-added by Galascript. More will be added along the way!", allGsTrans, function (input) {
+                    selectedEl.value = input
+                    siblingEl.value = $.i18n().messageStore.messages[$.i18n().locale][input] ?? ""
                     siblingEl.focus();
                 })
             });
@@ -4412,14 +5946,19 @@ function creditTitle(title) {
     return `<h4>${title}</h4>`
 }
 
+function creditTitleSmall(title) {
+    return `<h6>${title}</h4>`
+}
+
 function creditRow(contribution, creator) {
     return `<h5>${contribution}<span class="coolguy">${creator}</span></h5>`
 }
 function creatorRow(creator) {
     return `<h5 style="text-align: center; color: thistle;">${creator}</h5>`
 }
-function link(display, link, icon) {
-    return `<a target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;" href="${link}"><img style="width: 14px;" src="https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/${icon}.png">${display}</a>`
+function link(display, link, icon, htmlIcon = '') {
+    if (icon) {htmlIcon = `<img style="width: 14px;" src="https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/${icon}.png">`}
+    return `<a target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;" href="${link}">${htmlIcon}${display}</a>`
 }
 
 const credits = `
@@ -4427,37 +5966,42 @@ Galascript wouldn't be possible without all of your contributions and epic gamer
 ${creditRow("Underscript developer", "feildmaster")}
 feild made this whole thing possible! It's him who set the groundwork for people like me to easily craft their silly schemes (not to mention the heavy help along the way!). I can't thank him enough :D
 ${creditTitle("Frames")}
-${creditRow("Staff", "Diamaincrah")}
-${creditRow("Spamton", "Dylan Hall")}
-${creditRow("Cyber World", "Dylan Hall")}
-${creditRow("Hollow Knight", "Valaar")}
-${creditRow("Void", "Crystal & Acid")}
-${creditRow("Grimm Troupe", "Crystal & Acid")}
-${creditRow("FNAFB", "Crystal")}
-${creditRow("Outbreak", "Jaku")}
-${creditRow("Mirror Temple", "Emerald")}
-${creditRow("Snails", "Emerald")}
-${creditRow("Waterfall", "Emerald")}
-${creditRow("Yet Darker", "Za")}
-${creditRow("VMas", "StellarSting")}
-${creditRow("Steamworks", "Shyren")}
-${creditRow("Bone", "Diamaincrah")}
-${creditRow("Furry Sans", "Diamaincrah")}
-${creditRow("Inscrypted", "Dylan Hall")}
-${creditRow("It's TV Time!", "Dylan Hall")}
-${creditRow("Cold Place", "Dylan Hall")}
-${creditRow("Slay the Spire", "Bartwk")}
+    ${creditRow("Staff", "Diamaincrah")}
+    ${creditRow("Spamton", "Dylan Hall")}
+    ${creditRow("Cyber World", "Dylan Hall")}
+    ${creditRow("Hollow Knight", "Valaar")}
+    ${creditRow("Void", "Crystal & Acid")}
+    ${creditRow("Grimm Troupe", "Crystal & Acid")}
+    ${creditRow("FNAFB", "Crystal")}
+    ${creditRow("Outbreak", "Jaku")}
+    ${creditRow("Mirror Temple", "Emerald")}
+    ${creditRow("Snails", "Emerald")}
+    ${creditRow("Waterfall", "Emerald")}
+    ${creditRow("Yet Darker", "Za")}
+    ${creditRow("Steamworks", "Shyren")}
+    ${creditRow("Bone", "Diamaincrah")}
+    ${creditRow("Furry Sans", "Diamaincrah")}
+    ${creditRow("OvenBreak", "Shyren")}
+    ${creditRow("Inscrypted", "Dylan Hall")}
+    ${creditRow("It's TV Time!", "Dylan Hall")}
+    ${creditRow("Cold Place", "Dylan Hall")}
+    ${creditRow("Slay the Spire", "Bartwk")}
 ${creditTitle("Rarity icons")}
-${creditRow("Hollow Knight", "Jaku")}
-${creditRow("FNAFB", "JaimeezNuts")}
-${creditRow("Celeste", "Emerald")}
-${creditTitle("Free-to-use Frame assets")}
-${creditRow("Pokecard 1996 - Monster, Shiny", link("ILKCMP", "https://www.deviantart.com/ilkcmp", "deviantart_thistle"))}
-${creditRow("Pokecard 1996 - Spell", link("icycatelf", "https://www.deviantart.com/icycatelf", "deviantart_thistle"))}
+    ${creditRow("Hollow Knight", "Jaku")}
+    ${creditRow("FNAFB", "JaimeezNuts")}
+    ${creditRow("Celeste", "Emerald")}
+    ${creditRow("OvenBreak", "Shyren")}
+${creditTitle("Fair use assets")}
+${creditTitleSmall("I do not own, nor did I ask for permission to use, any of the following assets. They belong to their respective intellectual property holders. Galascript makes use of these copyrighted materials under the fair use doctrine, Section 107 of U.S. Copyright Law")}
+    ${creditRow("Pokecard 1996 - Monster", link("ILKCMP", "https://www.deviantart.com/ilkcmp", "deviantart_thistle"))}
+    ${creditRow("Pokecard 1996 - Spell", link("icycatelf", "https://www.deviantart.com/icycatelf", "deviantart_thistle"))}
+    ${creditRow("Balatro assets", "Balatro by LocalThunk")}
+    ${creditRow("Showdown frame misc assets", "Pokémon Showdown", "https://pokemonshowdown.com")}
+    ${creditRow("", "© The Pokémon Company Intl.")}
+${creditTitleSmall("Galascript is a fan project solely intended for non-commercial use!")}
 ${creditTitle("Special Thanks")}
-${creatorRow("feildmaster (again)")}
-${creatorRow("Onutrem")}
-${creatorRow("Galascript's early supporters and testers")}
-${creatorRow("And you. Thank you <3")}
-i am... so happy to have this out you have no fucking idea oh my g
+    ${creatorRow("feildmaster (again)")}
+    ${creatorRow("Onutrem")}
+    ${creatorRow("Galascript's early supporters and testers")}
+    ${creatorRow("And you. Thank you <3")}
 `
