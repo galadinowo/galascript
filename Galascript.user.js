@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.4
+// @version      1.0.4.1
 // @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
@@ -92,28 +92,10 @@ plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/G
 
 const patchNotes =
 `
-- New frame: <i>OvenBreak</i>
-    - <i>Balatro</i> frame finished
-    - Collapsed <i>Respective frames</i> option into its own frame
-- 3 new rarity icon sets: <i>Balatro</i>, <i>OvenBreak</i>, and <i>OvenBreak (Alt)</i>
-- Added power skins, with 4 unique options: <i>Ancient</i>, <i>Neon</i>, <i>Balatro</i>, and <i>Showdown</i>
-- Added setting to control <i>Card highlights</i>, controlling how highlighted cards are displayed
-- 5 new <i>Action powers</i>: <i>Equation</i>, <i>Brick</i>, <i>Stupor</i>, <i>Bitflipped</i>, and <i>Sludge</i>
-- <i>Action power</i> settings are now hidden if not enabled
-- Added new settings for <i>Kitty cat</i> to enable and disable certain effects
-- Added <i>Former glory</i> power, giving Trashy Ranged and Thorns, and The Heroine Another Chance
-- All settings should now work instantaneously; no need to wait for card updates or reloading
-- 0, 2 and 5 options added for <i>Stat base</i>. Again, no one asked for these
-- You can now click <span style="color: thistle">tips</span> to dismiss them
-    - These can be brought back at the bottom of settings via the <i>Restore tips</i> button
-- You can now import and export your settings, found at the bottom of your settings!
-- <i>Patch notes</i> and <i>Credits</i> buttons now bring up a seperate menu for viewing pleasure
-- Added <i>Log chat</i> within <i>QoL</i>, which makes it so messages and emotes from you or the enemy will be logged in the Underscript battle log
-- <i>Auto start music</i> setting has been removed due to changes to the background system; you will now always have to first click the page to hear the music
-- Added support for the 5 new backgrounds this season
-- Added translation support for Rarities and Tribes, plus miscellaneous Galascript strings
-- Copies are monochrome. Well, at least, they can be, in <i>Filters</i>
-- Fixed literally every bug! If you find one, I find you.
+- <i>Equations</i> properly implemented
+- Fixed <i>Kitty cats</i> and <i>Mike drops</i> triggering in scenarios where they shouldn't (fr this time, i promise)
+- New optional <i>Kitty cat</i> option to disenchant the played card, as well as toggles for other effects
+- Translation support for even more Galascript strings
 `;
 
 const convertMarkdown = new underscript.lib.showdown.Converter();
@@ -1256,12 +1238,13 @@ function defaultTranslations(language) {
                 $(this).text($.i18n(cleanKey, 1));
             }
         });
+        refreshCards();
     });
 }
 window.defaultTranslations = defaultTranslations
 function initGsTranslations() {
     if (!$) return;
-        $.i18n().load({
+    $.i18n().load({
         "gs.card-alias-8": "mommy",
         "gs.card-alias-30": "bp",
         "gs.card-alias-32": "memhead",
@@ -1408,7 +1391,7 @@ function initGsTranslations() {
         "gs.status-kitty-cat": "This card is secretly possessed by a kitty! It will do something random when played or summoned from your hand.",
         "gs.status-mike-drop": "This card's a real showstopper! It ends your turn immediately when played or summoned from your hand.",
         "gs.status-brick": "This card cannot be played, due to the really heavy brick on it.",
-        "gs.status-equation": "To be able to play this card, you must first solve a math equation.<br><button onclick=\"mathtime('$1')\">Start problem</button>",
+        "gs.status-equation": "To be able to play this card, you must first solve a math equation.<br><button class=\"gsDialogButton\" onclick=\"mathtime('$1')\">Start problem</button>",
         "gs.status-stupor": "This monster can't attack. Or rather, you can't make it attack, because it's lazy...",
         "gs.status-bitflipped": "A random stat on this card is off by one. Do you know which?",
         "gs.status-sludge": "This card is covered in a thick layer of sludge. Gross.",
@@ -1419,35 +1402,15 @@ function initGsTranslations() {
         "gs.status-thorns-stacked": "This monster will deal an additional {{DMG}} to the attacker.",
         "gs.status-ranged": "This monster is immune while attacking.",
 
+        "gs.owned": "(Owned)",
+        "gs.not-owned": "(Not owned)",
+
         "gs.game-enemy": "Enemy",
         "gs.game-ally": "Your",
+        "gs.game-going-first": "You go first.",
+        "gs.game-going-second": "You go second.",
 
-        "gs.game-intros-1": "$1 challenges you to a Dual!",
-        "gs.game-intros-2": "Fighting $1!",
-        "gs.game-intros-3": "$1 enters through a graceful misty fog...",
-        "gs.game-intros-4": "$1 enters the scene!",
-        "gs.game-intros-5": "$1 approaches!",
-        "gs.game-intros-6": "$1 attacks!",
-        "gs.game-intros-7": "$1 sniped you.",
-        "gs.game-intros-8": "$1 wants to win! Are you just gonna let that happen?",
-        "gs.game-intros-9": "C-could it be? It's the one and only $1...",
-        "gs.game-intros-10": "...It's $1? Sorry, youre cooked.",
-        "gs.game-intros-11": "$1 gracefully flops onto the battlefield like a fish.",
-        "gs.game-intros-12": "A wild $1 appeared!",
-        "gs.game-intros-14": "$1 glares at you. You hear boss music.",
-        "gs.game-intros-15": "Well, you didn't expect $1 to be here.",
-        "gs.game-intros-16": "Well, there is a $1 here. They might be happy to see you. What do you think?",
-        "gs.game-intros-17": "> enters $5-less queue<br>> looks inside<br>> $5",
-        "gs.game-intros-18": "Okay, so, a $1 walks into a bar",
-        "gs.game-intros-19": "You are not fighting $1!",
-        "gs.game-intros-20": "ITS FUCKING $5 RUN",
-        "gs.game-intros-21": "My money's on $1. No pressure.",
-        "gs.game-intros-22": "EPIC RAP BATTLES OF HISTORY:<br>$1<br>VERSUS!<br>$2",
-        "gs.game-intros-23": "Fighting $2!<br>Wait, no...<br>...it's $1!",
-        "gs.game-intros-24": "$1 calls an ambulance in advance.",
-        "gs.game-intros-25": "$1, huh?",
-        "gs.game-intros-26": "$1 emerges from the abyss!",
-        "gs.game-intros-27": "Hey, it's $1!",
+        "gs.game-intros": "$1 challenges you to a Dual!|Fighting $1!|$1 enters through a graceful misty fog...|$1 enters the scene!|$1 approaches!|$1 attacks!|$1 sniped you.|$1 wants to win! Are you just gonna let that happen?|C-could it be? It's the one and only $1...|...It's $1? Sorry, youre cooked.|$1 gracefully flops onto the battlefield like a fish.|A wild $1 appeared!|$1 glares at you. You hear boss music.|Well, you didn't expect $1 to be here.|Well, there is a $1 here. They might be happy to see you. What do you think?|> enters $5-less queue<br>> looks inside<br>> $5|Okay, so, a $1 walks into a bar|You are not fighting $1!|ITS FUCKING $6 RUN|My money's on $1. No pressure.|EPIC RAP BATTLES OF HISTORY:<br>$1<br>VERSUS!<br>$2|Fighting $2!<br>Wait, no...<br>...it's $1!|$1 calls an ambulance in advance.|$1, huh?|$1 emerges from the abyss!|Hey, it's $1!",
         "gs.game-intros-crystal": "$7 Free elo.",
         "gs.game-intros-dia": "$7 You're about to have a bad time.",
         "gs.game-intros-frogman": "$7 Pet the frog :D",
@@ -1455,7 +1418,64 @@ function initGsTranslations() {
         "gs.game-intros-jaimee": "$7 rat",
         "gs.game-intros-gala": "$7 Wow, what a really cool and awesome opponent there!",
         "gs.game-intros-speednick": "Draw out your sword, $2,<br>and paint $7 me a beautiful fight!",
-    }, $.i18n().locale);
+
+        "gs.alert-title-kitty": "Mrrp|Mrow|Meow|Nyaw|Mrrrrow|Prrrrrr|Mrorw|Mroooooow|Mew|Waoow",
+        "gs.alert-title-mike": "Truth nuke|Final act|That's all, folks|Yep, I went there|I'll see ya next time|Thank you all for coming|*cue applause*|Like and subscribe for part 2",
+        "gs.alert-title-equation-win": "Mathematical|Aced it|A+|You're winner|Ready for colleg|Gold star|Calculated",
+        "gs.alert-title-equation-fail": "Flunked|Dropout|F-|Didn't study|Dog ate it, probably|Slept through class|Yikes",
+        "gs.alert-title-not-allowed": "Nope|Nuh uh|No you don't|Hey, stop that|Stop it|Don't",
+        "gs.alert-title-import-complete": "Import complete!",
+
+        "gs.alert-mike": "$1's <i>Mike drop</i> ended your turn prematurely.",
+        "gs.alert-kitty-foreign": "An evil $1 kitty changed your language!",
+        "gs.alert-kitty-asleep": "This kitty is asleep...",
+        "gs.alert-kitty-chat": "Kitty got out all the chats to play!",
+        "gs.alert-kitty-emote": "Kitty found the emote control panel!",
+        "gs.alert-kitty-fall": "A kitty fell off the counter ;(",
+        "gs.alert-kitty-family": "This kitty wants you to meet her family!",
+        "gs.alert-kitty-lights": "A kitty bapped the light switch.",
+        "gs.alert-kitty-soulcolors": "A kitty messed with the color pallete.",
+        "gs.alert-kitty-endturn": "A kitty ended your turn!",
+        "gs.alert-kitty-shred": "A kitty shredded $1 to bits! You feel its remains flying into your wallet...",
+        "gs.alert-kitty-error": "Uh-oh! Kitty broke the space-time continuum and returned an error. Please report this to Gala!",
+        "gs.alert-cant-surrender": "You can't surrender before turn 5.",
+        "gs.alert-equation-win": "$1 can now be played!",
+        "gs.alert-equation-not-your-turn": "You can't do equations right now, it's not your turn.",
+        "gs.alert-equation-not-enemy-turn": "You can't do equations right now, it's not the enemy's turn.",
+        "gs.alert-equation-fail-nopenalty": "You failed to free $1 from its mathematical aura...",
+        "gs.alert-equation-fail-endturn": "Turn ended due to failing $1's math quiz!",
+        "gs.alert-equation-fail-surrender": "Lost due to failing $1's math quiz!",
+        "gs.alert-equation-fail-surrendernt": "Well, you would've lost due to failing $1's math quiz... but, I can't make you surrender before turn 5... so...",
+        "gs.alert-import-complete": "Successfully overridden your settings to those of <i>$1</i>",
+        "gs.alert-import-merged": "Successfully merged contents of <i>$1</i> into <i>$2</i>",
+
+
+        "gs.math-title": "$1's Math Time|$1's Math Quiz|$1's Basics in Education and Learning|Mr. $1's Test",
+        "gs.math-q-add": "What is $1 + $2?",
+        "gs.math-q-subtract": "What is $1 - $2?",
+        "gs.math-q-multiply": "What is $1 * $2?",
+        "gs.math-q-divide": "What is $1 / $2?",
+        "gs.math-q-dumb": "What is $1?|What is the meaning of life?|What|You turned off every operation... what did you expect?|Just guess",
+
+        "gs.dialog-import": "Yes, import",
+        "gs.dialog-combine": "Combine with current",
+        "gs.dialog-are-you-sure": "Are you sure?",
+        "gs.dialog-import-settings": "Import Galascript settings",
+        "gs.dialog-import-begin": "Import Galascript settings from a .gs file! You'll first be asked if you're sure about replacing your settings.",
+        "gs.dialog-import-are-you-sure": "Are you sure you want to import <i>$1</i>?",
+        "gs.dialog-import-override-all": "ALL settings will be overridden! If you'd like to keep them, go back and Export them.",
+        "gs.dialog-import-override-some": "The following settings will be overridden:",
+        "gs.dialog-import-override-one": "Just the <i>$1</i> setting will be overriden. If you'd like to keep its contents, Export them first, or press \"Combine with current\" to combine the two.",
+        "gs.dialog-export-settings": "Export Galascript settings",
+        "gs.dialog-export-begin": "Export your Galascript settings to send to other users or to save for later! Choose from one of the below presets to export.",
+        "gs.dialog-export-all": "All settings",
+        "gs.dialog-export-translations": "Custom translations",
+    }, 'en');
+}
+
+function randi18n(key, ...args) {
+    const list = $.i18n(key, ...args).split("|")
+    return list[Math.floor(Math.random() * list.length)];
 }
 
 function initCustomTranslations() {
@@ -1475,8 +1495,7 @@ function initMulliganInfo() {
             function soulIcon(replace) {return `<img src="/images/souls/${replace ? replace : enemySoul}.png">`};
             function soulColor(text, soul) {return `<span class="${soul ? soul : enemySoul}">${text}</span>`};
             function player(replace) {return `${soulIcon()} ${soulColor(replace ? replace : enemyUser)}`};
-            function translatedIntro(key) {
-                return  $.i18n(key,
+            const introVars = [
                             player(), // $1: The enemy player
                             `${soulIcon(yourSoul)} ${soulColor(yourUser, yourSoul)}`, // $2: You!
                             soulColor(enemyUser), // $3: Enemy, no soul icon
@@ -1485,30 +1504,24 @@ function initMulliganInfo() {
                             player(enemyUser.toUpperCase()), // $6: The enemy player, uppercased
                             soulIcon(), // $7 Enemy soul icon
                             soulIcon(yourSoul) // $8 Your soul icon
-                        )
-            }
-            var introductions = [];
-            Object.entries($.i18n().messageStore.messages.en).forEach(([key, value])=> {
-                if (key.startsWith("gs.game-intros") && /\d/.test(key)) {
-                    introductions.push(translatedIntro(key))
-                }
-            });
+                        ]
+            var introductions = $.i18n('gs.game-intros', ...introVars).split("|") ?? 'gs.game-intros';
             function funnyIntro() {
                 switch (enemyUser) {
-                    case "Crystal":                   return translatedIntro('gs.game-intros-crystal');
-                    case "Diamaincrah":               return translatedIntro('gs.game-intros-dia');
-                    case "frogman":                   return translatedIntro('gs.game-intros-frogman');
-                    case "Dware":                     return translatedIntro('gs.game-intros-dware');
-                    case "The Rat":                   return translatedIntro('gs.game-intros-jaimee');
-                    case "galadino":                  return translatedIntro('gs.game-intros-gala');
-                    case "speednick1972":             return translatedIntro('gs.game-intros-speednick');
+                    case "Crystal":                   return $.i18n('gs.game-intros-crystal', ...introVars);
+                    case "Diamaincrah":               return $.i18n('gs.game-intros-dia', ...introVars);
+                    case "frogman":                   return $.i18n('gs.game-intros-frogman', ...introVars);
+                    case "Dware":                     return $.i18n('gs.game-intros-dware', ...introVars);
+                    case "The Rat":                   return $.i18n('gs.game-intros-jaimee', ...introVars);
+                    case "galadino":                  return $.i18n('gs.game-intros-gala', ...introVars);
+                    case "speednick1972":             return $.i18n('gs.game-intros-speednick', ...introVars);
                 }
                 var result = introductions[Math.floor(Math.random() * introductions.length)];
                 introductions.splice(introductions.indexOf(result), 1);
                 return result;
             }
             var info = `${funnyIntro()}<br><br>
-                        ${window.userTurn !== window.userId ? 'You go first.' : 'You go second.'}`;
+                        ${window.userTurn !== window.userId ? $.i18n('gs.game-going-first') : $.i18n('gs.game-going-second')}`;
             $('.bootstrap-dialog-message:has(.mulligan) > p').html(info)
         }
     });
@@ -1576,22 +1589,22 @@ function staticStyles() {
     input.gsTransHelperOption {margin: 0px 12px;}
     input.gsTransHelperOption:hover {padding: 0px 0px 0px 10px;}
     #gsPowerFilterRow img {width: 24px;}
-    .playLocked:not(.doingEffect):not(.affected):not(.target):not(.cardOwned):not(.cardNotOwned) > *:not(.cardStatus) {filter: grayscale(100%) brightness(50%) sepia(0%) hue-rotate(0deg) saturate(100%) contrast(1);}
-    .playLocked:not(.doingEffect):not(.affected):not(.target):not(.cardOwned):not(.cardNotOwned) > .cardStatus > *:not([power="brick"]):not([power="equation"]) {filter: grayscale(100%) brightness(50%) sepia(0%) hue-rotate(0deg) saturate(100%) contrast(1);}
-    .playLocked:not(.doingEffect):not(.affected):not(.target):not(.cardOwned):not(.cardNotOwned) .cardBackground {box-shadow: none;}
+    :not(#dustpile) .playLocked:not(.doingEffect):not(.affected):not(.target):not(.cardOwned):not(.cardNotOwned) > *:not(.cardStatus) {filter: grayscale(100%) brightness(50%) sepia(0%) hue-rotate(0deg) saturate(100%) contrast(1);}
+    :not(#dustpile) .playLocked:not(.doingEffect):not(.affected):not(.target):not(.cardOwned):not(.cardNotOwned) > .cardStatus > *:not([power="brick"]):not([power="equation"]) {filter: grayscale(100%) brightness(50%) sepia(0%) hue-rotate(0deg) saturate(100%) contrast(1);}
+    :not(#dustpile) .playLocked:not(.doingEffect):not(.affected):not(.target):not(.cardOwned):not(.cardNotOwned) .cardBackground {box-shadow: none;}
     .cardStatus:has(.showdownStatus) { height: auto; width: 155px; top: 40px; left: 10px; line-height: 12px; display: flex; flex-direction: row-reverse; flex-wrap: wrap; justify-content: right; }
     .showdownStatus { padding: 0px 1px; border-radius: 3px; text-shadow: none; font-size: 7pt; border: 1px solid #FF4400; max-height: none; max-width: none; position: relative; margin: 0 1px;}
-    .brn, .psn, .par, .slp, .frz, .stu { padding: 1px 2px; border: 0;}
+    .brn, .psn, .par, .slp, .frz, .stu { padding: 1px 2px; border: 0; color: #FFF;}
     .negative { border-color: #FF4400; background: #FFE5E0; color: #FF4400;}
     .positive { border-color: #33AA00; background: #E5FFE0; color: #33AA00;}
     .neutral { border-color: #555555; background: #F0F0F0; color: #555555;}
-    .brn { background: #EE5533; color: #FFF;}
-    .psn { background: #A4009A; color: #FFF;}
-    .par { background: #9AA400; color: #FFF;}
-    .slp { background: #AA77AA; color: #FFF;}
-    .frz { background: #009AA4; color: #FFF;}
+    .brn { background: #EE5533; }
+    .psn { background: #A4009A; }
+    .par { background: #9AA400; }
+    .slp { background: #AA77AA; }
+    .frz { background: #009AA4; }
     .stu { background: #FFF; color: #AA77AA;}
-    .gsFileButton {background-color: black; margin-bottom: 10px;}
+    .gsDialogButton {background-color: black; margin-bottom: 5px 0px}
     `)
 }
 
@@ -1772,11 +1785,21 @@ const leGrandeObserver = new MutationObserver((mutations, obs) => {
     document.querySelectorAll('.card.playLocked').forEach(el => { // restricting what you can play for action powers
         if (el.classList.contains('canPlay')) {
             el.classList.remove('canPlay');
+            el.classList.add('cantPlay');
         }
     });
     document.querySelectorAll('td .card.attackLocked').forEach(el => { // make it so ally monsters cannot attack
         if (el.classList.contains('canPlay')) {
             el.classList.remove('canPlay');
+            el.classList.add('cantPlay');
+        }
+    });
+    document.querySelectorAll('.card.cantPlay').forEach(el => { // unlock
+        if (!el.classList.contains('playLocked') && !el.classList.contains('attackLocked')) {
+            el.classList.remove('cantPlay');
+            if (window.userTurn === window.userId) {
+                el.classList.add('canPlay');
+            }
         }
     });
     document.querySelectorAll('[id="underscript.plugin.Galascript.frameSpoof"]').forEach(el => { // dynamic backgrounds for frame skins option
@@ -2520,7 +2543,7 @@ function cardHighlightStyles(val) {
                 0% { transform: translateY(0px);}
                 100% { transform: translateY(5px);}
             }
-            .cardFrame {filter: none !important}
+            .card:not(.playLocked) .cardFrame {filter: none !important}
             .cardBackground {box-shadow: none !important}
 
             .balatro-frame:not(:hover) { animation: unset; }
@@ -2533,10 +2556,14 @@ function cardHighlightStyles(val) {
             .card.affected, .card.doingEffect {animation: action 0.4s ease-out;}
             .card.fight {animation: actionAtk 0.4s ease-out;}
             .mulligan .card.fight {animation: active 0.3s ease-out forwards;}
-            .cardOwned .cardName::after, .cardNotOwned .cardName::after {font-size: 7px; position: relative; top: -37px;}
-            .cardOwned .cardName::after {content: "${$.i18n('gs.game-ally')}"}
-            .cardNotOwned .cardName::after {content: "${$.i18n('gs.game-enemy')}"}
-            .cardOwned .cardName, .cardNotOwned .cardName {transform: translateY(4px)}
+            :not(#loadDeckCards) > .cardOwned .cardName::after, :not(#loadDeckCards) > .cardNotOwned .cardName::after {font-size: 7px; position: relative; top: -37px;}
+            :not(#loadDeckCards) > .cardOwned .cardName::after {content: "${$.i18n('gs.game-ally')}"}
+            :not(#loadDeckCards) > .cardNotOwned .cardName::after {content: "${$.i18n('gs.game-enemy')}"}
+            :not(#loadDeckCards) > .cardOwned .cardName, :not(#loadDeckCards) > .cardNotOwned .cardName {transform: translateY(4px)}
+            #loadDeckCards > .cardOwned .cardName::after, #loadDeckCards > .cardNotOwned .cardName::after {font-size: 7px; position: relative; top: -16px;}
+            #loadDeckCards > .cardOwned .cardName::after {content: "${$.i18n('gs.owned')}"}
+            #loadDeckCards > .cardNotOwned .cardName::after {content: "${$.i18n('gs.not-owned')}"}
+            #loadDeckCards > .cardOwned .cardName, #loadDeckCards > .cardNotOwned .cardName {transform: translateY(-4px)}
             .card.inactive {animation: active 0.3s ease-out backwards;}
 
             .balatro-frame:not(:hover):not(.target):not(.fight):not(.canPlay):not(.affected):not(.doingEffect):not(.craftable):not(.friendship-not-claimed):not(.playLocked):not(.cardSkin:hover:not(.owned)) { animation: 6s ease-in-out attr(data-gs-random-delay s) infinite normal both running sway; }
@@ -4035,7 +4062,7 @@ const kittyCatsEnabled = plugin.settings().add({
     category: 'Too many powers!!!',
     data: {
         src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/kittyCat.png',
-        childSettings: ["kittyCatsChance", "kittyCatsEndTurns", "kittyCatsDoNothing"]
+        childSettings: ["kittyCatsChance", "kittyCatsDoNothing", "kittyCatsObstructVision", "kittyCatsSendEmotes", "kittyCatsEndTurns", "kittyCatsShredCards"]
     },
     type: advPowerCheckbox,
     default: false,
@@ -4052,6 +4079,30 @@ const kittyCatsChance = plugin.settings().add({
     onChange: (val) => { rollEventArrays(true); }
 });
 
+const kittyCatsDoNothing = plugin.settings().add({
+    key: 'kittyCatsDoNothing',
+    name: 'Kitty cats can do nothing',
+    note: 'Enables the possible <i>Kitty cat</i> effect of doing nothing',
+    category: 'Too many powers!!!',
+    default: true,
+});
+
+const kittyCatsObstructVision = plugin.settings().add({
+    key: 'kittyCatsObstructVision',
+    name: 'Kitty cats can obstruct your vision',
+    note: 'Enables the possible <i>Kitty cat</i> effects of opening all chats<br>and turning off the lights',
+    category: 'Too many powers!!!',
+    default: true,
+});
+
+const kittyCatsSendEmotes = plugin.settings().add({
+    key: 'kittyCatsSendEmotes',
+    name: 'Kitty cats can send emotes',
+    note: 'Enables the possible <i>Kitty cat</i> effect of sending a random emote on your behalf',
+    category: 'Too many powers!!!',
+    default: false,
+});
+
 const kittyCatsEndTurns = plugin.settings().add({
     key: 'kittyCatsEndTurns',
     name: 'Kitty cats can end turns',
@@ -4060,12 +4111,12 @@ const kittyCatsEndTurns = plugin.settings().add({
     default: false,
 });
 
-const kittyCatsDoNothing = plugin.settings().add({
-    key: 'kittyCatsDoNothing',
-    name: 'Kitty cats can do nothing',
-    note: 'Enables the possible <i>Kitty cat</i> effect of doing nothing',
+const kittyCatsShredCards = plugin.settings().add({
+    key: 'kittyCatsShredCards',
+    name: 'Kitty cats can shred your cards',
+    note: 'Enables the possible <i>Kitty cat</i> effect of disenchanting the affected card',
     category: 'Too many powers!!!',
-    default: true,
+    default: false,
 });
 
 const mikeDropsEnabled = plugin.settings().add({
@@ -4099,7 +4150,7 @@ const equationsEnabled = plugin.settings().add({
     category: 'Too many powers!!!',
     data: {
         src: 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/equation.png',
-        childSettings: ["equationsChance", "equationsAddSubtract", "equationsMultiplyDivide", "equationsMaxOperand", "equationsNegatives", "equationsNonIntegerAnswers", "equationsPenalty"]
+        childSettings: ["equationsChance", "equationsAddSubtract", "equationsMultiplyDivide", "equationsMaxOperand", "equationsNegatives", "equationsDoableDuring", "equationsPenalty"]
     },
     type: advPowerCheckbox,
     default: false,
@@ -4149,18 +4200,19 @@ const equationsNegatives = plugin.settings().add({
     default: false
 });
 
-const equationsNonIntegerAnswers = plugin.settings().add({
-    key: 'equationsNonIntegerAnswers',
-    name: 'Non-integer answers',
-    note: 'Answers can be decimals',
+const equationsDoableDuring = plugin.settings().add({
+    key: 'equationsDoableDuring',
+    name: 'Completable during',
+    note: 'Defines when Equations are allowed to be solved',
     category: 'Too many powers!!!',
-    default: true,
+    type: "select", options: ['any time', 'your turn only', 'enemy turn only'],
+    default: 'any time',
 });
 
 const equationsPenalty = plugin.settings().add({
     key: 'equationsPenalty',
     name: 'Equation fail penalty',
-    note: 'Defines what happens when you fail an Equation',
+    note: 'Defines what happens when you fail an Equation<br><br>"end turn" requires that it\'s your turn. It\'s recommended that this option is<br>used in conjunction with "Completable during" on "your turn only""',
     category: 'Too many powers!!!',
     type: "select", options: ['none', 'end turn', 'surrender'],
     default: 'none',
@@ -4290,15 +4342,6 @@ const sludgeChance = plugin.settings().add({
     onChange: (val) => { rollEventArrays(true); }
 });
 
-const actionNotifications = plugin.settings().add({
-    key: 'actionNotifications',
-    name: 'Action power notifications',
-    note: 'Gives Underscript notifications for when an <i>Action power</i> triggers',
-    category: 'Too many powers!!!',
-    type: "select", options: ['on', 'off'],
-    default: 'on',
-});
-
 const healableActionPowers = plugin.settings().add({
     key: 'healableActionPowers',
     name: 'Action powers can be healed off',
@@ -4400,13 +4443,13 @@ const exportSettings = plugin.settings().add({
                 $('#gsExportDialog').modal('hide');
             }
             window.BootstrapDialog.show({
-                title: 'Export Galascript settings',
+                title: $.i18n('gs.dialog-export-settings'),
                 size: window.BootstrapDialog.SIZE_NORMAL,
                 id: 'gsExportDialog',
                 message: function() {
-                    return `<p>Export your Galascript settings to send to other users or to save for later! Choose from one of the below presets to export.</p>
-                    <button class="gsFileButton" onclick="saveGsTranslations()">Custom translations</button>
-                    <button class="gsFileButton" onclick="saveGsAll()">All settings</button>
+                    return `<p>${$.i18n('gs.dialog-export-begin')}</p>
+                    <button class="gsDialogButton" onclick="saveGsTranslations()">${$.i18n('gs.dialog-export-translations')}</button>
+                    <button class="gsDialogButton" onclick="saveGsAll()">${$.i18n('gs.dialog-export-all')}</button>
                     `
                 },
                 buttons: [{
@@ -4439,7 +4482,7 @@ const importSettings = plugin.settings().add({
                     function just(setting) {return Object.keys(settings).length === 1 && Object.hasOwn(settings, setting)}
                     var options = []
                     options.push({
-                            label: 'Yes, import!',
+                            label: $.i18n('gs.dialog-import'),
                             cssClass: 'btn-danger',
                             action: function (dialog) {
                                 dialog.close();
@@ -4453,15 +4496,15 @@ const importSettings = plugin.settings().add({
                                 });
                                 $('.underscript-dialog').modal('hide');
                                 plugin.toast({
-                                    title: 'Import complete!',
-                                    text: `Your settings have been replaced by those of <i>${fileName}</i>.`,
+                                    title: $.i18n('gs.alert-title-import-complete'),
+                                    text: $.i18n('gs.alert-import-complete', fileName),
                                     timeout: 5000,
                                 });
                                 refreshCards();
                             }})
                     if (just('customTranslations')) {
                         options.push({
-                                label: 'Combine with current',
+                                label: $.i18n('gs.dialog-combine'),
                                 cssClass: 'btn-warning',
                                 action: function (dialog) {
                                     dialog.close();
@@ -4469,8 +4512,8 @@ const importSettings = plugin.settings().add({
                                     localStorage.setItem('underscript.plugin.Galascript.customTranslations', JSON.stringify(newTrans));
                                     $('.underscript-dialog').modal('hide');
                                 plugin.toast({
-                                    title: 'Import complete!',
-                                    text: `<i>${fileName}</i> has been merged with your translations.`,
+                                    title: $.i18n('gs.alert-title-import-complete'),
+                                    text: $.i18n('gs.alert-import-merged', fileName, 'Custom translations'),
                                     timeout: 5000,
                                 })
                                 refreshCards();
@@ -4484,17 +4527,17 @@ const importSettings = plugin.settings().add({
                             }
                         })
                     window.BootstrapDialog.show({
-                        title: 'Are you sure?',
+                        title: $.i18n('gs.dialog-are-you-sure'),
                         size: window.BootstrapDialog.SIZE_NORMAL,
                         id: 'gsImportConfirm',
                         message: function() {
-                            var message = `<p>Are you sure you want to import <i>${fileName}</i>?`;
+                            var message = `<p>${$.i18n('gs.dialog-import-are-you-sure', fileName)}`;
                             if (just('customTranslations')) {
-                                message += `<br><br>Just the <i>Custom translations</i> setting will be overriden. If you'd like to keep its contents, Export them first, or press "Combine with current" to combine the two.`
+                                message += `<br><br>${$.i18n('gs.dialog-import-override-one', 'Custom translations')}`
                             } else if (Object.keys(settings).length > 20) {
-                                message += `<br><br>ALL settings will be overridden! If you'd like to keep them, go back and Export them.`
+                                message += `<br><br>${$.i18n('gs.dialog-import-override-all')}`
                             } else {
-                                message += `<br><br>The following settings will be overridden:`
+                                message += `<br><br>${$.i18n('gs.dialog-import-override-some')}`
                                 Object.keys(settings).forEach(key => {
                                     message += `<br>${key}`
                                 });
@@ -4514,11 +4557,11 @@ const importSettings = plugin.settings().add({
                 $('#gsImportDialog').modal('hide');
             }
             window.BootstrapDialog.show({
-                title: 'Import Galascript settings',
+                title: $.i18n('gs.dialog-import-settings'),
                 size: window.BootstrapDialog.SIZE_NORMAL,
                 id: 'gsImportDialog',
                 message: function() {
-                    return `<p>Import Galascript settings from a .gs file! You'll first be asked if you're sure about replacing your settings.</p>
+                    return `<p>${$.i18n('gs.dialog-import-begin')}</p>
                     <input type="file" id="gsImport" accept=".gs" onchange="importGsSettings()">
                     `
                 },
@@ -4597,7 +4640,7 @@ window.gsUpdateToast = function() {
                 borderRadius: '0px',
                 textShadow: 'none',
                 fontSize: '14px',
-                margin: '3px',
+                margin: '3px 40px',
                 width: '200px',
                 height: '40px',
             }
@@ -4659,7 +4702,7 @@ function processBinds(e) {
                     break;
                 }
                 if (window.turn < 5) {
-                    plugin.toast({title: "You can't surrender before turn 5!", text: "You pressed the set key for <i>Surrender</i>."})
+                    iconToast('equationFail', 'not-allowed', 'cant-surrender')
                     break;
                 }
                 window.socketGame.send(JSON.stringify({action: "surrender"}));
@@ -4723,15 +4766,15 @@ function rollEventArrays(override) { // override is a bool to start from new
         var a = 185852
         var s = ((seed ^ i) * 2654435761) >>> 0;
         var roll = (s * a % m) / m
-        return Math.floor(roll * 100) + 1;
+        return Math.floor(roll * 10000) + 1;
     }
-    const kittyCatsChancer = Math.min(Math.max(kittyCatsChance.value(), 0), 100);
-    const mikeDropsChancer = Math.min(Math.max(mikeDropsChance.value(), 0), 100);
-    const equationsChancer = Math.min(Math.max(equationsChance.value(), 0), 100);
-    const bricksChancer = Math.min(Math.max(bricksChance.value(), 0), 100);
-    const stuporChancer = Math.min(Math.max(stuporChance.value(), 0), 100);
-    const bitflippedChancer = Math.min(Math.max(bitflippedChance.value(), 0), 100);
-    const sludgeChancer = Math.min(Math.max(sludgeChance.value(), 0), 100);
+    const kittyCatsChancer = Math.min(Math.max(kittyCatsChance.value() * 10000, 0), 10000);
+    const mikeDropsChancer = Math.min(Math.max(mikeDropsChance.value() * 10000, 0), 10000);
+    const equationsChancer = Math.min(Math.max(equationsChance.value() * 10000, 0), 10000);
+    const bricksChancer = Math.min(Math.max(bricksChance.value() * 10000, 0), 10000);
+    const stuporChancer = Math.min(Math.max(stuporChance.value() * 10000, 0), 10000);
+    const bitflippedChancer = Math.min(Math.max(bitflippedChance.value() * 10000, 0), 10000);
+    const sludgeChancer = Math.min(Math.max(sludgeChance.value() * 10000, 0), 10000);
     for (let i = 10000; i <= 12000; i++) {       // <- if you somehow generate more than 2000 monster ids in a game then good for you, you broke it :D
         if (kittyCatsChancer >= rollChance(i)) { // previous was 10000, which is even more impossible, and i decided to actually observe this time around, so... yeah, 2000 is good
             gameData.cats.push(i);               // the optimization is needed when im setting big ass arrays--whom the tail ends of will likely never be used--to localstorage
@@ -4782,39 +4825,48 @@ function updGameData(name, operation, val) {
 var awaitingMike, awaitingKitty, lastCard, lastBoard;
 plugin.events.on('GameEvent', (data) => {
     var cardPlayed = (data.action === 'getMonsterPlayed' || data.action === 'getSpellPlayed');
+    var actionSilenced = false;
     if (cardPlayed) {
         var card = JSON.parse(data.card);
         var cid = card.id
         if (!awaitingMike && !awaitingKitty) {
             lastCard = card;
         }
+        actionSilenced = silencableActionPowers?.value() && findStatus(card, 'silenced')
     }
     if (data.action === 'getPlayableCards') {
         var cardIds = JSON.parse(data.playableCards)
         cardIds.forEach((cid) => {
-            if (gameData.mikes.includes(cid) && !gameData.allowedMikes.includes(cid)) {
+            const inhand = $('#handCards').find($('#' + cid)).length;
+
+            if (gameData.mikes.includes(cid) && !gameData.allowedMikes.includes(cid) && inhand) {
                 updGameData('allowedMikes', 'push', cid)
+            } else if (gameData.allowedMikes.includes(cid) && !inhand) {
+                updGameData('allowedMikes', 'remove', cid)
             }
-            if (gameData.cats.includes(cid) && !gameData.allowedCats.includes(cid)) {
+
+            if (gameData.cats.includes(cid) && !gameData.allowedCats.includes(cid) && inhand) {
                 updGameData('allowedCats', 'push', cid)
+            } else if (gameData.allowedCats.includes(cid) && !inhand) {
+                updGameData('allowedCats', 'remove', cid)
             }
         });
         refreshCards();
     }
-    if (cardPlayed && gameData.allowedMikes.includes(cid) && (card.ownerId === window.selfId) && mikeDropsEnabled?.value()) {
+    if (cardPlayed && gameData.allowedMikes.includes(cid) && (card.ownerId === window.selfId) && mikeDropsEnabled?.value() && !actionSilenced) {
         awaitingMike = true;
         updGameData('mikes', 'remove', cid);
         updGameData('allowedMikes', 'remove', cid);
     }
-    if (cardPlayed && gameData.allowedCats.includes(cid) && (card.ownerId === window.selfId) && kittyCatsEnabled?.value()) {
-        awaitingKitty = true
+    if (cardPlayed && gameData.allowedCats.includes(cid) && (card.ownerId === window.selfId) && kittyCatsEnabled?.value() && !actionSilenced) {
+        awaitingKitty = true;
         updGameData('cats', 'remove', cid);
         updGameData('allowedCats', 'remove', cid);
     }
     if (data.action === 'getPlayableCards') {
         if (awaitingMike) {
             window.socketGame.send(JSON.stringify({action: "endTurn"}));
-            actionNotification('mikeDrop', 'mike', `${lastCard.name}'s <i>Mike drop</i> ended your turn prematurely.`)
+            iconToast('mikeDrop', 'mike', 'mike', lastCard.name)
             awaitingMike = false;
         }
         if (awaitingKitty) {
@@ -4860,64 +4912,69 @@ plugin.events.on('ChatMessage', (data) => {
     }
 });
 
-function actionNotification(icon, type, text) {
-    if (actionNotifications?.value() === 'off') { return; }
-    const kitty = [ `Mrrp`, `Mrow`, `Meow`, `Nyaw`, `Mrrrrow`, `Prrrrrr`, `Mrorw`, `Mroooooow`, `Mew`, `Waoow` ]
-    const mike = [ `Truth nuke`, `Final act`, `That's all, folks`, `Yep, I went there`, `I'll see ya next time`, `Thank you all for coming`, `*cue applause*`, `Like and subscribe for part 2` ]
-    const equationWin = [ `Mathematical`, `Aced it`, `A+`, `You're winner`, `Ready for colleg`, `Gold star`, `Calculated`]
-    const equationFail = [ `Flunked`, `Dropout`, `F-`, `Didn't study`, `Dog ate it, probably`, `Slept through class`, `Yikes`]
-    var title = `<img src="https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${icon}.png"> `;
-    switch (type) {
-        case 'kitty': title += kitty[Math.floor(Math.random() * kitty.length)]; break;
-        case 'mike': title += mike[Math.floor(Math.random() * mike.length)]; break;
-        case 'equation win': title += equationWin[Math.floor(Math.random() * equationWin.length)]; break;
-        case 'equation fail': title += equationFail[Math.floor(Math.random() * equationFail.length)]; break;
-    }
+function iconToast(icon, title, text = title, ...transParams) {
+    title = `<img src="https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/${icon}.png"> ${randi18n('gs.alert-title-' + title)}`;
     plugin.toast({
         title: title,
-        text: text,
+        text: randi18n('gs.alert-' + text, ...transParams),
         timeout: 5000,
     })
 }
-
-var evilKittyLanguage;
+var transParams;
 function kittytime(card) {
     const kittymind = [
-        `${evilForeignKitty()}`,                                    // 0 loads default translations for random language out of most supported languages, doesnt actually change the setting
-        `This kitty is asleep...`,                                  // 1 nothing; a break
-        `Kitty got out all the chats to play!`,                     // 2 opens first 17 chat ids randomly across the screen
-        `Kitty found the emote control panel!`,                     // 3 use random emote
-        `A kitty fell off the counter ;(`,                          // 4 triggers big damage animation and sound
-        `This kitty wants you to meet her family!`,                 // 5 opens tribe menu for tribe
-        `A kitty bapped the light switch.`,                         // 6 toggles on/off dark mode
-        `A kitty messed with the color pallete.`,                   // 7 shuffles soul colors
-        `A kitty ended your turn!`,                                 // 8 mike drop effect
+        `foreign`,    // 0 loads default translations for random language out of most supported languages, doesnt actually change the setting
+        `asleep`,     // 1 nothing; a break
+        `chat`,       // 2 opens first 17 chat ids randomly across the screen
+        `emote`,      // 3 use random emote
+        `fall`,       // 4 triggers big damage animation and sound
+        `family`,     // 5 opens tribe menu for tribe
+        `lights`,     // 6 toggles on/off dark mode
+        `soulcolors`, // 7 shuffles soul colors
+        `endturn`,    // 8 mike drop effect
+        `shred`,      // 9 disenchants card
     ]
-    var kittypoll = Math.floor(Math.random() * kittymind.length);
-    switch (kittypoll) {
-        case 0: defaultTranslations(evilKittyLanguage); break;
+    transParams = []
+    const kittytype = kittymind[Math.floor(Math.random() * kittymind.length)];
+    switch (kittymind.indexOf(kittytype)) {
+        case 0: evilForeignKitty(); break;
         case 1: if (kittyCatsDoNothing?.value()) { break; } kittytime(card); return;
-        case 2: chattyKitty(); break;
-        case 3: emotingKitty(); break;
+        case 2: if (kittyCatsObstructVision?.value()) { chattyKitty(); break; } kittytime(card); return;
+        case 3: if (kittyCatsSendEmotes?.value()) { emotingKitty(); break; } kittytime(card); return;
         case 4: window.shakeScreen(); break;
         case 5: familyKitty(card); break;
-        case 6: if ($("#gsFlashlight").length) { removeFlashlight(); } else { createFlashlight(); }; break;
+        case 6: if (kittyCatsObstructVision?.value()) { if ($("#gsFlashlight").length) { removeFlashlight(); } else { createFlashlight(); }; break; } kittytime(card); return;
         case 7: shuffleSouls(1); break;
         case 8: if (kittyCatsEndTurns?.value()) { window.socketGame.send(JSON.stringify({action: "endTurn"})); break; } kittytime(card); return;
-        default: actionNotification('kittyCat', 'kitty', "Uh oh! Kitty broke the space-time continuum and returned an error. Please report this to Gala!"); return;
+        case 9:
+            if (kittyCatsShredCards?.value() && card.rarity !== 'TOKEN') {
+                const idCard = card.id
+                const shiny = card.shiny ? true : false
+                $.ajax({
+                        url: 'CraftConfig',
+                        type: "POST",
+                        dataType: "json",
+                        data: JSON.stringify({action: "disenchant", idCard: parseInt(idCard), isShiny: shiny}),
+                        contentType: "application/json",
+                });
+                transParams.push(card.name);
+                break;
+            }
+            kittytime(card); return;
+        default: kittytype = 'error'; return;
     }
-    actionNotification('kittyCat', 'kitty', kittymind[kittypoll])
+    iconToast('kittyCat', 'kitty', 'kitty-' + kittytype, ...transParams)
 }
 
 function evilForeignKitty() {
     const langs = ['en', 'es', 'ru', 'it', 'de', 'cn'];
-    const langsfrom = ['English', 'Spaniard', 'Russian', 'Italian', 'German', 'Chinese'];
     var langpoll = langs.indexOf($.i18n().locale)
     while (langs[langpoll] === $.i18n().locale) {
         langpoll = Math.floor(Math.random() * langs.length);
     }
-    evilKittyLanguage = langs[langpoll];
-    return `An evil ${langsfrom[langpoll]} kitty changed your language!`
+    const lang = langs[langpoll];
+    defaultTranslations(lang);
+    transParams.push($.i18n('chat-' + lang));
 }
 
 function chattyKitty() {
@@ -4948,7 +5005,14 @@ function familyKitty(card) {
 }
 
 function mathtime(card) {
-    $('*').modal('hide');
+    $('*:not(:has(.mulligan))').modal('hide');
+    const doableYourTurn = equationsDoableDuring?.value() === 'your turn only' && window.userTurn === window.userId
+    const doableEnemyTurn = equationsDoableDuring?.value() === 'enemy turn only' && window.userTurn !== window.userId
+    const doable = doableYourTurn || doableEnemyTurn || equationsDoableDuring?.value() === 'any time'
+    if (!doable) {
+        iconToast('equationFail', 'not-allowed', !doableYourTurn ? 'equation-not-your-turn' : 'equation-not-enemy-turn');
+        return;
+    }
     if (typeof card === 'string') {
         card = JSON.parse(card)
     }
@@ -4958,50 +5022,68 @@ function mathtime(card) {
         const upperLimit = equationsMaxOperand.value() ?? 1
         return seededRandInt(lowerLimit, upperLimit, seed)
     }
-    var operands, answer, sign
-    function makeEquation(seed) {
-        operands = [operand(seed), operand(seed)]
-        if (equationsAddSubtract.value() && !equationsMultiplyDivide.value()) {
-            if (seededRandInt(0, 1, seed)) {
-                answer = operands[0] - operands[1];
-                sign = '-';
+    var operands, answer, type
+    function makeEquation(seed, forceType) {
+        operands = [operand(seed), operand(seed + 1), operand(seed + 2), operand(seed + 3)]
+        if (!forceType) {
+            if (equationsAddSubtract.value() && !equationsMultiplyDivide.value()) {
+                if (seededRandInt(0, 1, seed)) {
+                    type = 'add';
+                } else {
+                    type = 'subtract';
+                }
+            } else if (!equationsAddSubtract.value() && equationsMultiplyDivide.value()) {
+                if (seededRandInt(0, 1, seed)) {
+                    type = 'multiply';
+                } else {
+                    type = 'divide';
+                }
+            } else if (equationsAddSubtract.value() && equationsMultiplyDivide.value()) {
+                switch (seededRandInt(0, 3, seed)) {
+                    case 0: type = 'add'; break;
+                    case 1: type = 'subtract'; break;
+                    case 2: type = 'multiply'; break;
+                    case 3: type = 'divide'; break;
+                }
             } else {
-                answer = operands[0] + operands[1];
-                sign = '+';
+                type = 'dumb';
             }
+        } else {
+            type = forceType
         }
-        if (!equationsAddSubtract.value() && equationsMultiplyDivide.value()) {
-            if (seededRandInt(0, 1, seed)) {
-                answer = operands[0] * operands[1];
-                sign = '×';
-            } else {
-                answer = operands[0] / operands[1];
-                sign = '÷';
-            }
+        switch (type) {
+            case 'add': answer = operands[0] + operands[1]; break;
+            case 'subtract': answer = operands[0] - operands[1]; break;
+            case 'multiply': answer = operands[0] * operands[1]; break;
+            case 'divide': answer = operands[0] / operands[1]; break;
+            case 'dumb': answer = operands[0]; break;
+            default: answer = operands[0]; break;
         }
-        if (equationsAddSubtract.value() && equationsMultiplyDivide.value()) {
-            switch (seededRandInt(0, 3, seed)) {
-                case 0: answer = operands[0] + operands[1]; sign = '+'; break;
-                case 1: answer = operands[0] - operands[1]; sign = '-'; break;
-                case 2: answer = operands[0] * operands[1]; sign = '×'; break;
-                case 3: answer = operands[0] / operands[1]; sign = '÷'; break;
-            }
-        }
-        if (!equationsNegatives.value() && answer < 0) {makeEquation(seed + 1)}
-        if (!equationsNonIntegerAnswers.value() && !Number.isInteger(answer)) {makeEquation(seed + 1)}
-        if (answer === undefined) {makeEquation(seed + 1)}
+        if (!equationsNegatives.value() && answer < 0) {makeEquation(seed + 1, type)}
+        if (!Number.isInteger(answer)) {makeEquation(seed + 1, type)}
+        if (answer === undefined) {makeEquation(seed + 1, type)}
     }
-    makeEquation(window.gameId + card.id)
-    bootstrapPrompt(`${card.name}'s Math Time`, `What is ${operands[0]} ${sign} ${operands[1]}?`, ` `, function(input) {
+    makeEquation(window.gameId ^ card.id)
+    bootstrapPrompt(randi18n('gs.math-title', card.name), randi18n('gs.math-q-' + type, ...operands), ` `, function(input) {
         if (input == answer) {
-            actionNotification('equation', 'equation win', `${card.name} can now be played!`)
+            iconToast('equation', 'equation-win', 'equation-win', card.name)
             updGameData('equationsWon', 'push', card.id)
-            window.setInfoPowers($htmlCard, card)
+            refreshCards()
         } else {
             switch (equationsPenalty.value()) {
-                case 'none': actionNotification('equationFail', 'equation fail', `You failed to free ${card.name} from its mathematical aura...`); break;
-                case 'end turn': actionNotification('equationFail', 'equation fail', `Turn ended due to failing ${card.name}'s math quiz!`); break;
-                case 'surrender': actionNotification('equationFail', 'equation fail', `Lost due to failing ${card.name}'s math quiz!`); break;
+                case 'none': iconToast('equationFail', 'equation-fail', 'equation-fail-nopenalty', card.name); break;
+                case 'end turn':
+                    window.socketGame.send(JSON.stringify({action: "endTurn"}));
+                    iconToast('equationFail', 'equation-fail', 'equation-fail-endturn', card.name);
+                    break;
+                case 'surrender':
+                    if (window.turn < 5) {
+                        window.socketGame.send(JSON.stringify({action: "surrender"}));
+                        iconToast('equationFail', 'equation-fail', 'equation-fail-surrender', card.name);
+                    } else {
+                        iconToast('equationFail', 'equation-fail', 'equation-fail-surrendernt', card.name)
+                    }
+                    break;
             }
         }
     });
@@ -5408,7 +5490,7 @@ function loadLibraries() {
         allStatus = allStatus.concat(gsStatus)
     }
     if (!allSouls.length) {
-        Object.keys($.i18n().messageStore.messages.en).forEach((key) => {
+        Object.keys($.i18n().messageStore.messages.en).forEach(([key, value]) => {
             if (key.startsWith("soul-") && !key.includes("desc")) {
                 const soul = key.replace("soul-", "").toUpperCase()
                 if (!allSouls.includes(soul)) {allSouls.push(soul)}
@@ -5416,7 +5498,7 @@ function loadLibraries() {
         });
     }
     if (!allRarities.length) {
-        Object.keys($.i18n().messageStore.messages.en).forEach((key)=> {
+        Object.keys($.i18n().messageStore.messages.en).forEach(([key, value])=> {
             if (key.startsWith("rarity-") && !key.includes("MYTHIC")) {
                 const rarity = key.replace("rarity-", "").toUpperCase()
                 if (!allRarities.includes(rarity)) {allRarities.push(rarity)}
@@ -5424,7 +5506,7 @@ function loadLibraries() {
         });
     }
     if (!allDivisions.length) {
-        Object.keys($.i18n().messageStore.messages.en).forEach((key)=> {
+        Object.keys($.i18n().messageStore.messages.en).forEach(([key, value])=> {
             if (key.startsWith("division-")) {
                 const div = key.replace("division-", "").toUpperCase()
                 if (!allDivisions.includes(div)) {allDivisions.push(div)}
