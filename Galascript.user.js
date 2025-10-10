@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.4.1
+// @version      1.0.4.2
 // @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
@@ -92,10 +92,10 @@ plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/G
 
 const patchNotes =
 `
-- <i>Equations</i> properly implemented
-- Fixed <i>Kitty cats</i> and <i>Mike drops</i> triggering in scenarios where they shouldn't (fr this time, i promise)
-- New optional <i>Kitty cat</i> option to disenchant the played card, as well as toggles for other effects
-- Translation support for even more Galascript strings
+Oops, am dumb, hotfix 2, electric boogaloo: some more stuff i forgot!!!!!!!!!
+- <i>Action powers</i> appearance chances now properly work, supporting decimal percentages too
+- Fixed an issue where changing <i>Action power</i> appearance chances mid-match was not working properly
+- Fixed an issue where tips weren't being dismissed and restored properly
 `;
 
 const convertMarkdown = new underscript.lib.showdown.Converter();
@@ -2779,7 +2779,7 @@ class plaintextSetting extends underscript.utils.SettingType {
     }) {
         return $(`<span>`)
             .html(name)
-            .attr("gsPlaintextDismissed", value)
+            .attr("gsPlaintextDismissed", dataDismissable ? value : false)
             .css({
                 color: dataColor,
                 cursor: dataDismissable ? 'pointer' : 'default'
@@ -2794,7 +2794,7 @@ class plaintextSetting extends underscript.utils.SettingType {
             })
             .on('click', (e) => {
                 if (dataDismissable) {
-                    $(e.currentTarget).attr("gsPlaintextDismissed");
+                    $(e.currentTarget).attr("gsPlaintextDismissed", true);
                     update(1);
                 }
             })
@@ -2804,7 +2804,7 @@ class plaintextSetting extends underscript.utils.SettingType {
         return [
             'span { max-width: 360px }',
             '.gsPlaintextDismiss { font-style: italic; color: salmon; }',
-            '[gsPlaintextDismissed] { display: none; }',
+            '[gsPlaintextDismissed="true"] { display: none; }',
         ];
     }
 }
@@ -4365,6 +4365,7 @@ const versionInfo = plugin.settings().add({
     data: {
         dismissable: false,
     },
+    default: false,
     category: 'Galascript',
 });
 
@@ -4584,11 +4585,10 @@ const restoreTips = plugin.settings().add({
     type: button,
     data: {
         onclick() {
-            keybindsInfo.set(0)
-            filtersInfo.set(0)
-            obscurityInfo.set(0)
-            actionPowersInfo.set(0)
-            versionInfo.set(0)
+            keybindsInfo.set(false)
+            filtersInfo.set(false)
+            obscurityInfo.set(false)
+            actionPowersInfo.set(false)
         }
     }
 });
@@ -4750,7 +4750,7 @@ function rollEventArrays(override) { // override is a bool to start from new
             }
         }
     });
-    if (!ingame || window.spectate) {
+     if (!ingame || window.spectate) {
         return;
     }
     const saved = JSON.parse(localStorage.getItem(`galascript.match${window.gameId}.actionPowers`)) ?? false;
@@ -4760,21 +4760,29 @@ function rollEventArrays(override) { // override is a bool to start from new
         return;
     }
 
+    gameData.cats = []
+    gameData.mikes = []
+    gameData.equations = []
+    gameData.bricks = []
+    gameData.stupor = []
+    gameData.bitflipped = []
+    gameData.sludge = []
+
     const seed = window.gameId ?? 1
     function rollChance(i) {
         var m = 2**35 - 31
         var a = 185852
         var s = ((seed ^ i) * 2654435761) >>> 0;
         var roll = (s * a % m) / m
-        return Math.floor(roll * 10000) + 1;
+        return roll * 100 + 1;
     }
-    const kittyCatsChancer = Math.min(Math.max(kittyCatsChance.value() * 10000, 0), 10000);
-    const mikeDropsChancer = Math.min(Math.max(mikeDropsChance.value() * 10000, 0), 10000);
-    const equationsChancer = Math.min(Math.max(equationsChance.value() * 10000, 0), 10000);
-    const bricksChancer = Math.min(Math.max(bricksChance.value() * 10000, 0), 10000);
-    const stuporChancer = Math.min(Math.max(stuporChance.value() * 10000, 0), 10000);
-    const bitflippedChancer = Math.min(Math.max(bitflippedChance.value() * 10000, 0), 10000);
-    const sludgeChancer = Math.min(Math.max(sludgeChance.value() * 10000, 0), 10000);
+    const kittyCatsChancer = Number(kittyCatsChance.value())
+    const mikeDropsChancer = Number(mikeDropsChance.value())
+    const equationsChancer = Number(equationsChance.value())
+    const bricksChancer = Number(bricksChance.value())
+    const stuporChancer = Number(stuporChance.value())
+    const bitflippedChancer = Number(bitflippedChance.value())
+    const sludgeChancer = Number(sludgeChance.value())
     for (let i = 10000; i <= 12000; i++) {       // <- if you somehow generate more than 2000 monster ids in a game then good for you, you broke it :D
         if (kittyCatsChancer >= rollChance(i)) { // previous was 10000, which is even more impossible, and i decided to actually observe this time around, so... yeah, 2000 is good
             gameData.cats.push(i);               // the optimization is needed when im setting big ass arrays--whom the tail ends of will likely never be used--to localstorage
