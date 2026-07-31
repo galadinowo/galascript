@@ -1,11 +1,10 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.5
+// @version      1.0.5.0.2
 // @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
-// @match        https://*.onutrem.fr/*
 // @icon         https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/iconVirgil.png
 // @require      https://raw.githubusercontent.com/UCProjects/UnderScript/master/src/checkerV2.js
 // @require      https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js
@@ -95,6 +94,9 @@ plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/G
 
 const patchNotes =
 `
+<span style="font-size: 9px; color: grey;">1.0.5.0.1 - extremely minor stuff</span>
+<span style="font-size: 9px; color: grey;">1.0.5.0.2 - missing translation strings, no more console logs</span>
+
 Hello! It's been 1 YEAR of Galascript, can you believe that...?
 
 Okay, I'm gonna be real with you. I needed to rush this a little to get it out for Season 121. Not to say it's gonna be unplayable, but just... look for cracks here and there. I'm gonna be observing everything, so, please report any bugs you experieeeence ~
@@ -1613,11 +1615,42 @@ function initGsTranslations() {
         "gs.tribe-lizard": "{{PLURAL:$1|Lizard|Lizards}}",
         "gs.tribe-meter": "{{PLURAL:$1|Meter|Meters}}",
         "gs.tribe-cactus": "{{PLURAL:$1|Cactus|Cacti}}",
+
+        "gs.tribe-retro": "{{PLURAL:$1|Retro|Retro}}",
+        "gs.tribe-guns": "{{PLURAL:$1|Gun|Guns}}",
+        "gs.tribe-hats": "{{PLURAL:$1|Hat|Hats}}",
+        "gs.tribe-robot": "{{PLURAL:$1|Robot|Robots}}",
+        "gs.tribe-bird": "{{PLURAL:$1|Bird|Birds}}",
+        "gs.tribe-fish": "Fish",
+        "gs.tribe-technology": "{{PLURAL:$1|Bird|Birds}}",
+        "gs.tribe-food": "Food",
+        "gs.tribe-bunny": "{{PLURAL:$1|Bunny|Bunnies}}",
+        "gs.tribe-gambling": "Gambling",
+        "gs.tribe-gold": "Gold",
+        "gs.tribe-ceramic": "Ceramic",
+        "gs.tribe-crystal": "{{PLURAL:$1|Crystal|Crystals}}",
+        "gs.tribe-ball": "{{PLURAL:$1|Ball|Balls}}",
+        "gs.tribe-box": "{{PLURAL:$1|Box|Boxes}}",
+        "gs.tribe-holiday": "Holiday",
+        "gs.tribe-the-holiday": "The Holidays",
+        "gs.tribe-rock": "{{PLURAL:$1|Rock|Rocks}}",
+        "gs.tribe-confinement": "{{PLURAL:$1|Confinement|Confinements}}",
+        "gs.tribe-music": "Music",
+        "gs.tribe-weather": "Weather",
+        "gs.tribe-sign": "{{PLURAL:$1|Sign|Signs}}",
+        "gs.tribe-art": "Art",
+        "gs.tribe-spawn": "SPAWN",
+        "gs.tribe-container": "{{PLURAL:$1|Container|Containers}}",
+        "gs.tribe-flower": "{{PLURAL:$1|Flower|Flowers}}",
+        "gs.tribe-cold": "Cold",
+        "gs.tribe-hot": "Hot",
+        "gs.tribe-cake": "{{PLURAL:$1|Cake|Cakes}}",
+        "gs.tribe-knight": "{{PLURAL:$1|Honest to God Roaring Knight Candidate|Honest to God Roaring Knight Candidates}}",
+
         "gs.tribe-cat": "{{PLURAL:$1|Cat|Cats}}",
         "gs.tribe-mom": "{{PLURAL:$1|Mom|Moms}}",
         "gs.tribe-dad": "{{PLURAL:$1|Dad|Dads}}",
         "gs.tribe-vehicle": "{{PLURAL:$1|Vehicle|Vehicles}}",
-        "gs.tribe-knight": "{{PLURAL:$1|Honest to God Roaring Knight Candidate|Honest to God Roaring Knight Candidates}}",
         "gs.tribe-broken": "{{PLURAL:$1|Broken|Broken}}",
         "gs.tribe-big": "{{PLURAL:$1|Big|Big}}",
 
@@ -1857,12 +1890,10 @@ function randi18n(key, ...args) {
 function initCustomTranslations() {
     const translations = Object.fromEntries(customTranslations.value());
     Object.entries(translations).forEach(([key, value]) => {
-        console.log(translations[key])
         translations[key] = DOMPurify.sanitize(value, {
             ALLOWED_TAGS: ['b', 'i', 'a', 'p', 'span', 'img'],
             ALLOWED_ATTR: ['style', 'src'],
         });
-        console.log(translations[key])
     })
     $.i18n().load(translations, $.i18n().locale);
 }
@@ -4280,8 +4311,6 @@ const bgMixtape = plugin.settings().add({
     }),
 });
 
-console.log(bgMixtape.value(), !bgMixtape.value())
-
 const customTranslations = plugin.settings().add({
     key: 'customTranslations',
     name: 'Custom translations',
@@ -4855,7 +4884,7 @@ const manyTribes = {
     BUNNY: [166, 169, 202, 298, 357, 374, 413, 426, 567, 663],
     GAMBLING: [614, 875, 876, 877, 900],
     GOLD: [81, 124, 257, 581, 722, 761, 879, 910],
-    //CERAMIC: [507, 701, 791, 932, 972],
+    CERAMIC: [507, 701, 791, 932, 972],
     CRYSTAL: [440, 548, 578, 598, 603, 712, 713, 725],
     BALL: [193, 390, 542, 628, 767, 799, 800, 900],
     BOX: [81, 171, 355, 376, 402, 403, 637, 690],
@@ -4863,12 +4892,11 @@ const manyTribes = {
     THE_HOLIDAY: [273, 468, 490, 710, 926],
     ROCK: [108, 111, 173, 602, 635, 835, 908, 909, 917, 918, 958],
     CONFINEMENT: [182, 506, 584, 621, 627, 643, 714],
-    //COMFORT: [532, 761, 791],
     MUSIC: [131, 867, 895, 896, 908, 909, 910, 911, 917, 918, 958],
     WEATHER: [552, 698, 825],
     SIGN: [239, 474, 604, 606, 650, 661, 784, 850, 860, 915, 917, 919],
-    //ART: [173, 761, 809],
-    //SPAWN: [897, 898, 901, 931],
+    ART: [173, 761, 809],
+    SPAWN: [897, 898, 901, 931],
     CONTAINER: [81, 133, 355, 600, 790, 791, 875, 876, 877, 900],
     FLOWER: [88, 105, 124, 300, 317, 375, 422, 462, 451, 477, 970, 965, 967, 979, 980, 981, 982, 986],
     COLD: [71, 73, 74, 75, 126, 133, 182, 260, 552, 563, 698, 737],
@@ -5956,7 +5984,6 @@ function initEventArrays(override) { // override is a bool to start from new
     }
     const saved = JSON.parse(localStorage.getItem(`galascript.match${window.gameId}.actionPowers`)) ?? false;
     if (saved && !override) {
-        console.log("Loaded save data!")
         gameData = saved;
     }
 
@@ -6295,7 +6322,6 @@ function mathtime(card) {
             !nonIntegers && !Number.isInteger(answer) && countDecimals(answer) >= 2,
             isNaN(answer),
         ]
-        console.log(undesirableOutcomes, undesirableOutcomes.includes(true))
         if (undesirableOutcomes.includes(true)) {
             makeEquation(type);
             return;
@@ -7103,7 +7129,6 @@ function loadLibraries() {
     if (!rockPetOTD) {
         let date = new Date();
         let rand = seededRand(date.getMonth() + 1 + date.getDate() + date.getFullYear())
-        console.log(date, rand)
     }
 }
 
