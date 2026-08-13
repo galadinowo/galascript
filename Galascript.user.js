@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.5.0.2
+// @version      1.0.5.1
 // @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
@@ -19,6 +19,7 @@ const pluginVersion = GM_info.script.version;
 const underscript = window.underscript;
 const plugin = underscript.plugin(pluginName, pluginVersion);
 const ingame = window.location.pathname === '/Game' || window.location.pathname === '/Spectate';
+const images = false ? 'fishImages' : 'images';
 window.styleGroups = new Map();
 function style(group, operation, ...css) {
     if (!window.styleGroups.has(group)) { window.styleGroups.set(group, plugin.addStyle()) }
@@ -31,7 +32,7 @@ function style(group, operation, ...css) {
     }
 }
 const standardFrames = ["Undertale", "Deltarune", "Time to get serious", "Vaporwave", "Spider Party", "Halloween2020", "Christmas2020"]
-const customFrames = ["Respective", "Staff", "Spamton", "Cyber World", "Hollow Knight", "Grimm Troupe", "Void", "FNAFB", "Outbreak", "Mirror Temple", "Snails", "Waterfall", "Yet Darker", "Steamworks", "Bone", "Furry Sans", "OvenBreak", "Inscrypted", "Its TV Time", "Cold Place", "brat", "Slay the Spire", "Balatro", "Pokecard 1996"]
+const customFrames = ["Respective", "Staff", "Spamton", "Cyber World", "Hollow Knight", "Grimm Troupe", "Void", "FNAFB", "Outbreak", "Mirror Temple", "Snails", "Waterfall", "Yet Darker", "Steamworks", "Bone", "Furry Sans", "OvenBreak", "Inscrypted", "Its TV Time", "Cold Place", "brat", "Slay the Spire", "Slay the Spire 2", "Balatro", "Pokecard 1996"]
 const backgrounds = ["-", "Ruins - UT", "Quiet Water - UT", "Hotland - UT", "Snowdin - UT", "The Surface - UT", "MTT Resort - UT", "Waterfall - UT", "The CORE - UT",
                      "Judgement Hall - UT", "True Lab - UT", "Hometown - DR", "Scarlet Forest - DR", "Home - DR", "Field of Hopes and Dreams - DR", "Castle Town - DR",
                      "Card Castle - DR", "Jevil's Staircase - DR", "Temmie Village - UT", "Home - UT", "Snowy - UT", "Quiet Autumn - DR", "Alphys's Classroom - DR", "Grillby's - UT",
@@ -92,72 +93,55 @@ const nullcard = {
 
 plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/Galascript.user.js');
 
-const patchNotes =
-`
-<span style="font-size: 9px; color: grey;">1.0.5.0.1 - extremely minor stuff</span>
-<span style="font-size: 9px; color: grey;">1.0.5.0.2 - missing translation strings, no more console logs</span>
+const patchNotes = `
+1.0.5.1! I need to push updates out more, instead of sitting on my ideas and procrastinating the whole thing....
 
-Hello! It's been 1 YEAR of Galascript, can you believe that...?
-
-Okay, I'm gonna be real with you. I needed to rush this a little to get it out for Season 121. Not to say it's gonna be unplayable, but just... look for cracks here and there. I'm gonna be observing everything, so, please report any bugs you experieeeence ~
+Hey, you can actually spectate people now. And more!
 
 <h3>New stuff</h3>
-- New category, <i>Cosmetics</i>, adding new control over randomizing avatars and profile skins!
-    - Add your favorites! You can automatically reroll your avatars and profile skins every match
-    - <i>Keybinds</i> included for randomizing cosmetics
-- Added "The meta", "Sidegraded", and "Unplayable" powers. These show up on cards to signify if they were buffed, reworked, or nerfed this patch.
-    - Also added em to the custom filters
-    - These, along with "New", now are fully dynamic and pull from the game updates page automatically! Less outdated Galascripts, I may be able to sleep tonight!
-- Added "Too many... tribes!?" which adds a ton of unneccessary purely-visual tribe additions
-- Added "Damaged" power (very important)
-- Removed "Check" power to opt for a new Check keybind: press your Check button (unbound by default, i like it on Z) while hovering over something to interact with it. Further functionality may be built upon in the future.
-- <i>Stat base</i> option now accepts any value, because I got tired of adding funny ones. Now, you are the funny
-    - Expanded the system to allow negative numbers, decimals up to the 4th place, and even just straight up text. For example, if <i>Stat base</i> is "Hi" and a card has 3 HP, it'll display as "HiHiHi"
-- New frame, <i>brat</i>
-    - The stats are not visible. This is intentional
-- New power skin, <i>Mewgenics!</i>
-- New filters: "Bouncing DVD logo" and "1/10000 Chance For Withered Foxy Jumpscare Every Second"
-    - I'm not joking. You think I'm joking. I'm not.
-    - Kitty Cats can trigger the DVD logo now
-- <i>Equations</i> got some attention... there are more options! Someone wanna tell me what 6 🦎 8 means? No?
-
+- New tribes for <i>Too many... tribes!?</i>: GHOSTS, STABBIES, HEARTS, SPADES, DIAMONDS, CLUBS, TRASH
+- New frame, <i>Slay the Spire 2</i>! Thank you, Bartwk!
+- KR filter for the two monsters that have it
 <h3>QoL</h3>
-- Added feature to visually collapse any Underscript / Underscript Plugin category by clicking its name
-- Added "New row" option to the Translation Helper menu
-    - I really did try to get the guide thing done, but I didn't finish it. Surely, in the time it took me to stall this update, you learned everything yourself, right?
-
+- New option to show <span class="STORY">STORY</span> cards on the crafting page
+- New option to show number of cards applicable to your search
 <h3>Engine stuff and fixes</h3>
-- Support added for Story rarity and board enchants, code-wise and in custom translations
-- Support added for Deltarune Chapter 5 content (backgrounds, new card aliases, Flowery Power)
-    - <span style="color: thistle;">In the base game, for the first week or so of the new season, backgrounds will only be new Chapter 5 ones.</span> I made it so if you have nothing set in your mixtape, my background system is never loaded, and base-game behaviour stays. If you want the default behaviour for backgrounds, remove everything!!!
-    - Fixed background system applying in Story mode when it shouldn't
-- <i>Showdown</i> status names added for various new Target types such as targets hand or targets boardslot
-- Various fixes and implements to how Action Powers are saved ingame. Uses a much more "random" random function so patterns are less noticable.
-    - Specifically, for the nerds reading, it's not a hacky "seeded" function anymore. Because why was I seeding it, I already save the results to localStorage...
-- Made some Baldesign-Compliant internal changes. Namely, you can no longer embed code into custom translations
-- Made some Onutrem-Compliant internal changes. You shouldn't notice anything, but, if you do... let me know?
+- Removed error messages that would annoyingly spam in your face while you're trying to spectate someone
+- <i>Sludge</i> action power actually...functions now
+    - Fixed occurances of "random" options having a clearly visible pattern and using the same 6 or so cards in a given game
+- Fixed a bug where, having <i>Card skin names</i> on, "Obscure card image" on, and "Obscure card name" off, the card's name, will, eventually, change to match the new image as if it were a skin
+- <i>Playlist</i> setting should... properly work now. Just, like, in general
+    - Properly omits backgrounds again instead of ignoring it
+- Fixed exponentation and tetration formatting for <i>Equations</i>
+    - Also, tetration equations were erraneously written in the first place
+- Fixed various inconsistencies with <i>Too many... tribes!?</i>
+- You can now export your settings in browsers that do not support <code>showSaveFilePicker</code> yet, such as Firefox or Safari. Previously, an error would occur and nothing would happen
+- Added missing strings for intros + added some
+- (optimization) Action powers won't save if they're off entirely
+- Fixed <i>Breaking fullarts</i> and <i>Force standard skins</i> often not working or being weird
+- Fixed the update prompt loading before GS translations, showing raw translation strings
+- Opened up the avenue of automatically supporting whatever shenanigans Undercards does during April Fools
+- Slay the Spire (and by extension the new Slay the Spire 2) frame's text shadow uses a different CSS technique, now. This should make small text much more readable
+- Fixed various long-standing issues with the "Pokecard 1996" frame.
+    - Some issues are still prevalent.
+- Removed old settings I forgot I left in and didn't work at all
 
-This update took a bit, so I'm probably forgetting... something...
-
-<span style="color: thistle;">ONCE AGAIN. Please report ANYTHING you may even think for a SECOND to be a bug to the #galascript channel. I will hunt them. For sport. Thank you, mew!~</span>
-
-<span style="font-size: 9px;">underscript will have some bugs too so maybe people wont be ... sure which one is bugged ... whatever just send bug reports in whichever channel and we'll sort it out surely</span>
+Report bug s........................ i have some ideas for next update but reporrt butgs pleas if you see any thing REPORT IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 `;
 
 const convertMarkdown = new underscript.lib.showdown.Converter();
 
-const seed = window.gameId
 function pullRandom(stat, from = 1, i = 1, raw) {
-    if (!raw) {
-        switch (obscRandomType?.value()) {
-            case 'universal': from = from.fixedId; break;
-            case 'independant': from = from.id; break;
-        }
-    }
-    var m = 2**35 - 31
-    var a = 185852
-    var s = ((seed << from << i) * 2654435761) >>> 0;
-    var roll = (s * a % m) / m
+    let seed = window.gameId || Math.random() * 9000
+    var mask = 0xffffffff;
+    var m_w  = (123456789 + seed) & mask;
+    var m_z  = (987654321 - seed) & mask;
+
+    m_z = (36969 * (m_z & 65535) + (m_z >>> 16)) & mask;
+    m_w = (18000 * (m_w & 65535) + (m_w >>> 16)) & mask;
+
+    var roll = ((m_z << 16) + (m_w & 65535)) >>> 0;
+    roll /= 4294967296;
     var rollFinal = Math.floor(roll * maxCardId())
     var newStat;
     if (stat === 'program') {
@@ -208,6 +192,7 @@ const checkCreateCard = setInterval(() => {
     if (typeof createCard === 'function') {
         clearInterval(checkCreateCard);
         function newCreateCard(card, $htmlCard) {
+            rollForEventPowers(card.id);
             var name, image, cost, attack, hp, maxHp, shiny, hpSquish, maxHpSquish, htmlHp, htmlAtk, rarity, extension;
             var program = "";
             var fauxCost = "";
@@ -230,8 +215,9 @@ const checkCreateCard = setInterval(() => {
                     break;
                 default:
                     name = $.i18n('card-name-' + card.fixedId, loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1);
-                    var cardImg = card.image.replaceAll(" Open", "").replace(/(\S)\d+$/, "$1");
-                    if (cardSkinNames?.value() && cardImg !== card.baseImage) {
+                    var cardSkin = card.image.replaceAll(" Open", "").replace(/(\S)\d+$/, "$1") !== card.baseImage;
+                    var imageSludged = cardImages.includes(card.image) && cardSkin;
+                    if (cardSkinNames?.value() && cardSkin && !imageSludged) {
                         name = card.image.replaceAll("_", " ").replaceAll(" Full", "").replaceAll(" FULL", "").replaceAll("C1225", "1225")
                     }
             }
@@ -370,16 +356,17 @@ const checkCreateCard = setInterval(() => {
             }
 
 
-            var disableBreaking = '';
-            const frames = ['pokecard-1996', 'slay-the-spire', 'balatro', 'showdown', 'brat']
+            let extraClasses = []
+            const frames = ['pokecard-1996', 'slay-the-spire', 'slay-the-spire-2', 'balatro', 'showdown', 'brat']
             if (frames.includes(frameSkinName)) {
-                disableBreaking = ' breaking-disabled'
+                extraClasses.push("gsDontFade")
             }
             if (card.typeSkin === 1 && breakingFullarts?.value()) {
-                disableBreaking = localStorage.getItem("breakingDisabled") ? ' breaking-skin breaking-disabled' : ' breaking-skin'
+                extraClasses.push("breaking-skin")
+                if (localStorage.getItem("breakingDisabled")) extraClasses.push("breaking-disabled")
             }
-            if (card.typeSkin === 1 || card.typeSkin === 2 && standardBreakings?.value()) {
-                disableBreaking = ' standard-skin'
+            if (card.typeSkin !== 0 && standardBreakings?.value()) {
+                extraClasses.push("gsMakeStandard")
             }
 
             frameSkinName += '-frame';
@@ -399,14 +386,14 @@ const checkCreateCard = setInterval(() => {
                     }
                     $(this).attr('class', classArray.join(' '));
                 };
-                $htmlCard.removeClass('shiny gsObscured breaking-disabled')
+                $htmlCard.removeClass('shiny gsObscured gsDontFade gsMakeStandard breaking-disabled')
                 $htmlCard.removeClassContaining('-frame')
                 $htmlCard.removeClassContaining('base')
                 $htmlCard.off('mousemove');
                 $htmlCard.off('mouseleave');
                 $htmlCard.attr('id', card.id)
                 $htmlCard.removeAttr('data-gs-random-delay');
-                $htmlCard.addClass(`${frameSkinName}${shiny}${disableBreaking}${obscClass} base${statBase?.value()}`)
+                $htmlCard.addClass(`${frameSkinName}${shiny} ${extraClasses.join(" ")} ${obscClass} base${statBase?.value()}`)
                 $htmlCard.attr('data-rarity', card.rarity)
                 $htmlCard.attr('data-extension', card.extension)
                 $htmlCard.find('.cardObject').html(JSON.stringify(card).replaceAll('"', '&quot;'))
@@ -439,7 +426,7 @@ const checkCreateCard = setInterval(() => {
                 $cardDescDiv.css('font-size', window.getResizedFontSize($cardDescDiv, 81));
             } else {
                 var htmlCard =
-                `<div id="${card.id}" class="card monster ${frameSkinName}${shiny}${disableBreaking}${obscClass} base${statBase?.value()}" data-rarity="${card.rarity}" data-extension="${card.extension}">
+                `<div id="${card.id}" class="card monster ${frameSkinName}${shiny} ${extraClasses.join(" ")} ${obscClass} base${statBase?.value()}" data-rarity="${card.rarity}" data-extension="${card.extension}">
                 <div class="cardObject">${JSON.stringify(card).replaceAll('"', '&quot;')}</div>
                 <div class="shinySlot"></div>
                 <div class="cardFrame"></div>
@@ -470,7 +457,7 @@ const checkCreateCard = setInterval(() => {
 
                     var cardSoul = card.hasOwnProperty('soul') ? card.soul.name : '';
                     htmlCard =
-                    `<div id="${card.id}" class="card spell ${frameSkinName}${shiny}${disableBreaking}${obscClass}" data-rarity="${card.rarity}" data-extension="${card.extension}">
+                    `<div id="${card.id}" class="card spell ${frameSkinName}${shiny} ${extraClasses.join(" ")} ${obscClass}" data-rarity="${card.rarity}" data-extension="${card.extension}">
                     <div class="cardObject">${JSON.stringify(card).replaceAll('"', '&quot;')}</div>
                     <div class="shinySlot"></div>
                     <div class="cardFrame"></div>
@@ -548,6 +535,11 @@ const filterPowersStandard = [
         condition: function(card) {return findStatus(card, 'disarmed')},
     },
     {
+        name: 'kr',
+        icon: 'kr',
+        condition: function(card) {return findStatus(card, 'kr')},
+    },
+    {
         name: 'loop',
         icon: 'loop',
         condition: function(card) {return findStatus(card, 'loop')},
@@ -619,7 +611,7 @@ return num > 1;
 }
 
 const checkSetInfoPowers = setInterval(() => {
- if (typeof setInfoPowers === 'function'){
+    if (typeof setInfoPowers === 'function') {
     clearInterval(checkSetInfoPowers);
     function newSetInfoPowers(monsterContainer, card) {
     monsterContainer.find('.cardStatus').empty();
@@ -674,7 +666,7 @@ const checkSetInfoPowers = setInterval(() => {
                 powers.push(sprite);
                 powersStringKeys.push((key.startsWith('gs.') ? '' : 'gs.') + key + '-stacked');
                 powersStringArgs.push([]);
-                powersStringNumbers.push(1);
+                powersStringNumbers.push(null);
                 powersTypes.push(type);
             }
         } else {
@@ -686,7 +678,7 @@ const checkSetInfoPowers = setInterval(() => {
         }
     };
 
-    const baseCard = window.getCard(selfId) || nullcard; // SHOULD fix the issue with getCard locking up in an old allCards cache ...
+    const baseCard = window.getCard(selfId) ?? nullcard; // SHOULD fix the issue with getCard locking up in an old allCards cache ...
 
     rollForEventPowers(card.id);
 
@@ -884,6 +876,7 @@ const checkSetInfoPowers = setInterval(() => {
     const balatro = powerSkins?.value() === 'Balatro' || (powerSkins?.value() === 'match frame' && card.frameSkinName === 'Balatro')
     const showdown = powerSkins?.value() === 'Showdown' || (powerSkins?.value() === 'match frame' && card.frameSkinName === 'Showdown')
     const mewgenics = powerSkins?.value() === 'Mewgenics!' || (powerSkins?.value() === 'match frame' && card.frameSkinName === 'uhhh something')
+    const pokecard = card.frameSkinName === 'Pokecard 1996'
     var offset = Number(0);
     var numPowers = powers.length - 1
     powers.forEach((power) => {
@@ -958,7 +951,9 @@ const checkSetInfoPowers = setInterval(() => {
                                    }`
                 $cardContainerImage.append(`<div class="gsPowerGroup" style="${sizeStyles} right: ${i * spacing + offset}px${brickTransform}" power="${powers[i]}"><img style="${sizeStyles}" class="infoPowers helpPointer" src="${url}" oncontextmenu="displayStatusStringKey(${window.formatArgs(powersStringKeys[i], powersStringArgs[i])});"></div>`);
             }
-            if (balatro) {
+            if (card.frameSkinName === 'Pokecard 1996' && card.typeCard === 0) {
+                appendPower({height: "10px", width: "10px"})
+            } else if (balatro) {
                 if (powers[i] === 'brick') {
                     appendPower({height: "27px", width: "54px"})
                     addOffset(38)
@@ -1060,11 +1055,11 @@ const checkSetInfoPowers = setInterval(() => {
         if (obscCardTribes?.value() === 'obfuscate' && obscActive(card)) {
             $cardContainerImage.append(`<img style="right: ${i * 20}px;" class="tribe helpPointer" src="https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/unknown.png" oncontextmenu="displayStatusStringKey('tribe-unknown');"/>`);
         } else if (tribe === "CACTUS" && (selfId === 854 || selfId === 855)) {
-            $cardContainerImage.append(`<img style="right: ${i * 20}px;" class="tribe helpPointer" src="/images/artifacts/Empty.png" oncontextmenu="showTooManyTribeCards('${tribe}');"/>`);
+            $cardContainerImage.append(`<img style="right: ${i * 20}px;" class="tribe helpPointer" src="${images}/artifacts/Empty.png" oncontextmenu="showTooManyTribeCards('${tribe}');"/>`);
         } else if (tooManyTribes?.value() && tribe in manyTribes) {
-            $cardContainerImage.append(`<img style="right: ${i * 20}px;" class="tribe helpPointer" src="${allTribes.includes(tribe) ? `images/tribes/${tribe}.png` : `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/tribes/${tribe}.png`}" oncontextmenu="showTooManyTribeCards('${tribe}');"/>`);
+            $cardContainerImage.append(`<img style="right: ${i * 20}px;" class="tribe helpPointer" src="${allTribes.includes(tribe) ? `${images}/tribes/${tribe}.png` : `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/tribes/${tribe}.png`}" oncontextmenu="showTooManyTribeCards('${tribe}');"/>`);
         } else {
-            $cardContainerImage.append(`<img style="right: ${i * 20}px;" class="tribe helpPointer" src="images/tribes/${tribe}.png" oncontextmenu="showTribeCards('${tribe}');"/>`);
+            $cardContainerImage.append(`<img style="right: ${i * 20}px;" class="tribe helpPointer" src="${images}/tribes/${tribe}.png" oncontextmenu="showTribeCards('${tribe}');"/>`);
         }
     }
     if (tribes.indexOf('ALL') > -1) {
@@ -1078,7 +1073,28 @@ const checkSetInfoPowers = setInterval(() => {
 }} window.setInfoPowers = newSetInfoPowers
 });
 
+let cardCount;
+var originalApplyFilters = window.applyFilters;
+
+function newApplyFilters() {
+    cardCount = 0;
+    originalApplyFilters.apply(this, arguments);
+    $('#gsCardCounterNum').text(cardCount);
+};
+window.applyFilters = newApplyFilters;
+
 if (typeof plugin.addFilter === 'function') {
+    plugin.addFilter(
+        function gsStoryDisabledByDefault (card, removed) {
+            if (!removed && card.rarity === "STORY") {
+
+                if (!$("#storyRarityInput").prop('checked')) {
+                    removed = true;
+                }
+            }
+            return removed;
+        }
+    )
     plugin.addFilter(
         function gsStatFilters (card, removed) {
             if (!removed && $('#costInput').length) {
@@ -1089,35 +1105,26 @@ if (typeof plugin.addFilter === 'function') {
                 if (card.typeCard == 1) {
                     removed = atk.length > 0 || hp.length > 0;
                 }
-
-                if (cost.length > 0 && !removed) {
-                    switch ($('#costInput').attr('class').split(' ')[1]) {
-                        case 'equals': removed = card.cost != cost; break;
-                        case 'moreThan': removed = card.cost <= cost; break;
-                        case 'moreThanEqualTo': removed = card.cost < cost; break;
-                        case 'lessThan': removed = card.cost >= cost; break;
-                        case 'lessThanEqualTo': removed = card.cost > cost; break;
+                function calc(property, stat) {
+                    let id = property === "attack" ? `#atkInput` : `#${property}Input`
+                    switch ($(id).attr('class').split(' ')[1]) {
+                        case 'equals':          removed = card[property] != stat; break;
+                        case 'moreThan':        removed = card[property] <= stat; break;
+                        case 'moreThanEqualTo': removed = card[property] < stat;  break;
+                        case 'lessThan':        removed = card[property] >= stat; break;
+                        case 'lessThanEqualTo': removed = card[property] > stat;  break;
                     }
+                }
+                if (cost.length > 0 && !removed) {
+                    calc('cost', cost)
                 }
 
                 if (atk.length > 0 && !removed) {
-                    switch ($('#atkInput').attr('class').split(' ')[1]) {
-                        case 'equals': removed = card.attack != atk; break;
-                        case 'moreThan': removed = card.attack <= atk; break;
-                        case 'moreThanEqualTo': removed = card.attack < atk; break;
-                        case 'lessThan': removed = card.attack >= atk; break;
-                        case 'lessThanEqualTo': removed = card.attack > atk; break;
-                    }
+                    calc('attack', atk)
                 }
 
                 if (hp.length > 0 && !removed) {
-                    switch ($('#hpInput').attr('class').split(' ')[1]) {
-                        case 'equals': removed = card.hp != hp; break;
-                        case 'moreThan': removed = card.hp <= hp; break;
-                        case 'moreThanEqualTo': removed = card.hp < hp; break;
-                        case 'lessThan': removed = card.hp >= hp; break;
-                        case 'lessThanEqualTo': removed = card.hp > hp; break;
-                    }
+                    calc('hp', hp)
                 }
             }
             return removed;
@@ -1197,6 +1204,14 @@ if (typeof plugin.addFilter === 'function') {
         )
     })
 
+    plugin.addFilter(
+        function gsCountIncrement(card, removed) {
+            if (!removed) {
+                cardCount++;
+            }
+            return removed;
+        }, "last"
+    )
 }
 
 function seededRand(s) {
@@ -1514,6 +1529,7 @@ function initGsTranslations() {
         "gs.card-alias-776": "tlights",
         "gs.card-alias-782": "talphys",
         "gs.card-alias-794": "gq",
+        "gs.card-alias-808": "gunhat",
         "gs.card-alias-815": "dalvdrobe",
         "gs.card-alias-828": "mommy",
         "gs.card-alias-838": "zmartlet",
@@ -1622,7 +1638,7 @@ function initGsTranslations() {
         "gs.tribe-robot": "{{PLURAL:$1|Robot|Robots}}",
         "gs.tribe-bird": "{{PLURAL:$1|Bird|Birds}}",
         "gs.tribe-fish": "Fish",
-        "gs.tribe-technology": "{{PLURAL:$1|Bird|Birds}}",
+        "gs.tribe-technology": "Technology",
         "gs.tribe-food": "Food",
         "gs.tribe-bunny": "{{PLURAL:$1|Bunny|Bunnies}}",
         "gs.tribe-gambling": "Gambling",
@@ -1645,7 +1661,16 @@ function initGsTranslations() {
         "gs.tribe-cold": "Cold",
         "gs.tribe-hot": "Hot",
         "gs.tribe-cake": "{{PLURAL:$1|Cake|Cakes}}",
-        "gs.tribe-knight": "{{PLURAL:$1|Honest to God Roaring Knight Candidate|Honest to God Roaring Knight Candidates}}",
+        "gs.tribe-knight": "The Knight!",
+
+        "gs.tribe-ghost": "{{PLURAL:$1|Ghost|Ghosts}}",
+        "gs.tribe-stabby": "{{PLURAL:$1|Stabby|Stabbies}}",
+        "gs.tribe-weird": "Weird",
+        "gs.tribe-heart": "{{PLURAL:$1|Heart|Hearts}}",
+        "gs.tribe-spade": "{{PLURAL:$1|Spade|Spades}}",
+        "gs.tribe-diamond": "{{PLURAL:$1|Diamond|Diamonds}}",
+        "gs.tribe-club": "{{PLURAL:$1|Club|Clubs}}",
+        "gs.tribe-trash": "Trash",
 
         "gs.tribe-cat": "{{PLURAL:$1|Cat|Cats}}",
         "gs.tribe-mom": "{{PLURAL:$1|Mom|Moms}}",
@@ -1737,7 +1762,7 @@ function initGsTranslations() {
         "gs.game-going-first": "You go first.",
         "gs.game-going-second": "You go second.",
 
-        "gs.game-intros": "$1 challenges you to a Dual!|Fighting $1!|$1 enters through a graceful misty fog...|$1 enters the scene!|$1 approaches!|$1 attacks!|$1 sniped you.|$1 wants to win! Are you just gonna let that happen?|C-could it be? It's the one and only $1...|...It's $1? Sorry, you're cooked.|$1 gracefully flops onto the battlefield like a fish.|A wild $1 appeared!|$1 glares at you. You hear boss music.|Well, you didn't expect $1 to be here.|Well, there is a $1 here. They might be happy to see you. What do you think?|> enters $5-less queue<br>> looks inside<br>> $5|Okay, so, a $1 walks into a bar|You are not fighting $1!|ITS FUCKING $6 RUN|My money's on $1. No pressure.|EPIC RAP BATTLES OF HISTORY:<br>$1<br>VERSUS!<br>$2|Fighting $2!<br>Wait, no...<br>...it's $1!|$1 calls an ambulance in advance.|$1, huh?|$1 emerges from the abyss!|Hey, it's $1!",
+        "gs.game-intros": "$1 challenges you to a Dual!|Fighting $1!|$1 enters through a graceful misty fog...|$1 enters the scene!|$1 approaches!|$1 attacks!|$1 sniped you.|$1 wants to win! Are you just gonna let that happen?|C-could it be? It's the one and only $1...|...It's $1? Sorry, you're cooked.|$1 gracefully flops onto the battlefield like a fish.|A wild $1 appeared!|$1 glares at you. You hear boss music.|Well, you didn't expect $1 to be here.|Well, there is a $1 here. They might be happy to see you. What do you think?|> enters $5-less queue<br>> looks inside<br>> $5|Okay, so, a $1 walks into a bar|You are not fighting $1!|ITS FUCKING $6 RUN|My money's on $1. No pressure.|EPIC RAP BATTLES OF HISTORY:<br>$1<br>VERSUS!<br>$2|Fighting $2!<br>Wait, no...<br>...it's $1!|$1 calls an ambulance in advance.|$1, huh?|$1 emerges from the abyss!|Hey, it's $1!|It is $1.|Quests<br>Kill $1 (0/1)|transmit this $1<img style= 'float: right' width='90px' src='https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/transmit.gif'>",                                                                        //
         "gs.game-intros-crystal": "$7 Free elo.",
         "gs.game-intros-dia": "$7 You're about to have a bad time.",
         "gs.game-intros-frogman": "$7 Pet the frog :D",
@@ -1748,10 +1773,14 @@ function initGsTranslations() {
         "gs.game-intros-mustard": "asd",
         "gs.game-intros-mel": "Mrrp|Mrow|Meow|Nyaw|Mrrrrow|Prrrrrr|Mrorw|Mroooooow|Mew|Waoow|:3",
         "gs.game-intros-cinn": "$1 blossoms into battle!",
-        "gs.game-intros-casdyne": "$7 oh btw heads up she's playing skris|$1 enters through a misty fog... and then trips.|$7 She's going to yam on $2 you.",
+        "gs.game-intros-casdyne": "$7 oh btw heads up she's playing skris|$1 enters through a misty fog... and then trips.|$7 She's going to yam on $8 you.",
         "gs.game-intros-runes": "$7 She's netdecking.|$7 if this is dt spikeband you're probably winning|$7 \"wruff :3\"<br>- Sun Tzu",
         "gs.game-intros-icy": "$1 floats down from the sky on fairy wings to test some random niche interaction, then not touch the game for another 3 months.",
         "gs.game-intros-blue": "$7 Your blue now, thast my attack",
+        "gs.game-intros-askz": "$7 Avoid the cliff.|Caught off guard all alone? Or is it just $7 me?",
+        "gs.game-intros-ren": "$7 You play with her life like game of chance...|$7 The knife twists further.",
+        "gs.game-intros-acid": "$1 appeared!<br>\>Engage<br>\>Run",
+        "gs.game-intros-onu": "It's $1! Good luck out there.",
 
         "gs.alert-title-kitty": "Mrrp|Mrow|Meow|Nyaw|Mrrrrow|Prrrrrr|Mrorw|Mroooooow|Mew|Waoow|:3",
         "gs.alert-title-mike": "Truth nuke|Final act|That's all, folks|Yep, I went there|I'll see ya next time|Thank you all for coming|*cue applause*|Like and subscribe for part 2|I'll be here all night|Tough crowd|There is a really big magnet on the ground that pulled the mic out of my hand",
@@ -1798,6 +1827,7 @@ function initGsTranslations() {
         "gs.alert-equation-pity-no": "No I got this",
         "gs.alert-equation-pity-answer": "The answer to $1's equation is $2! You'll get 'em next time.",
         "gs.alert-equation-cant-create": "$1's equation repeatedly failed to generate 100 times, solving itself to avoid issue. Check if the conditions for your equations are too strict.",
+        "gs.alert-equation-spectating": "You can't do equations for other people, now.",
         "gs.alert-friend-online": "$1 is online!",
         "gs.alert-friend-game": "$1 just got into a game versus $2!",
         "gs.alert-friend-game-win": "$1 won against $2!",
@@ -1819,19 +1849,19 @@ function initGsTranslations() {
         "gs.alert-game-data-not-ingame": "Galascript tried to save game data, but you're not in a game. This probably shouldn't pop up.",
         "gs.alert-game-data-spectating": "Galascript tried to save game data, but you're just spectating, not actually in the game. This probably shouldn't pop up.",
 
-        "gs.alert-title-update-success": "Galascript v$1 - Year of the Gala",
+        "gs.alert-title-update-success": "Galascript v$1 Patch Notes",
         "gs.alert-update-success": "Successfully installed Galascript v$1!",
         "gs.alert-patch-notes-read": "Read patch notes",
 
-        "gs.math-title": "$1's Math Time|$1's Math Quiz|$1's Basics in Education and Learning|Mx. $1's Test|Math, Brought to You by $1|$1 Helps You With Homework",
+        "gs.math-title": "$1's Math Time|$1's Math Quiz|$1's Basics in Education and Learning|Mx. $1's Test|Math, Brought to You by $1|$1 Helps with Homework",
         "gs.math-q-add": "What is $1 + $2?|What is $2 plus $1?",
         "gs.math-q-subtract": "What is $1 - $2?|What is $1 minus $2?",
         "gs.math-q-multiply": "What is $1 * $2?|What is $2 times $1?",
         "gs.math-q-divide": "What is $1 / $2?|What is $1 divided by $2?",
         "gs.math-q-modulo": "What is the remainder of $1 / $2?|What is the remainder of $1 divided by $2?",
         "gs.math-q-exponentate": "Evaluate $1<sup>$2</sup>.|What is $1<sup>$2</sup>?|What is $1 to the power of $2?",
-        "gs.math-q-tetrate": "Evaluate $1<sup>$2<sup>$2</sup></sup>.|What is $1<sup>$2<sup>$2</sup></sup>?|Tetrate $1 to the power of $2.",
-        "gs.math-q-factorial": "What is $1!?<br>And no, I'm not yelling.|What is the factorial of $1?",
+        "gs.math-q-tetrate": "Evaluate $1 ↑↑ $2.|What is <sup>$2<sup>$1?|Tetrate $1 to the height of $2.",
+        "gs.math-q-factorial": "What is $1!<br>And no, I'm not yelling.|What is the factorial of $1?",
         "gs.math-q-lizard": "What is $1 🦎 $2?",
         "gs.math-q-spade": "What is ♠$1?|Evaluate ♠$1.",
         "gs.math-q-nullary": "Guess.|The input is $4. What is the output?",
@@ -1841,7 +1871,7 @@ function initGsTranslations() {
         "gs.math-q-bitwise-right": "Shift $1 in binary representation $2 bits to the right, discarding bits shifted off.|What is $1 >> $2?",
         "gs.math-q-bitwise-zero": "Shift $1 in binary representation $2 bits to the right, discarding bits shifted off, and shifting in zeros from the left.|What is $1 >>> $2?",
 
-        "gs.dialog-patch-notes": "Galascript v$1 Patch Notes - Year of the Gala",
+        "gs.dialog-patch-notes": "Galascript v$1 Patch Notes",
         "gs.dialog-translation-guide": "Translation Guide",
         "gs.dialog-next-page": "Next >",
         "gs.dialog-goto-page": "Flip to page...",
@@ -1879,11 +1909,19 @@ function initGsTranslations() {
         "gs.dialog-export-begin": "Export your Galascript settings to send to other users or to save for later! Choose from one of the below presets to export.",
         "gs.dialog-export-all": "All settings",
         "gs.dialog-export-translations": "Custom translations",
+
+        "gs.setting-readPatchNotes": "Read patch notes",
+        "gs.setting-readCredits": "Read credits",
+        "gs.setting-exportSettings": "Export settings...",
+        "gs.setting-importSettings": "Import settings...",
+        "gs.setting-restoreTips": "Restore tips",
     }, 'en');
 }
 
 function randi18n(key, ...args) {
     const list = $.i18n(key, ...args).split("|")
+    const parser = new DOMParser();
+    const final = parser.parseFromString(list.gs_random(), 'text/html');
     return list.gs_random();
 }
 
@@ -1891,68 +1929,85 @@ function initCustomTranslations() {
     const translations = Object.fromEntries(customTranslations.value());
     Object.entries(translations).forEach(([key, value]) => {
         translations[key] = DOMPurify.sanitize(value, {
-            ALLOWED_TAGS: ['b', 'i', 'a', 'p', 'span', 'img'],
-            ALLOWED_ATTR: ['style', 'src'],
+            ALLOWED_TAGS: ['b', 'i', 'a', 'p', 'span', 'img', 'br', 'sup', 'sub'],
+            ALLOWED_ATTR: ['style', 'src', 'width', 'height'],
         });
     })
     $.i18n().load(translations, $.i18n().locale);
 }
 
-function initMulliganInfo() {
-    if (!ingame || window.spectate) return;
-    const waitForMulligan = setInterval(() => {
-        if ($('.bootstrap-dialog-message > .mulligan').length) { // waits for the mulligan message to show up
-            clearInterval(waitForMulligan);
-            var enemySoul = $('.soul:first').children().attr('class');
-            var enemyUser = parseInt($('.profile:first').attr("id").replace(/\D/g, ''));
-            var enemyUsername = $('#enemyUsername').text();
-            var yourSoul = $('.soul:last').children().attr('class');
-            var yourUser = parseInt($('.profile:last').attr("id").replace(/\D/g, ''));
-            var yourUsername = $('#yourUsername').text();
-            function soulIcon(replace) {return `<img src="/images/souls/${replace ? replace : enemySoul}.png">`};
-            function soulColor(text, soul) {return `<span class="${soul ? soul : enemySoul}">${text}</span>`};
-            function player(replace) {return `${soulIcon()} ${soulColor(replace ? replace : enemyUsername)}`};
-            const introVars = [
-                            player(), // $1: The enemy player
-                            `${soulIcon(yourSoul)} ${soulColor(yourUsername, yourSoul)}`, // $2: You!
-                            soulColor(enemyUsername), // $3: Enemy, no soul icon
-                            soulColor(yourUsername, yourSoul), // $4: You, no soul icon
-                            player(enemyUsername.toLowerCase()), // $5: The enemy player, lowercased
-                            player(enemyUsername.toUpperCase()), // $6: The enemy player, uppercased
-                            soulIcon(), // $7 Enemy soul icon
-                            soulIcon(yourSoul) // $8 Your soul icon
-                        ]
-            var introductions = $.i18n('gs.game-intros', ...introVars).split("|") ?? 'gs.game-intros';
-            function funnyIntro() {
-                switch (enemyUser) {
-                    case 163201:      return $.i18n('gs.game-intros-crystal', ...introVars);
-                    case 118586:      return $.i18n('gs.game-intros-dia', ...introVars);
-                    case 751745:      return $.i18n('gs.game-intros-frogman', ...introVars);
-                    case 241890:      return $.i18n('gs.game-intros-dware', ...introVars);
-                    case 741766:      return $.i18n('gs.game-intros-jaimee', ...introVars);
-                    case 477832:      return $.i18n('gs.game-intros-gala', ...introVars);
-                    case 326311:      return $.i18n('gs.game-intros-speednick', ...introVars);
-                    case 611082:      return $.i18n('gs.game-intros-mustard', ...introVars);
-                    case 652474:      return $.i18n('gs.game-intros-mel', ...introVars);
-                    case 316285:      return $.i18n('gs.game-intros-cinn', ...introVars);
-                        case 572824:      return $.i18n('gs.game-intros-cinn', ...introVars);
-                    case 428886:      return $.i18n('gs.game-intros-casdyne', ...introVars);
-                        case 780989:      return $.i18n('gs.game-intros-casdyne', ...introVars);
-                    case 361868:      return $.i18n('gs.game-intros-runes', ...introVars);
-                    case 597289:      return $.i18n('gs.game-intros-icy', ...introVars);
-                    case 481679:      return $.i18n('gs.game-intros-blue', ...introVars);
-                    case 650313:      return $.i18n('gs.game-intros-askz', ...introVars);
-                    case 779680:      return $.i18n('gs.game-intros-ren', ...introVars);
-                }
-                var result = introductions.gs_random();
-                introductions.splice(introductions.indexOf(result), 1);
-                return result;
-            }
-            var info = `<p>${funnyIntro()}</p>`;
-            $('.bootstrap-dialog-message:has(.mulligan) > p:first').prepend(info)
+function initMulliganInfo(testBool, id) {
+    if (!testBool) if (!ingame || window.spectate) return;
+    var enemySoul = $('.soul:first').children().attr('class') ?? 'DETERMINATION';
+    var enemyUser = id ?? parseInt($('.profile:first').attr("id")?.replace(/\D/g, '')) ?? '-1';
+    var enemyUsername = $('#enemyUsername').text() || 'USER';
+    var yourSoul = $('.soul:last').children().attr('class') ?? 'KINDNESS';
+    var yourUser = parseInt($('.profile:last').attr("id")?.replace(/\D/g, '')) ?? '-1';
+    var yourUsername = $('#yourUsername').text() || 'YOU';
+    function soulIcon(replace) {return `<img src="${images}/souls/${replace ? replace : enemySoul}.png">`};
+    function soulColor(text, soul) {return `<span class="${soul ? soul : enemySoul}">${text}</span>`};
+    function player(replace) {return `${soulIcon()} ${soulColor(replace ? replace : enemyUsername)}`};
+    const introVars = [
+                    player(), // $1: The enemy player
+                    `${soulIcon(yourSoul)} ${soulColor(yourUsername, yourSoul)}`, // $2: You!
+                    soulColor(enemyUsername), // $3: Enemy, no soul icon
+                    soulColor(yourUsername, yourSoul), // $4: You, no soul icon
+                    player(enemyUsername.toLowerCase()), // $5: The enemy player, lowercased
+                    player(enemyUsername.toUpperCase()), // $6: The enemy player, uppercased
+                    soulIcon(), // $7 Enemy soul icon
+                    soulIcon(yourSoul) // $8 Your soul icon
+                ]
+    function funnyIntro() {
+        switch (enemyUser) {
+            case 163201:      return randi18n('gs.game-intros-crystal', ...introVars);
+            case 118586:      return randi18n('gs.game-intros-dia', ...introVars);
+            case 751745:      return randi18n('gs.game-intros-frogman', ...introVars);
+            case 241890:      return randi18n('gs.game-intros-dware', ...introVars);
+            case 741766:      return randi18n('gs.game-intros-jaimee', ...introVars);
+            case 477832:      return randi18n('gs.game-intros-gala', ...introVars);
+            case 326311:      return randi18n('gs.game-intros-speednick', ...introVars);
+            case 611082:      return randi18n('gs.game-intros-mustard', ...introVars);
+            case 652474:      return randi18n('gs.game-intros-mel', ...introVars);
+            case 316285:      return randi18n('gs.game-intros-cinn', ...introVars);
+                case 572824:      return randi18n('gs.game-intros-cinn', ...introVars);
+            case 428886:      return randi18n('gs.game-intros-casdyne', ...introVars);
+                case 780989:      return randi18n('gs.game-intros-casdyne', ...introVars);
+            case 361868:      return randi18n('gs.game-intros-runes', ...introVars);
+            case 597289:      return randi18n('gs.game-intros-icy', ...introVars);
+            case 481679:      return randi18n('gs.game-intros-blue', ...introVars);
+            case 650313:      return randi18n('gs.game-intros-askz', ...introVars);
+            case 779680:      return randi18n('gs.game-intros-ren', ...introVars);
+            case 488578:      return randi18n('gs.game-intros-acid', ...introVars);
+            case 1:           return randi18n('gs.game-intros-onu', ...introVars);
         }
-    });
+        return randi18n('gs.game-intros', ...introVars);
+    }
+    if (testBool) {
+        window.BootstrapDialog.show({
+            title: $.i18n('game-mulligan'),
+            size: window.BootstrapDialog.SIZE_NORMAL,
+            id: 'gsCredits',
+            message: `<p>${funnyIntro()}</p><p>${$.i18n('game-mulligan-information')}</p><p><strong>You go never!</strong></p>`,
+            buttons: [{
+                label: $.i18n('dialog-close'),
+                cssClass: 'btn-primary',
+                action: function (dialog) {
+                    dialog.close();
+                }
+            }]
+        });
+    } else {
+        const waitForMulligan = setInterval(() => {
+            if ($('.bootstrap-dialog-message > .mulligan').length) { // waits for the mulligan message to show up
+                clearInterval(waitForMulligan);
+                var info = `<p>${funnyIntro()}</p>`;
+                $('.bootstrap-dialog-message:has(.mulligan) > p:first').prepend(info)
+            }
+        });
+    }
 }
+
+window.testMulliganInfo = initMulliganInfo
 
 function staticStyles() {
     style('static', 'add',
@@ -2000,8 +2055,9 @@ function staticStyles() {
     .setting-advancedMap_Galascript-keybind_select select {width: 50%}
     .setting-advancedMap_select:has(#underscript\\.plugin\\.Galascript\\.bgMixtape) {width: 350px; border-bottom: none !important;}
     .setting-advancedMap_select:has(#underscript\\.plugin\\.Galascript\\.bgMixtape) select {width: 40%; height: 40px; text-wrap: auto; text-align: center; background-repeat: no-repeat; background-size: cover; background-position: center;}
-    .card.breaking-skin.breaking-disabled .cardDesc,.cardName,.cardATK,.cardHP,.cardCost,.cardRarity {background-color: rgba(0, 0, 0, 0);}
-    .breaking-skin:not(.breaking-disabled):hover .cardDesc, .breaking-skin:not(.breaking-disabled):hover .cardName, .breaking-skin:not(.breaking-disabled):hover .cardATK, .breaking-skin:not(.breaking-disabled):hover .cardHP, .breaking-skin:not(.breaking-disabled):hover .cardCost, .breaking-skin:not(.breaking-disabled):hover .cardRarity {background-color: rgba(0, 0, 0, 0.7);}
+    .breaking-skin:not(.breaking-disabled):hover {
+        .cardDesc, .cardName, .cardATK, .cardHP, .cardCost, .cardRarity {background-color: rgba(0, 0, 0, 0.7);}
+    }
     .setting-Galascript-button {max-width: 380px;}
     #gsCredits h4 {font-size: 22px; font-weight: bold; text-align: center;}
     #gsCredits h5 {font-size: 18px; font-weight: bold; }
@@ -2061,17 +2117,24 @@ function staticStyles() {
     fieldset:has(.gsCollapsable.collapsed) {border: none; border-left: 3px solid silver;}
     fieldset:has(.gsCollapsable.collapsed) div {height: 0px; visibility: hidden; padding: 0px; pointer-events: none;}
     fieldset:has(.gsCollapsable.collapsed) {opacity: 0.3}
-    fieldset:has(.gsCollapsable.collapsed) legend::after {content: " ${$.i18n('gs.collapsed')}"; font-size: 12px;}
+    fieldset:has(.gsCollapsable.collapsed) legend::after {content: " ${randi18n('gs.collapsed')}"; font-size: 12px;}
     .gsPowerGroup {position: absolute; height: 0px; width: 0px;}
     .gsPowerGroup img {height: 100%; width: 100%; max-height: 100%; max-width: 100%}
+    .balatro-skin.gsPowerGroup {transform: rotate(90)}
     .infoPowersDetails {left: 100%; top: 100%; transform: translateX(-90%) translateY(-90%); padding: 0px 4px;}
+    .card.gsMakeStandard .cardImage {width: 160px; height: 90px; background-position: 50% 23% !important; left: 8px; top: 36px; z-index: 1}
+    .card.gsDontFade {
+        .cardDesc, .cardName, .cardATK, .cardHP, .cardCost, .cardRarity {
+            background: none !important;
+        }
+    }
     `)
 }
 
 const leGrandeObserver = new MutationObserver((mutations, obs) => {
     document.querySelectorAll('[id^="underscript.plugin.Galascript.bgMixtape."]:not([id$="value"])').forEach(el => { // dynamic backgrounds for playlist setting
         function updateBackground (value) {
-            el.style.setProperty('background-image', `url('/images/backgrounds/${value}.png')`);
+            el.style.setProperty('background-image', `url('${images}/backgrounds/${value}.png')`);
             el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.4)', 'important');
             el.style.setProperty('background-blend-mode', 'darken');
         };
@@ -2092,7 +2155,7 @@ const leGrandeObserver = new MutationObserver((mutations, obs) => {
             if (value == 0) {
                 emoteSrc = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/genericFail.png'
             } else {
-                emoteSrc = `/images/emotes/${window.chatEmotes.find(emote => emote.id === Number(value)).image}.png`
+                emoteSrc = `${images}/emotes/${window.chatEmotes.find(emote => emote.id === Number(value)).image}.png`
             }
             el.style.setProperty('background-image', `url('${emoteSrc}')`);
             el.style.setProperty('background-color', 'rgba(0, 0, 0, 0.4)', 'important');
@@ -2118,13 +2181,13 @@ const leGrandeObserver = new MutationObserver((mutations, obs) => {
             if (value.startsWith("card-") || value.startsWith("gs.card-")) {
                 const card = window.getCard(Number(value.replace(/\D/g,'')))
                 const image = card?.baseImage ?? "Blank"
-                el.style.setProperty('background-image', `url('/images/cards/${image}.png')`);
+                el.style.setProperty('background-image', `url('${images}/cards/${image}.png')`);
                 el.style.setProperty('background-size', '100%');
                 el.style.setProperty('background-position-y', 'bottom');
 
             } else if (value.startsWith("artifact-")) {
                 const artifactImg = allArtifacts.find(art => art.id === Number(value.replace(/\D/g,'')))?.image
-                el.style.setProperty('background-image', `url('/images/artifacts/${artifactImg}.png')`);
+                el.style.setProperty('background-image', `url('${images}/artifacts/${artifactImg}.png')`);
                 el.style.setProperty('background-size', '42%');
                 el.style.setProperty('background-position', 'center');
 
@@ -2157,7 +2220,7 @@ const leGrandeObserver = new MutationObserver((mutations, obs) => {
                     if (str === "kr") return "KR";
                     return str.charAt(0).toUpperCase() + str.slice(1);
                 }
-                let defaultLink = `images/powers/${onuItBurns(statusImg)}.png`
+                let defaultLink = `${images}/powers/${onuItBurns(statusImg)}.png`
                 switch (powerSkins?.value()) {
                     case 'match frame':
                         if (frameSpoof?.value() === 'Balatro') {
@@ -2205,7 +2268,7 @@ const leGrandeObserver = new MutationObserver((mutations, obs) => {
             } else if (value.startsWith("tribe-")) {
                 const tribe = value.replace("tribe-", "").toUpperCase()
                 el.style.setProperty('image-rendering', 'pixelated');
-                el.style.setProperty('background-image', `url('/images/tribes/${tribe}.png')`);
+                el.style.setProperty('background-image', `url('${images}/tribes/${tribe}.png')`);
                 el.style.setProperty('background-size', '52%');
                 el.style.setProperty('background-position', '50% 50%');
 
@@ -2213,8 +2276,8 @@ const leGrandeObserver = new MutationObserver((mutations, obs) => {
                 var rarity = value.replace("rarity-", "");
                 var rarityImg;
                 switch (raritySkins?.value()) {
-                    case 'off': rarityImg = `images/rarity/BASE_${rarity.toUpperCase()}.png`; break;
-                    case 'match frame': rarityImg = `images/rarity/BASE_${rarity.toUpperCase()}.png`; break;
+                    case 'off': rarityImg = `${images}/rarity/BASE_${rarity.toUpperCase()}.png`; break;
+                    case 'match frame': rarityImg = `${images}/rarity/BASE_${rarity.toUpperCase()}.png`; break;
                     case 'Hollow Knight': rarityImg = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/hk-${rarity}.png`; break;
                     case 'FNAFB': rarityImg = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-ut-${rarity}.png`; break;
                     case 'Celeste': rarityImg = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/celeste-ut-${rarity}.png`; break;
@@ -2228,7 +2291,7 @@ const leGrandeObserver = new MutationObserver((mutations, obs) => {
                 el.style.setProperty('background-position', '50% 50%');
 
             } else if (value.startsWith("kw-")) {
-                el.style.setProperty('background-image', `url('/images/cards/Blank.png')`)
+                el.style.setProperty('background-image', `url('${images}/cards/Blank.png')`)
 
             } else if (value.startsWith("gs.")) {
                 el.style.setProperty('image-rendering', 'pixelated');
@@ -2238,7 +2301,7 @@ const leGrandeObserver = new MutationObserver((mutations, obs) => {
 
             } else if (value.startsWith("enchant-")) {
                 var enchant = value.replace("enchant", "").replace("-desc", "").replace(/-([a-z])/gi, (_, c) => c.toUpperCase());;
-                el.style.setProperty('background-image', `url('/images/enchants/backgrounds/${enchant}.png'), url('/images/enchants/overlays/${enchant}.png')`);
+                el.style.setProperty('background-image', `url('${images}/enchants/backgrounds/${enchant}.png'), url('${images}/enchants/overlays/${enchant}.png')`);
                 el.style.setProperty('background-position', 'center');
 
             } else if (value.length) {
@@ -2340,7 +2403,7 @@ const leGrandeObserver = new MutationObserver((mutations, obs) => {
             var url;
             el.style.setProperty('background-position', '85% -2%');
             if (standardFrames.includes(value)) {
-                url = `images/frameSkins/${underscored}/frame_monster.png`
+                url = `${images}/frameSkins/${underscored}/frame_monster.png`
             } else if (value === "Waterfall") {
                 url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/waterfall-frame.png`
             } else if (value === "Yet Darker") {
@@ -2349,6 +2412,8 @@ const leGrandeObserver = new MutationObserver((mutations, obs) => {
                 url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/pokecard-1996-frame-common.png`
             } else if (value === "Slay the Spire") {
                 url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/slay-the-spire-frame-monster-common.png`
+            } else if (value === "Slay the Spire 2") {
+                url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/slay-the-spire-2-frame-monster-common.png`
             } else if (value === "brat") {
                 url = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/brat-frame.png`
                 el.style.setProperty('background-position', '85% 50%');
@@ -2376,7 +2441,7 @@ const leGrandeObserver = new MutationObserver((mutations, obs) => {
         function updateBackground (value) {
             var url;
             switch (value) {
-                case "off": url = 'images/rarity/BASE_DETERMINATION.png'; break;
+                case "off": url = `${images}/rarity/BASE_DETERMINATION.png`; break;
                 case "match frame": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/rarity-match.gif'; break;
                 case "Hollow Knight": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/hk-determination.png'; break;
                 case "FNAFB": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/rarities/fnafb-ut-determination.png'; break;
@@ -2412,7 +2477,7 @@ const leGrandeObserver = new MutationObserver((mutations, obs) => {
             }
             if (value !== 'Showdown') {
                 switch (value) {
-                    case "off": url = 'images/powers/BonusAtk.png'; break;
+                    case "off": url = `${images}/powers/BonusAtk.png`; break;
                     case "match frame": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/power-match.gif'; break;
                     case "Ancient": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/ancient-bonusAtk.png'; break;
                     case "Neon": url = 'https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/neon-bonusAtk.png'; break;
@@ -2563,7 +2628,7 @@ function obscure(element, type, firstLoad) {
             standardFrames.forEach(f => {
                 const fclass = f.toString().replace(/\s+/g, '-').toLowerCase();
                 const fimage = f.toString().replace(/\s+/g, '_');
-                style(`${fclass}UseSpellGraphic`, 'add', `.${fclass}-frame.monster.gsObscured .cardFrame {background-image: url("/images/frameSkins/${fimage}/frame_spell.png");}`)
+                style(`${fclass}UseSpellGraphic`, 'add', `.${fclass}-frame.monster.gsObscured .cardFrame {background-image: url("${images}/frameSkins/${fimage}/frame_spell.png");}`)
             });
             customFrames.forEach(f => {
                 f = f.toString().replace(/\s+/g, '-').toLowerCase();
@@ -2594,7 +2659,7 @@ function cardImagesOffsetToggle(val) {
 }
 function frameStyles() {
     style('static', 'add', `
-    .cardSilence {background: transparent url("images/cardAssets/silence.png") no-repeat; visibility: hidden;}
+    .cardSilence {background: transparent url("${images}/cardAssets/silence.png") no-repeat; visibility: hidden;}
     @keyframes float { 0% { transform: translatey(-4px); } 50% { transform: translatey(2px); } 100% { transform: translatey(-4px); } }
     @keyframes sway {
         0%   { transform: rotateX(0deg) rotateY(0deg) rotateZ(-1deg) translateZ(0px); }
@@ -2687,9 +2752,9 @@ function frameStyles() {
     .pokecard-1996-frame.spell .cardName {top: 37px; left: 14px;}
     .pokecard-1996-frame.monster .cardCost {top: 201px; left: 125px; transform: scale(1, 0.5);}
     .pokecard-1996-frame.spell .cardCost {top: 37px; left: 119px; text-align: right; transform: scale(1, 0.5);}
-    .pokecard-1996-frame.monster.standard-skin .cardImage {top: 28px; left: 0px; width: 175px; height: 105px}
+    .pokecard-1996-frame.monster.standard-skin .cardImage {top: 28px; left: 10px; width: 175px; height: 105px}
     .pokecard-1996-frame.spell.standard-skin .cardImage {top: 50px;}
-    .pokecard-1996-frame.breaking-skin .cardImage {height: 210px !important; top: 0px !important; z-index: 0 !important}
+    .pokecard-1996-frame.breaking-skin .cardImage {height: 210px !important; top: 0px !important; z-index: 1 !important}
     .pokecard-1996-frame.monster .cardDesc {top: 130px; line-height: 1.2; left: 18px; transform-origin: left; transform: scale(0.7); text-align: left;}
     .pokecard-1996-frame.spell .cardDesc {top: 144px; width: 140px; left: 18px; line-height: 1;}
     .pokecard-1996-frame .cardDesc, .pokecard-1996-frame .cardSilence {top: 129px;}
@@ -2700,14 +2765,13 @@ function frameStyles() {
     .pokecard-1996-frame .maxHP {color: maroon !important}
     .pokecard-1996-frame .cardRarity {visibility: hidden}
     .pokecard-1996-frame.monster .cardStatus {left: 91px; top: 207px;}
-    .pokecard-1996-frame.monster .cardStatus > img {max-width: 10px; width: 10px; max-height: 10px; height: 10px}
     .pokecard-1996-frame.monster .cardTribes {left: 156px; top: 130px; filter: grayscale(100%)}
     .pokecard-1996-frame.spell .cardTribes {right: 32px; top: 208px; filter: grayscale(100%)}
     .pokecard-1996-frame.spell .cardStatus {left: 46px; top: 208px; filter: grayscale(100%)}
-    .pokecard-1996-frame.spell .cardStatus > img:nth-child(2) {left: 2px;}
-    .pokecard-1996-frame.spell .cardStatus > img:nth-child(3) {left: 20px;}
-    .pokecard-1996-frame.spell .cardStatus > img:nth-child(4) {left: 38px;}
-    .pokecard-1996-frame.spell .cardStatus > img:nth-child(5) {left: 56px;}
+    .pokecard-1996-frame.spell .cardStatus > .gsPowerGroup:nth-child(2) {left: 2px;}
+    .pokecard-1996-frame.spell .cardStatus > .gsPowerGroup:nth-child(3) {left: 20px;}
+    .pokecard-1996-frame.spell .cardStatus > .gsPowerGroup:nth-child(4) {left: 38px;}
+    .pokecard-1996-frame.spell .cardStatus > .gsPowerGroup:nth-child(5) {left: 56px;}
     .pokecard-1996-frame.monster .cardTribes > img {max-width: 12px; width: 12px; max-height: 12px; height: 12px}
     .pokecard-1996-frame.monster .cardTribes > img:not(:first-child) {visibility: hidden}
     .pokecard-1996-frame.monster .PrettyCards_CardBottomLeftInfo > img {max-width: 12px; width: 12px; max-height: 12px; height: 12px}
@@ -2715,33 +2779,79 @@ function frameStyles() {
     .pokecard-1996-frame.spell .PrettyCards_CardBottomLeftInfo {left: 30px; top: 145px; filter: grayscale(100%)}
     .pokecard-1996-frame .cardQuantity, .pokecard-1996-frame .cardUCPCost {top: 244px;}
     .pokecard-1996-frame .cardUCPDiscount {top: 122px;}
-    .pokecard-1996-frame .cardQuantity, .pokecard-1996-frame .cardUCPCost, .pokecard-1996-frame .friendship-xp {text-shadow: -1px -1px black, 1px 1px black, -1px 1px black, 1px -1px black !important;}
+    .pokecard-1996-frame .cardQuantity, .pokecard-1996-frame .cardUCPCost, .pokecard-1996-frame .friendship-xp {-webkit-text-stroke: 5px black; paint-order: stroke fill;}
 
-    .slay-the-spire-frame {font-family: Candara,Calibri,Segoe,Segoe UI,Optima,Arial,sans-serif; }
-    .slay-the-spire-frame .cardName {top: 18px; text-align: center !important; left: 31px; transform: scale(1.1); width: 120px;}
-    .slay-the-spire-frame .cardHeader, .slay-the-spire-frame .cardFooter {background-color: rgba(0, 0, 0, 0);}
-    .slay-the-spire-frame .cardCost {top: 6px; left: -1px;}
-    .slay-the-spire-frame .cardImage {background-color: black !important; background-position: center !important;}
-    .slay-the-spire-frame.monster.standard-skin .cardImage {top: 39px; left: 15px; width: 150px; height: 100px; background-size: cover !important;}
-    .slay-the-spire-frame.spell.standard-skin .cardImage {top: 39px; left: 15px; width: 150px; height: 100px; background-size: cover !important;}
-    .slay-the-spire-frame.breaking-skin .cardImage, .slay-the-spire-frame.full-skin .cardImage {top: 39px; left: 15px; width: 150px; height: 100px; background-size: cover !important; background-position-y: 26% !important; z-index: 0 !important}
-    .slay-the-spire-frame .cardDesc {left: 21.5px; width: 136px;}
-    .slay-the-spire-frame .cardSilence {left: 52px;}
-    .slay-the-spire-frame .cardDesc > div span {color: revert;}
-    .slay-the-spire-frame .cardDesc > div .helpPointer, .slay-the-spire-frame .cardDesc .PATIENCE {text-decoration: none; font-weight: 700; color: #f0c441 !important;}
-    .slay-the-spire-frame .cardStatus {left: 150px; top: 44px;}
-    .slay-the-spire-frame.monster .cardTribes {right: 25px;}
-    .slay-the-spire-frame.monster .cardTribes > img:nth-child(2) {top: 5px;}
-    .slay-the-spire-frame.spell .cardTribes {right: 25px; top: 116px;}
-    .slay-the-spire-frame.monster .cardDesc, .slay-the-spire-frame.monster .cardSilence {top: 140px;}
-    .slay-the-spire-frame.spell .cardDesc, .slay-the-spire-frame.spell .cardSilence {top: 150px;}
-    .slay-the-spire-frame .cardATK, .slay-the-spire-frame .cardHP {top: 211px;}
-    .slay-the-spire-frame .cardATK {left: 45px;}
-    .slay-the-spire-frame .cardHP {left: 99px;}
-    .slay-the-spire-frame .cardQuantity, .slay-the-spire-frame .cardUCPCost {top: 240px; left: 29px;}
-    .slay-the-spire-frame .cardUCPDiscount {top: 120px;}
-    .slay-the-spire-frame .cardRarity {visibility: hidden}
-    .slay-the-spire-frame .cardBackground {visibility: hidden}
+    .slay-the-spire-frame, .slay-the-spire-2-frame {
+        font-family: Candara,Calibri,Segoe,Segoe UI,Optima,Arial,sans-serif;
+        text-shadow: 0 0 black !important;
+        -webkit-text-stroke: 2px black;
+        paint-order: stroke fill;
+        .cardHeader, .cardFooter {background-color: rgba(0, 0, 0, 0);}
+        .cardDesc > div span {color: revert;}
+        .cardDesc > div .helpPointer, .cardDesc .PATIENCE {text-decoration: none; font-weight: 700; color: #f0c441 !important;}
+    }
+    .slay-the-spire-frame {
+        .cardName {top: 18px; text-align: center !important; left: 31px; transform: scale(1.1); width: 120px;}
+        .cardCost {top: 6px; left: -1px;}
+        .cardImage {background-color: black !important; background-position: center !important;}
+        .cardDesc {top: 140px; left: 21.5px; width: 136px;}
+        .cardSilence {top: 140px; left: 52px;}
+        .cardStatus {left: 150px; top: 44px;}
+        .cardTribes {top: 105px; right: 25px;}
+        .cardATK, .cardHP {top: 211px;}
+        .cardATK {left: 45px;}
+        .cardHP {left: 99px;}
+        .cardQuantity, .cardUCPCost {top: 240px; left: 29px;}
+        .cardUCPDiscount {top: 120px;}
+        .cardRarity, .cardBackground {display: none}
+    }
+    .slay-the-spire-frame.monster {
+        .cardTribes > img:nth-child(2) {top: 5px;}
+        .cardTribes > img:nth-child(3) {top: 10px;}
+        .cardTribes > img:nth-child(4) {top: 10px;}
+        .cardTribes > img:nth-child(5) {top: 10px;}
+    }
+    .slay-the-spire-frame.spell {
+        .cardTribes {top: 116px;}
+        .cardDesc, .cardSilence {top: 150px;}
+    }
+    .slay-the-spire-frame.standard-skin {
+        .cardImage {top: 39px; left: 15px; width: 150px; height: 100px; background-size: cover !important;}
+    }
+    .slay-the-spire-frame.breaking-skin, .slay-the-spire-frame.full-skin {
+        .cardImage {top: 39px; left: 15px; width: 150px; height: 100px; background-size: cover !important; background-position-y: 26% !important; z-index: 0 !important}
+    }
+
+    .slay-the-spire-2-frame {
+        .cardName {top: 13px; text-align: center !important; left: 31px; transform: scale(1.1); width: 120px;}
+        .cardCost {top: 2px; left: -5px;}
+        .cardImage {background-color: black !important; background-position: center !important;}
+        .cardDesc, .cardSilence {top: 147px; left: 20px; width: 136px;}
+        .cardSilence {top: 140px; left: 52px;}
+        .cardStatus {left: 150px; top: 44px;}
+        .cardTribes {top: 105px; right: 25px;}
+        .cardATK, .cardHP {left: -4.5px;}
+        .cardATK {top: 60px;}
+        .cardHP {top: 30px;}
+        .cardQuantity, .cardUCPCost {top: 240px; left: 29px;}
+        .cardUCPDiscount {top: 120px;}
+        .cardRarity, .cardBackground {display: none}
+    }
+    .slay-the-spire-2-frame.monster {
+        .cardTribes > img:nth-child(2) {top: 5px;}
+        .cardTribes > img:nth-child(3) {top: 10px;}
+        .cardTribes > img:nth-child(4) {top: 10px;}
+        .cardTribes > img:nth-child(5) {top: 10px;}
+    }
+    .slay-the-spire-2-frame.spell {
+        .cardTribes {top: 116px;}
+    }
+    .slay-the-spire-2-frame.standard-skin {
+        .cardImage {top: 33px; left: 14px; width: 150px; height: 105px; background-size: cover !important;}
+    }
+    .slay-the-spire-2-frame.breaking-skin, .slay-the-spire-frame.full-skin {
+        .cardImage {top: 27px; left: 14px; width: 150px; height: 111px; background-size: cover !important; background-position-y: 26% !important; z-index: 0 !important}
+    }
 
     *:has(> .balatro-frame) {perspective: 800px;}
     .balatro-frame { height: 236px !important; text-shadow: 0 0 black !important; }
@@ -2786,8 +2896,8 @@ function frameStyles() {
     .balatro-frame .cardQuantity, .balatro-frame .cardUCPCost {top: 230px;}
     .balatro-frame .cardSilence {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/balatro-frame-silenced.png"); background-repeat: no-repeat; background-position: center; background-size: contain; width: 176px; height: 236px; top: -0.5px; left: 0px; z-index: 7; opacity: 0.5; image-rendering: pixelated;}
 
-    .grimm-troupe-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .grimm-troupe-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .grimm-troupe-frame .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .grimm-troupe-frame .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
     .grimm-troupe-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/grimm-troupe-frame-spell.png");}
     .grimm-troupe-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/grimm-troupe-frame-monster.png");}
     .grimm-troupe-frame .cardName, .grimm-troupe-frame .cardCost {top: 9px;}
@@ -2795,8 +2905,8 @@ function frameStyles() {
     .grimm-troupe-frame .cardATK, .grimm-troupe-frame .cardHP, .grimm-troupe-frame .cardRarity {top: 213px;}
     .grimm-troupe-frame .cardQuantity, .grimm-troupe-frame .cardUCPCost {top: 240px;}
 
-    .void-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .void-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .void-frame .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .void-frame .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
     .void-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/void-frame-spell.png");}
     .void-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/void-frame-monster.png");}
     .void-frame .cardName, .void-frame .cardCost {top: 9px;}
@@ -2804,8 +2914,8 @@ function frameStyles() {
     .void-frame .cardATK, .void-frame .cardHP, .void-frame .cardRarity {top: 213px;}
     .void-frame .cardQuantity, .void-frame .cardUCPCost {top: 240px;}
 
-    .hollow-knight-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .hollow-knight-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .hollow-knight-frame .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .hollow-knight-frame .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
     .hollow-knight-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/hollow-knight-frame-spell.png");}
     .hollow-knight-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/hollow-knight-frame-monster.png");}
     .hollow-knight-frame .cardName, .hollow-knight-frame .cardCost {top: 9px;}
@@ -2813,8 +2923,8 @@ function frameStyles() {
     .hollow-knight-frame .cardATK, .hollow-knight-frame .cardHP, .hollow-knight-frame .cardRarity {top: 213px;}
     .hollow-knight-frame .cardQuantity, .hollow-knight-frame .cardUCPCost {top: 240px;}
 
-    .fnafb-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .fnafb-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .fnafb-frame .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .fnafb-frame .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
     .fnafb-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/fnafb-frame-spell.png");}
     .fnafb-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/fnafb-frame-monster.png");}
     .fnafb-frame .cardName, .fnafb-frame .cardCost {top: 9px;}
@@ -2831,8 +2941,8 @@ function frameStyles() {
     .outbreak-frame .cardATK, .outbreak-frame .cardHP, .outbreak-frame .cardRarity {top: 213px;}
     .outbreak-frame .cardQuantity, .outbreak-frame .cardUCPCost {top: 240px;}
 
-    .staff-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .staff-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .staff-frame .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .staff-frame .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
     .staff-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/staff-frame-spell.png");}
     .staff-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/staff-frame-monster.png");}
     .staff-frame .cardName, .staff-frame .cardCost {top: 9px;}
@@ -2840,8 +2950,8 @@ function frameStyles() {
     .staff-frame .cardATK, .staff-frame .cardHP, .staff-frame .cardRarity {top: 213px;}
     .staff-frame .cardQuantity, .staff-frame .cardUCPCost {top: 240px;}
 
-    .mirror-temple-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .mirror-temple-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .mirror-temple-frame .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .mirror-temple-frame .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
     .mirror-temple-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/mirror-temple-frame-spell.png");}
     .mirror-temple-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/mirror-temple-frame-monster.png"); height: 252px;}
     .mirror-temple-frame .cardName, .mirror-temple-frame .cardCost {top: 9px;}
@@ -2851,8 +2961,8 @@ function frameStyles() {
     .mirror-temple-frame .cardHP {animation: float 6s ease-in-out infinite; animation-delay: -1s;}
     .mirror-temple-frame .cardQuantity, .mirror-temple-frame .cardUCPCost {top: 240px;}
 
-    .snails-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .snails-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .snails-frame .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .snails-frame .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
     .snails-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/snails-frame-spell.png");}
     .snails-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/snails-frame-monster.png");}
     .snails-frame .cardName, .snails-frame .cardCost {top: 9px;}
@@ -2860,24 +2970,24 @@ function frameStyles() {
     .snails-frame .cardATK, .snails-frame .cardHP, .snails-frame .cardRarity {top: 213px;}
     .snails-frame .cardQuantity, .snails-frame .cardUCPCost {top: 240px;}
 
-    .waterfall-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .waterfall-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .waterfall-frame .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .waterfall-frame .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
     .waterfall-frame .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/waterfall-frame.png");}
     .waterfall-frame .cardName, .waterfall-frame .cardCost {top: 9px;}
     .waterfall-frame .cardDesc, .waterfall-frame .cardSilence {top: 129px;}
     .waterfall-frame .cardATK, .waterfall-frame .cardHP, .waterfall-frame .cardRarity {top: 213px;}
     .waterfall-frame .cardQuantity, .waterfall-frame .cardUCPCost {top: 240px;}
 
-    .yet-darker-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .yet-darker-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .yet-darker-frame .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .yet-darker-frame .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
     .yet-darker-frame .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/yet-darker-frame.png");}
     .yet-darker-frame .cardName, .yet-darker-frame .cardCost {top: 9px;}
     .yet-darker-frame .cardDesc, .yet-darker-frame .cardSilence {top: 129px;}
     .yet-darker-frame .cardATK, .yet-darker-frame .cardHP, .yet-darker-frame .cardRarity {top: 213px;}
     .yet-darker-frame .cardQuantity, .yet-darker-frame .cardUCPCost {top: 240px;}
 
-    .bone-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .bone-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .bone-frame .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .bone-frame .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
     .bone-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/bone-frame-spell.png");}
     .bone-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/bone-frame-monster.png");}
     .bone-frame .cardName, .bone-frame .cardCost {top: 9px;}
@@ -2885,8 +2995,8 @@ function frameStyles() {
     .bone-frame .cardATK, .bone-frame .cardHP, .bone-frame .cardRarity {top: 213px;}
     .bone-frame .cardQuantity, .bone-frame .cardUCPCost {top: 240px;}
 
-    .furry-sans-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .furry-sans-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .furry-sans-frame .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .furry-sans-frame .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
     .furry-sans-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/furry-sans-frame-spell.png");}
     .furry-sans-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/furry-sans-frame-monster.png");}
     .furry-sans-frame .cardName, .furry-sans-frame .cardCost {top: 9px;}
@@ -2894,8 +3004,8 @@ function frameStyles() {
     .furry-sans-frame .cardATK, .furry-sans-frame .cardHP, .furry-sans-frame .cardRarity {top: 213px;}
     .furry-sans-frame .cardQuantity, .furry-sans-frame .cardUCPCost {top: 240px;}
 
-    .ovenbreak-frame .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .ovenbreak-frame .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
+    .ovenbreak-frame .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .ovenbreak-frame .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
     .ovenbreak-frame.spell .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/ovenbreak-frame-spell.png");}
     .ovenbreak-frame.monster .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/ovenbreak-frame-monster.png");}
     .ovenbreak-frame .cardName, .ovenbreak-frame .cardCost {top: 9px;}
@@ -2903,18 +3013,18 @@ function frameStyles() {
     .ovenbreak-frame .cardATK, .ovenbreak-frame .cardHP, .ovenbreak-frame .cardRarity {top: 213px;}
     .ovenbreak-frame .cardQuantity, .ovenbreak-frame .cardUCPCost {top: 240px;}
 
-    .respective-frame[data-extension="BASE"] .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .respective-frame[data-extension="BASE"] .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
-    .respective-frame[data-extension="DELTARUNE"] .shinySlot {background-image: url("/images/frameSkins/Deltarune/frame_shiny.png");}
-    .respective-frame[data-extension="DELTARUNE"] .shinySlot.animated {background-image: url("/images/frameSkins/Deltarune/frame_shiny_animated.png");}
-    .respective-frame[data-extension="UTY"] .shinySlot {background-image: url("/images/frameSkins/Undertale/frame_shiny.png");}
-    .respective-frame[data-extension="UTY"] .shinySlot.animated {background-image: url("/images/frameSkins/Undertale/frame_shiny_animated.png");}
-    .respective-frame.spell[data-extension="BASE"] .cardFrame {background-image: url("/images/frameSkins/Undertale/frame_spell.png");}
-    .respective-frame.monster[data-extension="BASE"] .cardFrame {background-image: url("/images/frameSkins/Undertale/frame_monster.png");}
-    .respective-frame.spell[data-extension="DELTARUNE"] .cardFrame {background-image: url("/images/frameSkins/Deltarune/frame_spell.png");}
-    .respective-frame.monster[data-extension="DELTARUNE"] .cardFrame {background-image: url("/images/frameSkins/Deltarune/frame_monster.png");}
-    .respective-frame.spell[data-extension="UTY"] .cardFrame {background-image: url("/images/frameSkins/Undertale/frame_spell.png");}
-    .respective-frame.monster[data-extension="UTY"] .cardFrame {background-image: url("/images/frameSkins/Undertale/frame_monster.png");}
+    .respective-frame[data-extension="BASE"] .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .respective-frame[data-extension="BASE"] .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
+    .respective-frame[data-extension="DELTARUNE"] .shinySlot {background-image: url("${images}/frameSkins/Deltarune/frame_shiny.png");}
+    .respective-frame[data-extension="DELTARUNE"] .shinySlot.animated {background-image: url("${images}/frameSkins/Deltarune/frame_shiny_animated.png");}
+    .respective-frame[data-extension="UTY"] .shinySlot {background-image: url("${images}/frameSkins/Undertale/frame_shiny.png");}
+    .respective-frame[data-extension="UTY"] .shinySlot.animated {background-image: url("${images}/frameSkins/Undertale/frame_shiny_animated.png");}
+    .respective-frame.spell[data-extension="BASE"] .cardFrame {background-image: url("${images}/frameSkins/Undertale/frame_spell.png");}
+    .respective-frame.monster[data-extension="BASE"] .cardFrame {background-image: url("${images}/frameSkins/Undertale/frame_monster.png");}
+    .respective-frame.spell[data-extension="DELTARUNE"] .cardFrame {background-image: url("${images}/frameSkins/Deltarune/frame_spell.png");}
+    .respective-frame.monster[data-extension="DELTARUNE"] .cardFrame {background-image: url("${images}/frameSkins/Deltarune/frame_monster.png");}
+    .respective-frame.spell[data-extension="UTY"] .cardFrame {background-image: url("${images}/frameSkins/Undertale/frame_spell.png");}
+    .respective-frame.monster[data-extension="UTY"] .cardFrame {background-image: url("${images}/frameSkins/Undertale/frame_monster.png");}
     .respective-frame .cardName, .respective-frame .cardCost {top: 9px;}
     .respective-frame .cardDesc, .respective-frame .cardSilence {top: 129px;}
     .respective-frame .cardATK, .respective-frame .cardHP, .respective-frame .cardRarity {top: 213px;}
@@ -2959,6 +3069,8 @@ function rarityStyles(type) {
         style('rarityStyle', 'add', `.pokecard-1996-frame.monster[data-rarity="${r}"] .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/pokecard-1996-frame-${r.toLowerCase()}.png");}`);
         style('rarityStyle', 'add', `.slay-the-spire-frame.monster[data-rarity="${r}"] .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/slay-the-spire-frame-monster-${r.toLowerCase()}.png");}`);
         style('rarityStyle', 'add', `.slay-the-spire-frame.spell[data-rarity="${r}"] .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/slay-the-spire-frame-spell-${r.toLowerCase()}.png");}`);
+        style('rarityStyle', 'add', `.slay-the-spire-2-frame.monster[data-rarity="${r}"] .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/slay-the-spire-2-frame-monster-${r.toLowerCase()}.png");}`);
+        style('rarityStyle', 'add', `.slay-the-spire-2-frame.spell[data-rarity="${r}"] .cardFrame {background-image: url("https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/frames/slay-the-spire-2-frame-spell-${r.toLowerCase()}.png");}`);
         switch (type) {
             case "off": break;
             case "match frame":
@@ -3201,7 +3313,7 @@ function cardModifier(val) {
                     if (['BASE', 'TOKEN', 'STORY'].includes(r)) {
                         return `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/cardBacks/${ext}Card${r}.png`;
                     } else {
-                        return `images/cardBacks/${ext}Card${r}.png`;
+                        return `${images}/cardBacks/${ext}Card${r}.png`;
                     }
                 }
                 modifier += `.card[data-rarity="${r}"][data-extension="BASE"].gsObscured .cardFrame {background-image: url(${link('BASE')})}
@@ -3226,13 +3338,13 @@ function cardModifier(val) {
 function updateSoulColor(soul, color) {
     style(`soulColor${soul}`, 'replace', `
         ${color === soulColors[soul] ? `
-            img[src*="images/souls/${soul}.png"] {filter: drop-shadow(0px); transform: translateY(0px);}
-            img[src*="images/souls/big/${soul}.png"] {filter: drop-shadow(0px); transform: translateY(0px);}
+            img[src*="${images}/souls/${soul}.png"] {filter: drop-shadow(0px); transform: translateY(0px);}
+            img[src*="${images}/souls/big/${soul}.png"] {filter: drop-shadow(0px); transform: translateY(0px);}
             div:not(.breaking-skin):has(.cardName.${soul}):not(.balatro-frame) > .cardImage {background-color: pebis; background-blend-mode: unset;}
             .${soul}:not(li span):not([onmouseover]):not(.pokecard-1996-frame .${soul}):not(#deckCardsCanvas *) {color: ${color}; text-shadow: revert}
         ` : `
-            img[src*="images/souls/${soul}.png"] {filter: drop-shadow(5000px 5000px 0 ${color}); transform: translate(-5000px, -5000px);}
-            img[src*="images/souls/big/${soul}.png"] {filter: drop-shadow(5000px 5000px 0 ${color}); transform: translate(-5000px, -5000px);}
+            img[src*="${images}/souls/${soul}.png"] {filter: drop-shadow(5000px 5000px 0 ${color}); transform: translate(-5000px, -5000px);}
+            img[src*="${images}/souls/big/${soul}.png"] {filter: drop-shadow(5000px 5000px 0 ${color}); transform: translate(-5000px, -5000px);}
             div:not(.breaking-skin):has(.cardName.${soul}):not(.balatro-frame) > .cardImage {background-color: ${color} !important; background-blend-mode: luminosity;}
             .${soul}:not(li span):not([onmouseover]):not(.pokecard-1996-frame .${soul}):not(#deckCardsCanvas *) {color: ${color}}
             ${color === "#000000" ? `
@@ -3294,7 +3406,7 @@ function defaultSouls() {
 
 function setBg(bg, detachMusic) {
     window.music.pause();
-    $('body').css('background', '#000 url(\'images/backgrounds/' + bg + '.png\') no-repeat');
+    $('body').css('background', `#000 url('${images}/backgrounds/${bg}.png') no-repeat`);
     $('body').css('background-size', 'cover');
     if (plugin.settings().value('underscript.persist.bgm')) {
         sessionStorage.setItem(`underscript.bgm.${window.gameId}`, bg);
@@ -3307,19 +3419,27 @@ function setBg(bg, detachMusic) {
 }
 
 function rollBgSmart(returnNum) {
-    var newBg = window.randomInt(1, backgrounds.length - 1);
+    let bgs = backgrounds.map((_, i) => i + 1);
+    bgs.push(...bgs);
     for (let [key, value] of bgMixtape.value()) {
         key = Number(key)
-        if (newBg === key) {
-            switch (value) {
-                case 'Omit': rollBgSmart(); return;
-                case 'Play less often': if (window.randomInt(0, 1)) rollBgSmart(); return;
-            }
-        };
-        if (value === 'Play more often' && window.randomInt(0, 5) === 5) {
-            newBg = key;
+        switch (value) {
+            case 'Omit':
+                bgs = bgs.filter(bg => bg !== key);
+                break;
+            case 'Play less often':
+                bgs.splice(bgs.indexOf(key), 1);
+                break;
+            case 'Play more often':
+                bgs.push(key);
+                bgs.push(key);
+                break;
+            default:
+                bgs = bgs.filter(bg => bg !== key);
         }
     }
+    bgs.sort((a, b) => a - b);
+    var newBg = bgs[window.randomInt(1, bgs.length - 1)];
     if (returnNum) {
         return newBg;
     }
@@ -3668,6 +3788,24 @@ const statFilters = plugin.settings().add({
     onChange: (val) => {if (val) {createStatFilters()} else {removeStatFilters()}}
 });
 
+const storyFilter = plugin.settings().add({
+    key: 'storyFilter',
+    name: 'STORY filter + visible in crafting',
+    note: 'Adds a rarity filter for STORY cards and makes them viewable on the crafting page.',
+    category: 'QoL',
+    default: true,
+    onChange: (val) => {if (val) {createStoryFilter(); addStoriesToCollection();} else {removeStoryFilter(); removeStoriesFromCollection();}}
+});
+
+const cardCounter = plugin.settings().add({
+    key: 'cardCounter',
+    name: 'Card counter',
+    note: 'Adds a counter on the collection page that shows how many cards are applicable to your search',
+    category: 'QoL',
+    default: true,
+    onChange: (val) => {if (val) {createCardCounter()} else {removeCardCounter()}}
+});
+
 const powerFilters = plugin.settings().add({
     key: 'powerFilters',
     name: 'Power filters',
@@ -3709,7 +3847,7 @@ const loopNames = plugin.settings().add({
 const breakingFullarts = plugin.settings().add({
     key: 'breakingFullarts',
     name: 'Breaking fullarts',
-    note: 'Makes Full art skins instead behave like Breaking skins',
+    note: 'Makes Full-art skins look like Breaking skins, going over the card.',
     category: 'Cardpaint',
     default: false,
     onChange: (val) => refreshCards()
@@ -3717,8 +3855,8 @@ const breakingFullarts = plugin.settings().add({
 
 const standardBreakings = plugin.settings().add({
     key: 'standardBreakings',
-    name: 'Standard breaking',
-    note: 'Makes Breaking skins instead behave like Standard skins',
+    name: 'Force standard skins',
+    note: 'Makes Breaking and Full-art skins look like Standard skins',
     category: 'Cardpaint',
     default: false,
     onChange: (val) => refreshCards()
@@ -3742,6 +3880,9 @@ const frameSpoof = plugin.settings().add({
             case 'Slay the Spire':
                 powerBounds.set(135);
                 break;
+            case 'Slay the Spire 2':
+                powerBounds.set(135);
+                break;
             case 'Balatro':
                 powerBounds.set(135);
                 break;
@@ -3754,6 +3895,9 @@ const frameSpoof = plugin.settings().add({
                 numStack.set(1);
                 break;
             case 'Slay the Spire':
+                powerBounds.set(102);
+                break;
+            case 'Slay the Spire 2':
                 powerBounds.set(102);
                 break;
             case 'Balatro':
@@ -3789,7 +3933,7 @@ const powerSkins = plugin.settings().add({
     name: 'Power skin',
     note: 'Use a set of custom status icons<br>"match frame" uses the custom icon set associated with the frame, if any',
     category: 'Cardpaint',
-    type: "select", options: ["off", "match frame", "Ancient", "Neon", "Balatro", "Showdown", "Slay the Spire", "Mewgenics!"],
+    type: "select", options: ["off", "match frame", "Ancient", "Neon", "Balatro", "Showdown", "Mewgenics!"],
     default: "match frame",
     onChange: (val) => { refreshCards(); $('*').removeAttr("data-gs-setting-bg-loaded"); settingOverriddenStyles(); if(powerFilters?.value()) {createPowerFilters()}  }
 });
@@ -4183,7 +4327,7 @@ const copiesAreMonochrome = plugin.settings().add({
     default: false,
     onChange: (val) => monochromeCopiesToggle(val)
 });
-
+/*
 const cardImagesOffset = plugin.settings().add({
     key: 'cardImagesOffset',
     name: 'Card images are offset',
@@ -4192,7 +4336,7 @@ const cardImagesOffset = plugin.settings().add({
     default: false,
     onChange: (val) => cardImagesOffsetToggle(val)
 });
-
+*/
 const dtColor = plugin.settings().add({
     key: 'dtColor',
     name: 'Determination color',
@@ -4330,7 +4474,7 @@ const customTranslations = plugin.settings().add({
         });
     }
 });
-
+/*
 const translationGuide = plugin.settings().add({
     key: 'translationGuide',
     name: 'Translation guide',
@@ -4356,7 +4500,7 @@ const translationGuide = plugin.settings().add({
         }
     }
 });
-
+*/
 const obscurityInfo = plugin.settings().add({
     key: 'obscurityInfo',
     name: 'ⓘ Obscurity info',
@@ -4509,9 +4653,13 @@ const obscBlurStrength = plugin.settings().add({
 });
 
 var cardNames = [];
+var cardImages = [];
 
 plugin.events.on('allCardsReady', (c) => {
-    c.forEach(card => {cardNames.push(card.name)})
+    c.forEach(card => {
+        cardNames.push(card.name);
+        cardImages.push(card.baseImage);
+    })
     cardNames.sort();
 })
 
@@ -4626,7 +4774,7 @@ const baseStatChangePower = plugin.settings().add({
     name: 'Base stat change',
     note: 'Brings back the base stat change power<br>...Should be stable this time. I think.',
     category: 'Too many powers!!!',
-    data: { src: 'images/powers/BaseStatChange.png' },
+    data: { src: `${images}/powers/BaseStatChange.png` },
     type: imgCheckbox,
     default: false,
     onChange: (val) => refreshCards()
@@ -4637,7 +4785,7 @@ const undereventPower = plugin.settings().add({
     name: 'Underevent 2024',
     note: 'Displays on El Undercardio',
     category: 'Too many powers!!!',
-    data: { src: 'images/powers/Underevent2024.png' },
+    data: { src: `${images}/powers/Underevent2024.png` },
     type: imgCheckbox,
     default: true,
     onChange: (val) => refreshCards()
@@ -4648,7 +4796,7 @@ const programPower = plugin.settings().add({
     name: 'Program',
     note: 'Displays the program value',
     category: 'Too many powers!!!',
-    data: { src: 'images/powers/Program.png' },
+    data: { src: `${images}/powers/Program.png` },
     type: imgCheckbox,
     default: true,
     onChange: (val) => refreshCards()
@@ -4868,56 +5016,65 @@ const manyTribes = {
     MAYBE_HUMAN: [164, 726, 741, 923],
     SNOW_HUMAN: [554],
     LASER: [142, 143, 572, 608, 689, 740, 930],
-    BOMB: [29, 97, 192, 238, 366, 367, 368, 495, 512, 513, 781, 789, 797],
+    BOMB: [29, 97, 192, 238, 366, 367, 368, 495, 512, 513, 781, 789, 797, 831],
     LIZARD: [13, 26, 42, 51, 52, 121, 152, 168, 185, 219, 245, 248, 280, 318, 365, 394, 399, 416, 417, 514, 557, 635, 652, 653, 782, 809, 834, 842, 849, 869, 884, 860, 898, 903, 920, 955, 957, 958, 967, 973],
     METER: [432, 775, 839, 963],
     CACTUS: [136, 844, 854, 855],
 
-    RETRO: [645, 862, 863, 883, 884, 905, 906, 907, 923, 932, 945, 957],
+    RETRO: [645, 862, 863, 883, 884, 888, 905, 906, 907, 923, 932, 945, 957],
     GUN: [99, 100, 181, 257, 689, 718, 808, 818, 819, 820, 821, 822, 823, 855, 886, 947, 982],
-    HAT: [302, 379, 393, 683, 808, 815, 866],
-    ROBOT: [56, 64, 110, 201, 249, 359, 427, 790, 795, 864],
+    HAT: [9, 302, 379, 393, 683, 808, 815, 866],
+    ROBOT: [56, 64, 110, 201, 249, 359, 427, 688, 790, 795, 796, 797, 798, 799, 864],
     BIRD: [34, 116, 198, 250, 271, 279, 291, 297, 372, 397, 428, 573, 673, 671, 674, 675, 733, 761, 764, 793, 838, 880, 971],
-    FISH: [62, 106, 123, 151, 176, 214, 364, 549, 836, 949, 973],
-    TECHNOLOGY: [133, 400, 481, 482, 483, 484, 485, 486, 487, 613, 627, 656, 658, 659, 660, 661, 719, 720, 721, 722, 723, 787],
-    FOOD: [91, 133, 195, 306, 428, 429, 430, 431, 440, 459, 461, 596, 618, 785, 916],
+    FISH: [62, 106, 151, 161, 162, 176, 214, 364, 415, 530, 549, 836, 892, 949, 973],
+    TECHNOLOGY: [133, 220, 400, 481, 482, 483, 484, 485, 486, 487, 613, 623, 627, 656, 658, 659, 660, 661, 719, 720, 721, 722, 723, 763, 787],
+    FOOD: [6, 91, 123, 132, 133, 150, 187, 195, 259, 306, 353, 354, 428, 429, 430, 431, 440, 459, 461, 511, 596, 611, 618, 677, 704, 785, 813, 868, 916, 959],
     BUNNY: [166, 169, 202, 298, 357, 374, 413, 426, 567, 663],
-    GAMBLING: [614, 875, 876, 877, 900],
-    GOLD: [81, 124, 257, 581, 722, 761, 879, 910],
-    CERAMIC: [507, 701, 791, 932, 972],
-    CRYSTAL: [440, 548, 578, 598, 603, 712, 713, 725],
-    BALL: [193, 390, 542, 628, 767, 799, 800, 900],
-    BOX: [81, 171, 355, 376, 402, 403, 637, 690],
+    GAMBLING: [447, 614, 848, 875, 876, 877, 900, 944],
+    GOLD: [81, 124, 257, 581, 610, 722, 761, 879, 910],
+    CERAMIC: [406, 507, 701, 791, 932, 972, 984],
+    CRYSTAL: [440, 548, 578, 598, 603, 712, 713, 725, 847],
+    BALL: [193, 217, 390, 524, 542, 628, 767, 799, 800, 847, 891, 900],
+    BOX: [10, 81, 171, 355, 376, 402, 403, 620, 637, 690],
     HOLIDAY: [141, 355, 424, 781],
     THE_HOLIDAY: [273, 468, 490, 710, 926],
-    ROCK: [108, 111, 173, 602, 635, 835, 908, 909, 917, 918, 958],
-    CONFINEMENT: [182, 506, 584, 621, 627, 643, 714],
-    MUSIC: [131, 867, 895, 896, 908, 909, 910, 911, 917, 918, 958],
-    WEATHER: [552, 698, 825],
-    SIGN: [239, 474, 604, 606, 650, 661, 784, 850, 860, 915, 917, 919],
-    ART: [173, 761, 809],
+    ROCK: [108, 111, 173, 267, 352, 521, 522, 533, 599, 602, 635, 666, 773, 835, 853, 908, 909, 917, 918, 958],
+    CONFINEMENT: [182, 506, 584, 621, 627, 643, 714, 827],
+    MUSIC: [131, 593, 867, 895, 896, 908, 909, 910, 911, 917, 918, 958],
+    WEATHER: [552, 698, 825, 857],
+    SIGN: [239, 401, 441, 474, 604, 606, 650, 661, 784, 850, 860, 915, 917, 919],
+    ART: [111, 126, 173, 283, 309, 350, 520, 524, 541, 629, 635, 647, 648, 749, 761, 809],
     SPAWN: [897, 898, 901, 931],
-    CONTAINER: [81, 133, 355, 600, 790, 791, 875, 876, 877, 900],
-    FLOWER: [88, 105, 124, 300, 317, 375, 422, 462, 451, 477, 970, 965, 967, 979, 980, 981, 982, 986],
-    COLD: [71, 73, 74, 75, 126, 133, 182, 260, 552, 563, 698, 737],
-    HOT: [125, 147, 178, 216, 236, 250, 310, 456, 492, 497, 507, 695, 723, 812, 861, 942, 943, 951],
+    CONTAINER: [81, 133, 226, 311, 355, 600, 766, 786, 790, 791, 875, 876, 877, 900],
+    FLOWER: [54, 88, 105, 117, 124, 300, 317, 375, 422, 462, 451, 477, 550, 933, 937, 965, 967, 968, 970, 979, 980, 981, 982, 983, 986],
+    COLD: [9, 10, 31, 36, 71, 72, 73, 74, 75, 112, 126, 133, 150, 160, 182, 260, 423, 552, 554, 563, 698, 710, 711, 712, 737, 871, 938],
+    HOT: [72, 125, 147, 178, 216, 236, 239, 250, 310, 456, 492, 497, 507, 695, 723, 812, 861, 934, 942, 943, 951],
     CAKE: [306, 431, 459, 868],
 
-    CAT: [153, 262, 276, 381, 472, 592, 624, 625, 626, 628, 664, 717, 759, 899, 902, 945],
+    GHOST: [53, 131, 392, 593, 642, 978],
+    STABBY: [28, 62, 77, 98, 129, 217, 263, 366, 368, 391, 441, 445, 499, 505, 537, 574, 601, 623, 631, 892, 886, 923, 936, 939, 970, 983],
+    WEIRD: [703, 710, 711, 712],
+    HEART: [396, 448, 515, 516, 789, 971],
+    SPADE: [265, 309, 371, 419, 443, 449, 504, 630, 631, 666, 752, 789, 883],
+    DIAMOND: [145, 146, 294, 314, 377, 446, 584, 765, 789, 949, 967],
+    CLUB: [266, 384, 447],
+    TRASH: [127, 186, 542, 632, 659, 662, 772, 765],
+
+    CAT: [153, 262, 276, 381, 472, 592, 624, 625, 626, 628, 664, 717, 759, 899, 902, 945, 969, 977, 978],
     MOM: [8, 36, 531, 560, 579, 828, 870, 878],
     DAD: [61, 235, 272, 276, 287, 416, 419, 468, 564, 707, 829, 929],
     VEHICLE: [277, 395, 421, 534, 546, 573, 595, 565, 605, 649, 651, 671, 691, 693, 778, 792, 851, 859],
     KNIGHT: [57, 58, 60, 63, 254, 274, 417, 468, 570, 716, 874, 926, 935, 941],
     BROKEN: [79, 306, 510, 516, 522, 585, 649, 692, 701, 758, 932, 935],
-    BIG: [135, 137, 192, 302, 368, 718, 766, 791, 794],
+    BIG: [135, 137, 192, 302, 368, 718, 766, 791, 794, 985],
 
-    G_FOLLOWER: [351, 575],
+    G_FOLLOWER: [70, 351, 575],
     ROYAL_GUARD: [82],
     FROGGIT: [128],
     PLUG: [734],
     MOLD: [92],
     PLANT: [596],
-    DOG: [236, 250],
+    DOG: [236, 250, 939],
     ROUND: [378, 693, 819, 820, 820, 821, 821, 821, 822, 822, 822, 822, 823, 823, 823, 823, 823],
 }
 
@@ -4986,7 +5143,7 @@ const kittyCatsEnabled = plugin.settings().add({
     },
     type: advancedCheckbox,
     default: false,
-    onChange: (val) => { refreshCards(); }
+    onChange: (val) => { initEventArrays(true); }
 });
 
 const kittyCatsChance = plugin.settings().add({
@@ -5049,7 +5206,7 @@ const mikeDropsEnabled = plugin.settings().add({
     },
     type: advancedCheckbox,
     default: false,
-    onChange: (val) => { refreshCards(); }
+    onChange: (val) => { initEventArrays(true); }
 });
 
 const mikeDropsChance = plugin.settings().add({
@@ -5073,7 +5230,7 @@ const equationsEnabled = plugin.settings().add({
     },
     type: advancedCheckbox,
     default: false,
-    onChange: (val) => { refreshCards(); }
+    onChange: (val) => { initEventArrays(true); }
 });
 
 const equationsChance = plugin.settings().add({
@@ -5186,7 +5343,7 @@ const bricksEnabled = plugin.settings().add({
     },
     type: advancedCheckbox,
     default: false,
-    onChange: (val) => { refreshCards(); }
+    onChange: (val) => { initEventArrays(true); }
 });
 
 const bricksChance = plugin.settings().add({
@@ -5210,7 +5367,7 @@ const stuporEnabled = plugin.settings().add({
     },
     type: advancedCheckbox,
     default: false,
-    onChange: (val) => { refreshCards(); }
+    onChange: (val) => { initEventArrays(true); }
 });
 
 const stuporChance = plugin.settings().add({
@@ -5234,7 +5391,7 @@ const bitflippedEnabled = plugin.settings().add({
     },
     type: advancedCheckbox,
     default: false,
-    onChange: (val) => { refreshCards(); }
+    onChange: (val) => { initEventArrays(true); }
 });
 
 const bitflippedChance = plugin.settings().add({
@@ -5286,7 +5443,7 @@ const sludgeEnabled = plugin.settings().add({
     },
     type: advancedCheckbox,
     default: false,
-    onChange: (val) => { refreshCards(); settingOverriddenStyles(); }
+    onChange: (val) => { initEventArrays(true); settingOverriddenStyles(); }
 });
 
 const sludgeChance = plugin.settings().add({
@@ -5536,8 +5693,7 @@ const rockPetOTDEnabled = plugin.settings().add({
 });
 
 const readPatchNotes = plugin.settings().add({
-    key: 'readPatchNotes',
-    name: 'Patch notes',
+    key: 'gs.setting-readPatchNotes',
     category: 'Galascript',
     type: button,
     data: {
@@ -5562,8 +5718,7 @@ const readPatchNotes = plugin.settings().add({
 });
 
 const readCredits = plugin.settings().add({
-    key: 'readCredits',
-    name: 'Credits',
+    key: 'gs.setting-readCredits',
     category: 'Galascript',
     type: button,
     data: {
@@ -5588,8 +5743,7 @@ const readCredits = plugin.settings().add({
 });
 
 const exportSettings = plugin.settings().add({
-    key: 'exportSettings',
-    name: 'Export settings',
+    key: 'gs.setting-exportSettings',
     category: 'Galascript',
     type: button,
     data: {
@@ -5632,8 +5786,7 @@ const exportSettings = plugin.settings().add({
 });
 
 const importSettings = plugin.settings().add({
-    key: 'importSettings',
-    name: 'Import settings',
+    key: 'gs.setting-importSettings',
     category: 'Galascript',
     type: button,
     data: {
@@ -5745,8 +5898,7 @@ const importSettings = plugin.settings().add({
 });
 
 const restoreTips = plugin.settings().add({
-    key: 'restoreTips',
-    name: 'Restore tips',
+    key: 'gs.setting-restoreTips',
     category: 'Galascript',
     type: button,
     data: {
@@ -5777,8 +5929,8 @@ const collapsedCategories = plugin.settings().add({
 
 window.gsUpdateToast = function() {
     plugin.toast({
-        title: randi18n('gs.alert-title-update-success', pluginVersion)`Galascript v${pluginVersion}`,
-        text: randi18n('gs.alert-update-success', pluginVersion)`Successfully installed Galascript v${pluginVersion}!`,
+        title: randi18n('gs.alert-title-update-success', pluginVersion),
+        text: randi18n('gs.alert-update-success', pluginVersion),
         buttons: [{
             text: randi18n('gs.alert-patch-notes-read'),
             onclick: () => {
@@ -5823,19 +5975,31 @@ window.gsUpdateToast = function() {
 }
 
 async function saveFile(filename, content) {
-    try {
-        const handle = await window.showSaveFilePicker({
-            suggestedName: filename,
-            types: [{
-                description: 'Galascript settings files',
-                accept: { 'text/plain': ['.gs'] },
-            }],
-        });
-        const writable = await handle.createWritable();
-        await writable.write(content);
-        await writable.close();
-    } catch (err) {
-        console.error('Error saving file:', err);
+    if ('showSaveFilePicker' in window) {
+        try {
+            const handle = await window.showSaveFilePicker({
+                suggestedName: filename,
+                types: [{
+                    description: 'Galascript settings files',
+                    accept: { 'text/plain': ['.gs'] },
+                }],
+            });
+            const writable = await handle.createWritable();
+            await writable.write(content);
+            await writable.close();
+        } catch (err) {
+            console.error('Error saving file:', err);
+        }
+    } else {
+        let blob = new Blob([content], { type: '.gs' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
     }
 }
 
@@ -5988,16 +6152,18 @@ function initEventArrays(override) { // override is a bool to start from new
     }
 
     saveGameData();
-    refreshCards();
     eventArraysInitiated = true;
+    refreshCards();
 }
+let erringame = false;
+let errspectating = false;
 function saveGameData() {
-    if (!ingame) {
+    if (!ingame && erringame) {
         iconToast('genericFail', 'error', 'game-data-not-ingame');
+        erringame = true;
         return;
     }
     if (window.spectate) {
-        iconToast('genericFail', 'error', 'game-data-spectating');
         return;
     }
     try {
@@ -6013,25 +6179,25 @@ function rollForEventPowers(id) {
     if (gameData.accounted.includes(id) || !eventArraysInitiated) {
         return;
     }
-    if (kittyCatsChancer >= randTo100()) {
+    if (kittyCatsEnabled?.value() && kittyCatsChancer >= randTo100()) {
         gameData.cats.push(id);
     }
-    if (mikeDropsChancer >= randTo100()) {
+    if (mikeDropsEnabled?.value() && mikeDropsChancer >= randTo100()) {
         gameData.mikes.push(id);
     }
-    if (equationsChancer >= randTo100()) {
+    if (equationsEnabled?.value() && equationsChancer >= randTo100()) {
         gameData.equations.push(id);
     }
-    if (bricksChancer >= randTo100()) {
+    if (bricksEnabled?.value() && bricksChancer >= randTo100()) {
         gameData.bricks.push(id);
     }
-    if (stuporChancer >= randTo100()) {
+    if (stuporEnabled?.value() && stuporChancer >= randTo100()) {
         gameData.stupor.push(id);
     }
-    if (bitflippedChancer >= randTo100()) {
+    if (bitflippedEnabled?.value() && bitflippedChancer >= randTo100()) {
         gameData.bitflipped.push(id);
     }
-    if (sludgeChancer >= randTo100()) {
+    if (sludgeEnabled?.value() && sludgeChancer >= randTo100()) {
         gameData.sludge.push(id);
     }
     gameData.accounted.push(id);
@@ -6116,9 +6282,9 @@ plugin.events.on('GameEvent', (data) => {
     }
     if (logChat?.value() && data.action === "getEmote") {
         if (data.idUser === window.userId) {
-            $('#log').prepend(`<div><span class="${window.yourSoul.name}" style="text-decoration: underline;"><img src="images/souls/${window.yourSoul.name}.png">${$('#yourUsername').text()}</span>: <img src="images/emotes/${data.emoteImage}.png"></div>`)
+            $('#log').prepend(`<div><span class="${window.yourSoul.name}" style="text-decoration: underline;"><img src="${images}/souls/${window.yourSoul.name}.png">${$('#yourUsername').text()}</span>: <img src="${images}/emotes/${data.emoteImage}.png"></div>`)
         } else {
-            $('#log').prepend(`<div><span class="${window.enemySoul.name}" style="text-decoration: underline;"><img src="images/souls/${window.enemySoul.name}.png">${$('#enemyUsername').text()}</span>: <img src="images/emotes/${data.emoteImage}.png"></div>`)
+            $('#log').prepend(`<div><span class="${window.enemySoul.name}" style="text-decoration: underline;"><img src="${images}/souls/${window.enemySoul.name}.png">${$('#enemyUsername').text()}</span>: <img src="${images}/emotes/${data.emoteImage}.png"></div>`)
         }
     }
     if (randomizeAvatarAuto?.value() && (data.action === "getVictory" || data.action === "getDefeat")) {
@@ -6133,9 +6299,9 @@ plugin.events.on('ChatMessage', (data) => {
         const user = JSON.parse(data.chatMessage).user.id
         const message = JSON.parse(data.chatMessage).message
         if (user === window.userId) {
-            $('#log').prepend(`<div><span class="${window.yourSoul.name}" style="text-decoration: underline;"><img src="images/souls/${window.yourSoul.name}.png">${$('#yourUsername').text()}</span>: <span style="color: thistle">${message}</span></div>`)
+            $('#log').prepend(`<div><span class="${window.yourSoul.name}" style="text-decoration: underline;"><img src="${images}/souls/${window.yourSoul.name}.png">${$('#yourUsername').text()}</span>: <span style="color: thistle">${message}</span></div>`)
         } else if (user === window.opponentId) {
-            $('#log').prepend(`<div><span class="${window.enemySoul.name}" style="text-decoration: underline;"><img src="images/souls/${window.enemySoul.name}.png">${$('#enemyUsername').text()}</span>: <span style="color: thistle">${message}</span></div>`)
+            $('#log').prepend(`<div><span class="${window.enemySoul.name}" style="text-decoration: underline;"><img src="${images}/souls/${window.enemySoul.name}.png">${$('#enemyUsername').text()}</span>: <span style="color: thistle">${message}</span></div>`)
         }
     }
 });
@@ -6231,6 +6397,10 @@ function mathtime(card) {
     const doable = doableYourTurn || doableEnemyTurn || equationsDoableDuring?.value() === 'any time'
     if (!doable) {
         iconToast('genericFail', 'not-allowed', !doableYourTurn ? 'equation-not-your-turn' : 'equation-not-enemy-turn');
+        return;
+    }
+    if (window.spectate) {
+        iconToast('genericFail', 'not-allowed', 'equation-spectating');
         return;
     }
     if (typeof card === 'string') {
@@ -6348,7 +6518,7 @@ function mathtime(card) {
         }
         saveGameData()
     }
-    bootstrapPrompt(randi18n('gs.math-title', card.name), randi18n('gs.math-q-' + type.replaceAll(" ", "-"), ...operands), ` `, function(response) {
+    bootstrapPrompt(randi18n('gs.math-title', card.name), randi18n('gs.math-q-' + type.replaceAll(" ", "-"), ...operands), ' ', function(response) {
         if (response == answer) {
             iconToast('equation', 'equation-win', 'equation-win', card.name)
             delete gameData.equationsData[card.id]
@@ -6525,7 +6695,7 @@ plugin.events.on(':preload', () => {
     cardModifier(visualModifier?.value());
     siteFilter(crispiness?.value(), blurriness?.value(), greyscale?.value(), invert?.value());
     monochromeCopiesToggle(copiesAreMonochrome?.value());
-    cardImagesOffsetToggle(cardImagesOffset?.value());
+  //cardImagesOffsetToggle(cardImagesOffset?.value());
     updateFlashlightRadius(flashlightRadiusInput?.value());
     updateFlashlightImg(flashlightStyle?.value());
     imgPixelToggle(pixelImageRendering?.value());
@@ -6545,10 +6715,6 @@ plugin.events.on(':preload', () => {
     updateSoulColor('BRAVERY', braveryColor?.value());
     updateSoulColor('PATIENCE', patienceColor?.value());
     settingOverriddenStyles();
-    if (gsVersion.value() != pluginVersion) {
-        gsVersion.set(pluginVersion);
-        window.gsUpdateToast();
-    }
 });
 
 let both = 0
@@ -6562,6 +6728,10 @@ plugin.events.on('translation:loaded', () => {
     both++
     if (both === 2) {
         loadLibraries();
+    }
+    if (gsVersion.value() != pluginVersion) {
+        gsVersion.set(pluginVersion);
+        window.gsUpdateToast();
     }
 });
 
@@ -6672,22 +6842,11 @@ plugin.events.on('GameStart', () => {
 });
 
 plugin.events.on(':load', () => {
-    if (statFilters?.value()) {createStatFilters()}
+    if (statFilters?.value()) {createStatFilters();}
+    if (cardCounter?.value()) {createCardCounter()}
     if (powerFilters?.value() !== 'off') {createPowerFilters()}
+    if (storyFilter?.value()) {createStoryFilter()}
 });
-
-function removeStatFilters() {
-    style('statFilterSpacing', 'remove', `
-        td[style*="width: 200px"] {display: table; margin-bottom: -20px;}
-        td[style*="width: 200px"] {display: table; margin-bottom: -20px;}
-    `)
-    $('#costInput').remove();
-    $('#atkInput').remove();
-    $('#hpInput').remove();
-    $('#costMode').remove();
-    $('#atkMode').remove();
-    $('#hpMode').remove();
-}
 
 function createStatFilters() {
     removeStatFilters();
@@ -6835,10 +6994,24 @@ function createStatFilters() {
     });
 }
 
+function removeStatFilters() {
+    style('statFilterSpacing', 'remove', `
+        td[style*="width: 200px"] {display: table; margin-bottom: -20px;}
+        td[style*="width: 200px"] {display: table; margin-bottom: -20px;}
+    `)
+    $('#costInput').remove();
+    $('#atkInput').remove();
+    $('#hpInput').remove();
+    $('#costMode').remove();
+    $('#atkMode').remove();
+    $('#hpMode').remove();
+}
+
 function createPowerFilters() {
     removePowerFilters();
-    const includePaths = ['/Crafting', '/Decks'];
-    if (!includePaths.includes(window.location.pathname)) { return; }
+    let page = window.location.pathname;
+    let includePaths = ['/Crafting', '/Decks'];
+    if (!includePaths.includes(page)) { return; }
     style('powerFiltersSpacing', 'remove')
 
     const $newFilterRow = $('<p>', {
@@ -6863,7 +7036,7 @@ function createPowerFilters() {
                 if (str === "kr") return "KR";
                 return str.charAt(0).toUpperCase() + str.slice(1);
             }
-            let defaultLink = `images/powers/${onuWHY(power.icon)}.png`
+            let defaultLink = `${images}/powers/${onuWHY(power.icon)}.png`
             switch (powerSkins.value()) {
                 case 'Ancient': link = power.name === 'disarmed' ? `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/ancient-${power.icon}.png` : defaultLink; break;
                 case 'Neon': link = `https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/powers/neon-${power.icon}.png`; break;
@@ -6901,17 +7074,17 @@ function createPowerFilters() {
             powers[`${power.name}Input`] = $powerFilter
         })
     }
-    if (window.location.pathname === '/Decks') {
+    if (page === '/Decks') {
         if (powerFilters?.value() === 'standard') {
             style('powerFiltersSpacing', 'add', '#gsPowerFilterRow img {margin: 0 0px;}');
         } else {
-            style('powerFiltersSpacing', 'add', '#gsPowerFilterRow img {margin: 0 -2.5px;}');
+            style('powerFiltersSpacing', 'add', '#gsPowerFilterRow img {margin: 0 -3px;}');
         }
     } else {
         if (powerFilters?.value() === 'standard') {
             style('powerFiltersSpacing', 'add', '#gsPowerFilterRow img {margin: 0 2px;}');
         } else {
-            style('powerFiltersSpacing', 'add', '#gsPowerFilterRow img {margin: 0 0px;}');
+            style('powerFiltersSpacing', 'add', '#gsPowerFilterRow img {margin: 0 -1px;}');
         }
     }
 
@@ -6926,6 +7099,85 @@ function removePowerFilters() {
     $('#gsPowerFilterRow').remove()
     style('powerFiltersSpacing', 'remove')
 }
+
+function createStoryFilter() {
+    removeStoryFilter();
+    const includePaths = ['/Crafting'];
+    if (!includePaths.includes(window.location.pathname)) { return; }
+
+    let $storyFilter = $('<label>', {id: 'gsStoryFilter'})
+    $storyFilter.append($('<input>', {
+        type: 'checkbox',
+        id: 'storyRarityInput',
+        class: 'rarityInput',
+        rarity: 'STORY',
+        onchange: 'applyFilters(); showPage(0);'
+    }))
+    $storyFilter.append($('<img>', {
+        src: `${images}/rarity/BASE_STORY.png`,
+    }))
+    $('p:has(label:has(.rarityInput))').prepend($storyFilter)
+}
+
+function removeStoryFilter() {
+    $("#gsStoryFilter").remove()
+}
+
+function createCardCounter() {
+    removeCardCounter();
+    const includePaths = ['/Crafting'];
+    if (!includePaths.includes(window.location.pathname)) { return; }
+
+    let $cardCounter = $('<span>', {
+        id: 'gsCardCounter',
+        text: 'Cards: '
+    })
+    $cardCounter.append($('<span>', {
+        id: 'gsCardCounterNum',
+    }))
+    $('#DTFragmentsDiv').after($cardCounter);
+    refreshCards(true);
+}
+
+function removeCardCounter() {
+    $('#gsCardCounter').remove()
+}
+
+function addStoriesToCollection() {
+    removeStoriesFromCollection(true);
+    let stories = []
+    window.allCards.forEach((card) => {
+        if (card.rarity === "STORY") {
+            stories.push({ ...card })
+        }
+    })
+    let frameSkin = window.collection[0].frameSkinName
+    stories.forEach((card) => {
+        card.quantity = 0;
+        card.frameSkinName = frameSkin;
+        card.shiny = false;
+        window.collection.push({ ...card })
+        card.shiny = true;
+        window.collection.push({ ...card })
+    })
+    window.collection.sort((a, b) => {
+        if (a.cost === b.cost) {
+            return a.name.localeCompare(b.name);
+        }
+        return a.cost - b.cost;
+    });
+    refreshCards(true);
+}
+function removeStoriesFromCollection(noRefresh) {
+    window.collection = window.collection.filter(card => card.rarity !== "STORY");
+    if (noRefresh) return;
+    refreshCards(true);
+}
+plugin.events.on('Craft:Loaded', () => {
+    if (storyFilter?.value()) {
+        addStoriesToCollection();
+    }
+})
 
 plugin.events.on('Settings:open', () => createTransHelper());
 
@@ -7140,7 +7392,7 @@ function bootstrapPrompt(title, text, other, func) {
             if (typeof other === 'string') {
                 return $('<div>')
                     .append(
-                        $('<p>').text(text),
+                        $('<p>').html(text),
                         $('<input>', {
                             type: 'text',
                             id: 'gsBootstrapPrompt',
@@ -7151,7 +7403,7 @@ function bootstrapPrompt(title, text, other, func) {
             } else if (typeof other === 'object') {
                 const $el = $('<div>')
                     .append(
-                        $('<p>').text(text)
+                        $('<p>').html(text)
                     );
                 const $sel =
                     $('<select>', {
@@ -7166,7 +7418,18 @@ function bootstrapPrompt(title, text, other, func) {
                 return $el;
             }
         },
+        onshown: function(dialogRef) {
+            const $input = dialogRef.getModalBody().find('#gsBootstrapPrompt');
+
+                $input.on('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    dialogRef.getButton('confirm').click();
+                }
+            });
+        },
         buttons: [{
+            id: 'confirm',
             label: $.i18n('dialog-confirm'),
             cssClass: 'btn-primary',
             action: function (dialog) {
@@ -7175,7 +7438,7 @@ function bootstrapPrompt(title, text, other, func) {
                 if (typeof func === "function") {
                     func(input);
                 }
-                selectedEl.focus();
+                selectedEl?.focus();
             }
         }, {
             label: $.i18n('dialog-cancel'),
@@ -7750,6 +8013,7 @@ ${creditTitle("Frames")}
     ${creditRow("It's TV Time!", "Dylan Hall")}
     ${creditRow("Cold Place", "Dylan Hall")}
     ${creditRow("Slay the Spire", "Bartwk")}
+    ${creditRow("Slay the Spire 2", "Bartwk")}
 ${creditTitle("Rarity icons")}
     ${creditRow("Hollow Knight", "Jaku")}
     ${creditRow("FNAFB", "JaimeezNuts")}
