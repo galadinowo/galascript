@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Galascript
 // @namespace    https://undercards.net
-// @version      1.0.5.1
+// @version      1.5.1.1
 // @description  Galascript adds various features that modify your gameplay experience; whether it be for the better, or for the worse...!
 // @author       galadino
 // @match        https://*.undercards.net/*
@@ -94,7 +94,13 @@ const nullcard = {
 plugin.updater?.('https://github.com/galadinowo/galascript/raw/refs/heads/main/Galascript.user.js');
 
 const patchNotes = `
-1.0.5.1! I need to push updates out more, instead of sitting on my ideas and procrastinating the whole thing....
+<i>1.5.1.1: Bugfixes. Intros now properly function. Cardsludge settings now function... more, I hope. Some "Too many tribes" tribe additions. Added a custom intro for AG.</i>
+
+<i>Also, starting now, I'm axing the "0" in the version numbers. I don't think I'm even gonna get there. Why was it there. These numbers were getting way too long.</i>
+
+Below are the patch notes for the previous major update, <span style="text-decoration: line-through">v1.0.5.1</span> v1.5.1.
+<hr>
+1.5.1! I need to push updates out more, instead of sitting on my ideas and procrastinating the whole thing....
 
 Hey, you can actually spectate people now. And more!
 
@@ -133,6 +139,7 @@ const convertMarkdown = new underscript.lib.showdown.Converter();
 
 function pullRandom(stat, from = 1, i = 1, raw) {
     let seed = window.gameId || Math.random() * 9000
+    seed += from * i
     var mask = 0xffffffff;
     var m_w  = (123456789 + seed) & mask;
     var m_z  = (987654321 - seed) & mask;
@@ -144,13 +151,14 @@ function pullRandom(stat, from = 1, i = 1, raw) {
     roll /= 4294967296;
     var rollFinal = Math.floor(roll * maxCardId())
     var newStat;
-    if (stat === 'program') {
+    if (stat === 'Program') {
         var index = window.getCard(rollFinal)?.statuses.findIndex(status => status.name === stat)
         newStat = window.getCard(rollFinal)?.statuses[index]?.counter
     } else {
         newStat = window.getCard(rollFinal)?.[stat]
     }
-    return newStat ?? pullRandom(stat, from + 1, i, 1);
+    from < 0 ? from -= 1 : from *= -17;
+    return newStat ?? pullRandom(stat, from, i, 1);
 }
 
 var maxCard = -Infinity;
@@ -203,6 +211,16 @@ const checkCreateCard = setInterval(() => {
             var cssVars = `--offset-x: ${9}; --offset-y: ${1}`
             const obsc = obscActive(card);
             var cardLoop = findStatus(card, 'loop');
+            switch (JSON.stringify([obscCardImage?.value(), obsc])) {
+                case '["to set card",1]':
+                    card.image = window.getCardWithName(obscSetCard?.value()).baseImage;
+                    card.typeSkin = 0;
+                    break;
+                case '["to random card",1]':
+                    card.image = pullRandom('baseImage', card.id, 2);
+                    card.typeSkin = 0;
+                    break;
+            }
             switch (JSON.stringify([obscCardName?.value(), obsc])) {
                 case '["obfuscate",1]':
                     name = obfuscationText?.value();
@@ -211,25 +229,16 @@ const checkCreateCard = setInterval(() => {
                     name = $.i18n('card-name-' + window.getCardWithName(obscSetCard?.value()).fixedId, loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1)
                     break;
                 case '["to random card",1]':
-                    name = $.i18n('card-name-' + pullRandom('id', card, 1), loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1)
+                    name = $.i18n('card-name-' + pullRandom('id', card.id, 1), loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1)
                     break;
                 default:
                     name = $.i18n('card-name-' + card.fixedId, loopNames?.value() && cardLoop > 0 ? cardLoop + 1 : 1);
                     var cardSkin = card.image.replaceAll(" Open", "").replace(/(\S)\d+$/, "$1") !== card.baseImage;
                     var imageSludged = cardImages.includes(card.image) && cardSkin;
+                    console.log(imageSludged)
                     if (cardSkinNames?.value() && cardSkin && !imageSludged) {
                         name = card.image.replaceAll("_", " ").replaceAll(" Full", "").replaceAll(" FULL", "").replaceAll("C1225", "1225")
                     }
-            }
-            switch (JSON.stringify([obscCardImage?.value(), obsc])) {
-                case '["to set card",1]':
-                    card.image = window.getCardWithName(obscSetCard?.value()).baseImage;
-                    card.typeSkin = 0;
-                    break;
-                case '["to random card",1]':
-                    card.image = pullRandom('baseImage', card, 2);
-                    card.typeSkin = 0;
-                    break;
             }
             var description = "";
             switch (JSON.stringify([obscCardDesc?.value(), obsc])) {
@@ -240,7 +249,7 @@ const checkCreateCard = setInterval(() => {
                     description = $.i18n('card-' + window.getCardWithName(obscSetCard?.value()).fixedId);
                     break;
                 case '["to random card",1]':
-                    description = $.i18n('card-' + pullRandom('id', card, 3));
+                    description = $.i18n('card-' + pullRandom('id', card.id, 3));
                     break;
                 default:
                     description = $.i18n('card-' + card.fixedId)
@@ -248,29 +257,32 @@ const checkCreateCard = setInterval(() => {
 
             switch (JSON.stringify([obscCardRarity?.value(), obsc])) {
                 case '["to set card",1]':
-                    card.rarity = window.getCardWithName(obscSetCard?.value()).rarity;
-                    card.extension = window.getCardWithName(obscSetCard?.value()).extension;
+                    rarity = window.getCardWithName(obscSetCard?.value()).rarity;
+                    extension = window.getCardWithName(obscSetCard?.value()).extension;
                     break;
                 case '["to random card",1]':
-                    card.rarity = pullRandom('rarity', card, 4);
-                    card.extension = pullRandom('extension', card, 4);
+                    rarity = pullRandom('rarity', card.id, 4);
+                    extension = pullRandom('extension', card.id, 4);
                     break;
                 case '["hide",1]':
-                    card.rarity = 'BASE'
+                    rarity = 'BASE'
                     break;
+                default:
+                    rarity = card.rarity;
+                    extension = card.extension;
             }
 
             switch (JSON.stringify([obscCardPowers?.value(), obsc])) {
                 case '["to set card",1]':
-                    program = findStatus(window.getCardWithName(obscSetCard?.value()), 'program');
+                    program = findStatus(window.getCardWithName(obscSetCard?.value()), 'Program');
                     fauxStatusId = window.getCardWithName(obscSetCard?.value()).id
                     break;
                 case '["to random card",1]':
-                    program = pullRandom('program', card, 5);
-                    fauxStatusId = pullRandom('id', card, 5);
+                    program = pullRandom('Program', card.id, 5);
+                    fauxStatusId = pullRandom('id', card.id, 5);
                     break;
                 default:
-                    program = findStatus(card, 'program');
+                    program = findStatus(card, 'Program');
             }
             if (program === 0) program = "";
 
@@ -279,7 +291,7 @@ const checkCreateCard = setInterval(() => {
                     fauxTribesId = window.getCardWithName(obscSetCard?.value()).id
                     break;
                 case '["to random card",1]':
-                    fauxTribesId = pullRandom('id', card, 6);
+                    fauxTribesId = pullRandom('id', card.id, 6);
                     break;
             }
 
@@ -293,7 +305,7 @@ const checkCreateCard = setInterval(() => {
                     fauxCost = window.getCardWithName(obscSetCard?.value()).cost;
                     break;
                 case '["to random card",1]':
-                    fauxCost = pullRandom('cost', card, 7);
+                    fauxCost = pullRandom('cost', card.id, 7);
                     break;
             }
             if (card.hasOwnProperty('attack')) {
@@ -312,8 +324,8 @@ const checkCreateCard = setInterval(() => {
                         fauxHp = window.getCardWithName(obscSetCard?.value()).hp;
                         break;
                     case '["to random card",1]':
-                        fauxAttack = pullRandom('attack', card, 8);
-                        fauxHp = pullRandom('hp', card, 9);
+                        fauxAttack = pullRandom('attack', card.id, 8);
+                        fauxHp = pullRandom('hp', card.id, 9);
                         break;
                 }
             }
@@ -419,7 +431,7 @@ const checkCreateCard = setInterval(() => {
                     $htmlCard.find('.cardATK').html(htmlAtk)
                     $htmlCard.find('.cardHP').html(htmlHp)
                 }
-                $htmlCard.find('.cardRarity').css('background', 'transparent url(\'images/rarity/' + card.extension + '_' + card.rarity + '.png\') no-repeat');
+                $htmlCard.find('.cardRarity').css('background', 'transparent url(\'images/rarity/' + extension + '_' + rarity + '.png\') no-repeat');
                 var $cardNameDiv = $htmlCard.find('.cardName div');
                 var $cardDescDiv = $htmlCard.find('.cardDesc div');
                 $cardNameDiv.css('font-size', window.getResizedFontSize($cardNameDiv, 25));
@@ -1603,6 +1615,10 @@ function initGsTranslations() {
         "gs.status-brick": "This card cannot be played, due to the really heavy brick on it.",
         "gs.status-equation": "To be able to play this card, you must first solve a math equation.<br><button class=\"gsDialogButton\" onclick=\"mathtime('$1')\">Start problem</button>",
         "gs.status-stupor": "This monster can't attack. Or rather, you can't make it attack, because it's lazy...",
+        "gs.status-sandy": "This card is covered in sand. When played or summoned from your hand, it will take $1 {{PLURAL:$1|second|seconds}} off of your turn time.",
+        "gs.status-taunt-2": "It's {{KW:TAUNT}}, but better! You have a feeling this will not be in your favor.",
+        "gs.status-flashbang": "Think fast, chucklenuts.",
+        "gs.status-pure": "In a sea of intentionally horrible effects... you feel a little safer. This card is immune to all negative Action Powers. After a card is affected by this card in any way, it is also cleansed of its negative Action Powers.",
         "gs.status-bitflipped": "A random stat on this card is off by one. Do you know which?",
         "gs.status-sludge": "This card is covered in a thick layer of sludge. Gross.",
         "gs.status-loop-stacked": "This card can trigger its {{KW:LOOP}} effect an additional time.",
@@ -1634,7 +1650,7 @@ function initGsTranslations() {
 
         "gs.tribe-retro": "{{PLURAL:$1|Retro|Retro}}",
         "gs.tribe-guns": "{{PLURAL:$1|Gun|Guns}}",
-        "gs.tribe-hats": "{{PLURAL:$1|Hat|Hats}}",
+        "gs.tribe-hat": "{{PLURAL:$1|Hat|Hats}}",
         "gs.tribe-robot": "{{PLURAL:$1|Robot|Robots}}",
         "gs.tribe-bird": "{{PLURAL:$1|Bird|Birds}}",
         "gs.tribe-fish": "Fish",
@@ -1762,7 +1778,7 @@ function initGsTranslations() {
         "gs.game-going-first": "You go first.",
         "gs.game-going-second": "You go second.",
 
-        "gs.game-intros": "$1 challenges you to a Dual!|Fighting $1!|$1 enters through a graceful misty fog...|$1 enters the scene!|$1 approaches!|$1 attacks!|$1 sniped you.|$1 wants to win! Are you just gonna let that happen?|C-could it be? It's the one and only $1...|...It's $1? Sorry, you're cooked.|$1 gracefully flops onto the battlefield like a fish.|A wild $1 appeared!|$1 glares at you. You hear boss music.|Well, you didn't expect $1 to be here.|Well, there is a $1 here. They might be happy to see you. What do you think?|> enters $5-less queue<br>> looks inside<br>> $5|Okay, so, a $1 walks into a bar|You are not fighting $1!|ITS FUCKING $6 RUN|My money's on $1. No pressure.|EPIC RAP BATTLES OF HISTORY:<br>$1<br>VERSUS!<br>$2|Fighting $2!<br>Wait, no...<br>...it's $1!|$1 calls an ambulance in advance.|$1, huh?|$1 emerges from the abyss!|Hey, it's $1!|It is $1.|Quests<br>Kill $1 (0/1)|transmit this $1<img style= 'float: right' width='90px' src='https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/transmit.gif'>",                                                                        //
+        "gs.game-intros": "$1 challenges you to a Dual!|Fighting $1!|$1 enters through a graceful misty fog...|$1 enters the scene!|$1 approaches!|$1 attacks!|$1 sniped you.|$1 wants to win! Are you just gonna let that happen?|C-could it be? It's the one and only $1...|...It's $1? Sorry, you're cooked.|$1 gracefully flops onto the battlefield like a fish.|A wild $1 appeared!|$1 glares at you. You hear boss music.|Well, you didn't expect $1 to be here.|Well, there is a $1 here. They might be happy to see you. What do you think?|> enters $5-less queue<br>> looks inside<br>> $5|Okay, so, a $1 walks into a bar|You are not fighting $1!|ITS FUCKING $6 RUN|My money's on $1. No pressure.|EPIC RAP BATTLES OF HISTORY:<br>$1<br>VERSUS!<br>$2|Fighting $2!<br>Wait, no...<br>...it's $1!|$1 calls an ambulance in advance.|$1, huh?|$1 emerges from the abyss!|Hey, it's $1!|It is $1.|Quests<br>Kill $1 (0/1)|transmit this $1<img style='float: right' width='90px' src='https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/transmit.gif'>",                                                                        //
         "gs.game-intros-crystal": "$7 Free elo.",
         "gs.game-intros-dia": "$7 You're about to have a bad time.",
         "gs.game-intros-frogman": "$7 Pet the frog :D",
@@ -1781,6 +1797,7 @@ function initGsTranslations() {
         "gs.game-intros-ren": "$7 You play with her life like game of chance...|$7 The knife twists further.",
         "gs.game-intros-acid": "$1 appeared!<br>\>Engage<br>\>Run",
         "gs.game-intros-onu": "It's $1! Good luck out there.",
+        "gs.game-intros-ag": "$1<span class='awesomeGuy ag$9'></span>",
 
         "gs.alert-title-kitty": "Mrrp|Mrow|Meow|Nyaw|Mrrrrow|Prrrrrr|Mrorw|Mroooooow|Mew|Waoow|:3",
         "gs.alert-title-mike": "Truth nuke|Final act|That's all, folks|Yep, I went there|I'll see ya next time|Thank you all for coming|*cue applause*|Like and subscribe for part 2|I'll be here all night|Tough crowd|There is a really big magnet on the ground that pulled the mic out of my hand",
@@ -1938,16 +1955,15 @@ function initCustomTranslations() {
 
 function initMulliganInfo(testBool, id) {
     if (!testBool) if (!ingame || window.spectate) return;
-    var enemySoul = $('.soul:first').children().attr('class') ?? 'DETERMINATION';
-    var enemyUser = id ?? parseInt($('.profile:first').attr("id")?.replace(/\D/g, '')) ?? '-1';
-    var enemyUsername = $('#enemyUsername').text() || 'USER';
-    var yourSoul = $('.soul:last').children().attr('class') ?? 'KINDNESS';
-    var yourUser = parseInt($('.profile:last').attr("id")?.replace(/\D/g, '')) ?? '-1';
-    var yourUsername = $('#yourUsername').text() || 'YOU';
-    function soulIcon(replace) {return `<img src="${images}/souls/${replace ? replace : enemySoul}.png">`};
-    function soulColor(text, soul) {return `<span class="${soul ? soul : enemySoul}">${text}</span>`};
-    function player(replace) {return `${soulIcon()} ${soulColor(replace ? replace : enemyUsername)}`};
-    const introVars = [
+    var enemySoul, enemyUser, enemyUsername, yourSoul, yourUser, yourUsername, introVars;
+    function initVars() {
+        enemySoul = $('.soul:first').children().attr('class') ?? 'DETERMINATION';
+        enemyUser = id ?? parseInt($('.profile:first').attr("id")?.replace(/\D/g, '')) ?? '-1';
+        enemyUsername = $('#enemyUsername').text() || 'USER';
+        yourSoul = $('.soul:last').children().attr('class') ?? 'KINDNESS';
+        yourUser = parseInt($('.profile:last').attr("id")?.replace(/\D/g, '')) ?? '-1';
+        yourUsername = $('#yourUsername').text() || 'YOU';
+        introVars = [
                     player(), // $1: The enemy player
                     `${soulIcon(yourSoul)} ${soulColor(yourUsername, yourSoul)}`, // $2: You!
                     soulColor(enemyUsername), // $3: Enemy, no soul icon
@@ -1955,8 +1971,14 @@ function initMulliganInfo(testBool, id) {
                     player(enemyUsername.toLowerCase()), // $5: The enemy player, lowercased
                     player(enemyUsername.toUpperCase()), // $6: The enemy player, uppercased
                     soulIcon(), // $7 Enemy soul icon
-                    soulIcon(yourSoul) // $8 Your soul icon
+                    soulIcon(yourSoul), // $8 Your soul icon
+                    enemySoul, // $9 Enemy soul name
+                    yourSoul, // $10 Your soul name
                 ]
+    }
+    function soulIcon(replace) {return `<img src="${images}/souls/${replace ? replace : enemySoul}.png">`};
+    function soulColor(text, soul) {return `<span class="${soul ? soul : enemySoul}">${text}</span>`};
+    function player(replace) {return `${soulIcon()} ${soulColor(replace ? replace : enemyUsername)}`};
     function funnyIntro() {
         switch (enemyUser) {
             case 163201:      return randi18n('gs.game-intros-crystal', ...introVars);
@@ -1979,9 +2001,11 @@ function initMulliganInfo(testBool, id) {
             case 779680:      return randi18n('gs.game-intros-ren', ...introVars);
             case 488578:      return randi18n('gs.game-intros-acid', ...introVars);
             case 1:           return randi18n('gs.game-intros-onu', ...introVars);
+            case 433216:      return randi18n('gs.game-intros-ag', ...introVars);
         }
         return randi18n('gs.game-intros', ...introVars);
     }
+    initVars();
     if (testBool) {
         window.BootstrapDialog.show({
             title: $.i18n('game-mulligan'),
@@ -2000,6 +2024,7 @@ function initMulliganInfo(testBool, id) {
         const waitForMulligan = setInterval(() => {
             if ($('.bootstrap-dialog-message > .mulligan').length) { // waits for the mulligan message to show up
                 clearInterval(waitForMulligan);
+                initVars();
                 var info = `<p>${funnyIntro()}</p>`;
                 $('.bootstrap-dialog-message:has(.mulligan) > p:first').prepend(info)
             }
@@ -2128,6 +2153,7 @@ function staticStyles() {
             background: none !important;
         }
     }
+    .awesomeGuy {float: right; width: 90px; height: 90px; background: url(https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/ag.png) center / contain transparent}
     `)
 }
 
@@ -3337,6 +3363,7 @@ function cardModifier(val) {
 
 function updateSoulColor(soul, color) {
     style(`soulColor${soul}`, 'replace', `
+        .ag${soul} {background-color: ${color} !important; background-blend-mode: luminosity;}
         ${color === soulColors[soul] ? `
             img[src*="${images}/souls/${soul}.png"] {filter: drop-shadow(0px); transform: translateY(0px);}
             img[src*="${images}/souls/big/${soul}.png"] {filter: drop-shadow(0px); transform: translateY(0px);}
@@ -5043,7 +5070,7 @@ const manyTribes = {
     MUSIC: [131, 593, 867, 895, 896, 908, 909, 910, 911, 917, 918, 958],
     WEATHER: [552, 698, 825, 857],
     SIGN: [239, 401, 441, 474, 604, 606, 650, 661, 784, 850, 860, 915, 917, 919],
-    ART: [111, 126, 173, 283, 309, 350, 520, 524, 541, 629, 635, 647, 648, 749, 761, 809],
+    ART: [111, 126, 173, 253, 283, 309, 350, 441, 520, 524, 541, 629, 635, 647, 648, 749, 761, 809],
     SPAWN: [897, 898, 901, 931],
     CONTAINER: [81, 133, 226, 311, 355, 600, 766, 786, 790, 791, 875, 876, 877, 900],
     FLOWER: [54, 88, 105, 117, 124, 300, 317, 375, 422, 462, 451, 477, 550, 933, 937, 965, 967, 968, 970, 979, 980, 981, 982, 983, 986],
