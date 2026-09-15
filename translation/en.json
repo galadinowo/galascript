@@ -315,7 +315,7 @@
     "gs.game-going-first": "You go first.",
     "gs.game-going-second": "You go second.",
 
-    "gs.game-intros": "$1 challenges you to a Dual!|Fighting $1!|$1 enters through a graceful misty fog...|$1 enters the scene!|$1 approaches!|$1 attacks!|$1 sniped you.|$1 wants to win! Are you just gonna let that happen?|C-could it be? It's the one and only $1...|...It's $1? Sorry, you're cooked.|$1 gracefully flops onto the battlefield like a fish.|A wild $1 appeared!|$1 glares at you. You hear boss music.|Well, you didn't expect $1 to be here.|Well, there is a $1 here. They might be happy to see you. What do you think?|> enters $5-less queue\n> looks inside\n> $5|Okay, so, a $1 walks into a bar|You are not fighting $1!|ITS FUCKING $6 RUN|My money's on $1. No pressure.|EPIC RAP BATTLES OF HISTORY:\n$1\nVERSUS!\n$2|Fighting $2!\nWait, no...\n...it's $1!|$1 calls an ambulance in advance.|$1, huh?|$1 emerges from the abyss!|Hey, it's $1!|It is $1.|Quests\nKill $1 (0/1)|transmit this $1<img style='float: right' width='90px' src='https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/transmit.gif'>",                                                                        //
+    "gs.game-intros": "$1 challenges you to a Dual!|Fighting $1!|$1 enters through a graceful misty fog...|$1 enters the scene!|$1 approaches!|$1 attacks!|$1 sniped you.|$1 wants to win! Are you just gonna let that happen?|C-could it be? It's the one and only $1...|...It's $1? Sorry, you're cooked.|$1 gracefully flops onto the battlefield like a fish.|A wild $1 appeared!|$1 glares at you. You hear boss music.|Well, you didn't expect $1 to be here.|Well, there is a $1 here. They might be happy to see you. What do you think?|> enters $5-less queue\n> looks inside\n> $5|Okay, so, a $1 walks into a bar|You are not fighting $1!|ITS FUCKING $6 RUN|My money's on $1. No pressure.|EPIC RAP BATTLES OF HISTORY:\n$1\nVERSUS!\n$2|Fighting $2!\nWait, no...\n...it's $1!|$1 calls an ambulance in advance.|$1, huh?|$1 emerges from the abyss!|Hey, it's $1!|It is $1.|Quests\nKill $1 (0/1)|transmit this $1<img style='float: right' width='90px' src='https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/misc/transmit.gif'>",
     "gs.game-intros-crystal": "$7 Free elo.",
     "gs.game-intros-dia": "$7 You're about to have a bad time.",
     "gs.game-intros-frogman": "$7 Pet the frog :D",
@@ -503,16 +503,16 @@
         "gs.setting-secretCodes": " ",
             "gs.setting-secretCodes-note": "Accepts 12 characters.",
 
-    "gs.key-unbound": "unbound"
-    "gs.key-mouse-0": "Left click"
-    "gs.key-mouse-1": "Middle click"
-    "gs.key-mouse-2": "Right click"
-    "gs.key-mouse-other": "Mouse button $1"
-    "gs.key-space": "Space"
-    "gs.key-location-1": "(Left)"
-    "gs.key-location-2": "(Right)"
-    "gs.key-location-3": "(Numpad)"
-    "gs.key-location-other": "(Mystery zone)"
+    "gs.key-unbound": "unbound",
+    "gs.key-mouse-0": "Left click",
+    "gs.key-mouse-1": "Middle click",
+    "gs.key-mouse-2": "Right click",
+    "gs.key-mouse-other": "Mouse button $1",
+    "gs.key-space": "Space",
+    "gs.key-location-1": "(Left)",
+    "gs.key-location-2": "(Right)",
+    "gs.key-location-3": "(Numpad)",
+    "gs.key-location-other": "(Mystery zone)",
 
     "gs.utbox-cnp": "Code not applicable.",
     "gs.utbox-not-12": "That's not 12 characters.",
