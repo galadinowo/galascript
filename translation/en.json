@@ -522,5 +522,5 @@
     "gs.utbox-you-are-galadino": "{{style:yellow|You are galadino}}! ^ \"Debug mode\" setting now visible.",
     "gs.utbox-affirm-galadino": "Yes you are!",
     "gs.utbox-not-galadino": "{{style:yellow|You are not galadino}}! ^ \"Debug mode\" setting now hidden.",
-    "gs.utbox-affirm-not-galadino": "This is true!",
+    "gs.utbox-affirm-not-galadino": "This is true!"
 }
