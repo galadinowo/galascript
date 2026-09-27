@@ -455,10 +455,7 @@
     
     "gs.category-qol": "QoL",
         "gs.setting-cardAliases": "Card alias lookup",
-            "gs.setting-cardAliases-note": [
-                "Cards can be searched in your collection by well-known aliases and shorthands",
-                "For example, searching \"casdyne\" will have Casual Undyne as a result"
-            ],
+            "gs.setting-cardAliases-note": "Cards can be searched in your collection by well-known aliases and shorthands\nFor example, searching \"casdyne\" will have Casual Undyne as a result",
         "gs.setting-mulliganInfo": "Mulligan information",
             "gs.setting-mulliganInfo-note": "Displays turn order and opponent's name and SOUL on the Mulligan at the start of the game",
         "gs.setting-programIndicators": "Program indicator",
@@ -476,11 +473,7 @@
         "gs.setting-powerFilters": "Power filters",
             "gs.setting-powerFilters-note": "Adds filters for certain powers in your collection",
         "gs.setting-maxHpIndicator": "Max HP indicator",
-            "gs.setting-maxHpIndicator-note": [
-                "Adds an indicator that shows the monster's {{HP}} out of its max (ex. 5/6)",
-                "{{STYLE:gsAccent|hide when full}}: Doesn't display if the monster's {{HP}} is full.",
-                "{{STYLE:gsAccent|always show}}: Still displays if the monster's {{HP}} is full."
-            ],
+            "gs.setting-maxHpIndicator-note": "Adds an indicator that shows the monster's {{HP}} out of its max (ex. 5/6)\n{{STYLE:gsAccent|hide when full}}: Doesn't display if the monster's {{HP}} is full.\n{{STYLE:gsAccent|always show}}: Still displays if the monster's {{HP}} is full.",
     "gs.category-cardpaint": "Cardpaint",
         "gs.setting-cardSkinNames": "Card skin names",
             "gs.setting-cardSkinNames-note": "Card names will become the name of the skin they have on",
@@ -494,6 +487,8 @@
             "gs.setting--note": "",
         "gs.setting-": "",
             "gs.setting--note": "",
+    "gs.category-gamechangers": "Game changers!",
+        "gs.setting-cardSkinNames": "Card skin names",
     
     "gs.setting-readPatchNotes": "Read patch notes",
     "gs.setting-readCredits": "Read credits",
@@ -508,6 +503,12 @@
     "gs.category-secret": "...?",
         "gs.setting-secretCodes": " ",
             "gs.setting-secretCodes-note": "Accepts 12 characters.",
+
+    "gs.option-off": "Off",
+    "gs.option-standard": "Standard",
+    "gs.option-standard-galascript": "Standard + Galascript",
+    "gs.option-hide-when-full": "Hide when full",
+    "gs.option-always-show": "Always show",
     
     "gs.key-unbound": "unbound",
     "gs.key-mouse-0": "Left click",
