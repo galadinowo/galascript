@@ -156,6 +156,7 @@
     "gs.status-meta": "This card was buffed recently! It must be the new meta.",
     "gs.status-sidegraded": "This card was reworked recently! It's still usable, but many consider this one a nerf!",
     "gs.status-unplayable": "This card was nerfed recently! It must be unbearable to play now.",
+    "gs.status-funny-number": "This card has a very funny number: $1!",
     "gs.status-ranged": "This monster is immune while attacking.",
     "gs.status-check": "$1",
     "gs.status-kitty-cat": "This card is secretly possessed by a kitty! It will do something random when played or summoned from your hand.",
@@ -179,6 +180,14 @@
     "gs.status-sandy-stacked": "There's some sand here. When played or summoned from your hand, it will take an additional second off of your turn time.",
     "gs.status-bug-stacked": "There's a bug here. When played, it'll corrupt your game with a severity of +1!",
     "gs.status-ranged": "This monster is immune while attacking.",
+
+    "gs.funny-source-cost": "its {{COST}} is $1",
+    "gs.funny-source-attack": "its {{ATK}} is $1",
+    "gs.funny-source-hp": "its {{HP}} is $1",
+    "gs.funny-source-attack-hp": "its stats are {{STATS:$1|$2}}",
+    "gs.funny-source-cost-attack-hp": "its stats are {{STATS:$1|$2|$3}}",
+    "gs.funny-source-id": "its ID is $1",
+    "gs.funny-source-id-containing": "its ID contains $1",
     
     "gs.tribe-unknown": "Hmmm... this monster has a tribe, but which one?",
     
