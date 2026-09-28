@@ -156,7 +156,7 @@
     "gs.status-meta": "This card was buffed recently! It must be the new meta.",
     "gs.status-sidegraded": "This card was reworked recently! It's still usable, but many consider this one a nerf!",
     "gs.status-unplayable": "This card was nerfed recently! It must be unbearable to play now.",
-    "gs.status-funny-number": "This card has a very funny number: $1!",
+    "gs.status-funnyNumber": "This card references an amusing number... $1!",
     "gs.status-ranged": "This monster is immune while attacking.",
     "gs.status-check": "$1",
     "gs.status-kitty-cat": "This card is secretly possessed by a kitty! It will do something random when played or summoned from your hand.",
@@ -187,7 +187,6 @@
     "gs.funny-source-attack-hp": "its stats are {{STATS:$1|$2}}",
     "gs.funny-source-cost-attack-hp": "its stats are {{STATS:$1|$2|$3}}",
     "gs.funny-source-id": "its ID is $1",
-    "gs.funny-source-id-containing": "its ID contains $1",
     
     "gs.tribe-unknown": "Hmmm... this monster has a tribe, but which one?",
     
@@ -203,7 +202,7 @@
     "gs.tribe-meter": "{{PLURAL:$1|Meter|Meters}}",
     "gs.tribe-cactus": "{{PLURAL:$1|Cactus|Cacti}}",
     
-    "gs.tribe-retro": "{{PLURAL:$1|Retro|Retro}}",
+    "gs.tribe-retro": "Retro",
     "gs.tribe-guns": "{{PLURAL:$1|Gun|Guns}}",
     "gs.tribe-hat": "{{PLURAL:$1|Hat|Hats}}",
     "gs.tribe-robot": "{{PLURAL:$1|Robot|Robots}}",
@@ -318,6 +317,7 @@
     "gs.showdown-support": "{{KW:SUPPORT}} active",
     "gs.showdown-bullseye": "{{KW:BULLSEYE}} active",
     "gs.showdown-floweryPower": "Power of a Flower!",
+    "gs.showdown-funnyNumber": "$1",
     
     "gs.game-enemy": "Enemy",
     "gs.game-ally": "Your",
