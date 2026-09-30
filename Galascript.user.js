@@ -6,6 +6,7 @@
 // @author       galadino
 // @match        https://*.undercards.net/*
 // @icon         https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/images/iconVirgil.png
+// @downloadURL  https://raw.githubusercontent.com/galadinowo/galascript/refs/heads/main/Galascript.user.js
 // @require      https://raw.githubusercontent.com/UCProjects/UnderScript/master/src/checkerV2.js
 // @require      https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js
 // @grant        none
