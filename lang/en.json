@@ -172,8 +172,8 @@
     "gs.status-confusion": "This card is confused! It'll attack and target randomly.",
     "gs.status-bug": "This card is bugged. When played, it'll corrupt your game with a severity of $1!",
     "gs.status-pure": "This card is immune to all negative Action Powers. After another card is affected by this card in any way, it is also cleansed of its negative Action Powers.",
-    "gs.status-tasty": "This card looks rather appetizing...\n<button class=\"gsDialogButton\" onclick=\"mathtime('$1')\">Eat.</button>"
-    "gs.status-remains": "What once was. Rest in peace, $1."
+    "gs.status-tasty": "This card looks rather appetizing...\n<button class=\"gsDialogButton\" onclick=\"mathtime('$1')\">Eat.</button>",
+    "gs.status-remains": "What once was. Rest in peace, $1.",
     "gs.status-loop-stacked": "This card can trigger its {{KW:LOOP}} effect an additional time.",
     "gs.status-program-stacked": "If you have an additional {{GOLD}}, spend it to trigger this effect.",
     "gs.status-turn-played-stacked": "This card was played an additional turn.",
@@ -357,7 +357,7 @@
     "gs.alert-title-equation-pity-answer": "Enjoy yourselves|Learn from this|Write that down",
     "gs.alert-title-sandy": "Forget it|Sand attack!|Lost in the sands|Sands of time|Take your time|Where did the time go|Killing some time|Unpaid time off|Time-consuming|Clockblocked|What time is it?|Get a watch|Sands undertale",
     "gs.alert-title-taxed": "Tax time|Where'd my wallet go|Should've evaded|The $1 prices are crazy|It was on sale, too...|File your 1040s, kids|Taxi taxi tabaxi|I'll be taking that|It wasn't this expensive yesterday|FORM-$3|Guess I have to skip out on food|I care who the IRS sends",
-    "gs.alert-title-confusion": "Déjà vu|Loafing around|Couldn't hear you|In their own lane|Nah|Imma do my own thing|Stubborn...",
+    "gs.alert-title-confusion": "Déjà vu|Loafing around|Couldn't hear you|In their own lane|Nah|Imma do my own thing|Stubborn...|Confused|Can't run from the urge",
     "gs.alert-title-pure-triggered": "Cleanse thy soul|Blessing of purity|Destined for greatness|Divine intervention|Awaken your faith|Prayers answered",
     "gs.alert-title-not-allowed": "Nope|Nuh uh|No you don't|Hey, stop that|Stop it|Don't|Cut it out man|You can't|Uh, no|What are you doing|Stop",
     "gs.alert-title-import-complete": "Import complete!",
